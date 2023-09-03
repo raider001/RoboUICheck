@@ -1,0 +1,8 @@
+setup.py
+SnagTest.egg-info/PKG-INFO
+SnagTest.egg-info/SOURCES.txt
+SnagTest.egg-info/dependency_links.txt
+SnagTest.egg-info/top_level.txt
+src/SnagTest.py
+src/__init__.py
+src/keywords.py

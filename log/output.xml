@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.1.1 (Python 3.11.5 on win32)" generated="20230903 16:54:57.967" rpa="false" schemaversion="4">
+<suite id="s1" name="SnagTest" source="C:\Users\Daniel\Documents\GitHub\RoboUICheck\RobotSnagTest\SnagTest.robot">
+<test id="s1-t1" name="Test Robot Setup" line="6">
+<kw name="Log" library="BuiltIn">
+<arg>Set up correctly!</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20230903 16:54:58.014" level="INFO">Set up correctly!</msg>
+<status status="PASS" starttime="20230903 16:54:58.013" endtime="20230903 16:54:58.014"/>
+</kw>
+<status status="PASS" starttime="20230903 16:54:58.012" endtime="20230903 16:54:58.014"/>
+</test>
+<test id="s1-t2" name="Test SnagTest Connection" line="9">
+<kw name="ping">
+<msg timestamp="20230903 16:54:58.017" level="FAIL">No keyword with name 'ping' found.</msg>
+<status status="FAIL" starttime="20230903 16:54:58.017" endtime="20230903 16:54:58.017"/>
+</kw>
+<status status="FAIL" starttime="20230903 16:54:58.015" endtime="20230903 16:54:58.017">No keyword with name 'ping' found.</status>
+</test>
+<status status="FAIL" starttime="20230903 16:54:57.971" endtime="20230903 16:54:58.018"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="1" skip="0" id="s1" name="SnagTest">SnagTest</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20230903 16:54:58.008" level="ERROR">Error in file 'C:\Users\Daniel\Documents\GitHub\RoboUICheck\RobotSnagTest\SnagTest.robot' on line 2: Importing library '../PySnagTest/PySnagTest/SnagTest.py CONNECT' failed: ModuleNotFoundError: No module named '.'
+Traceback (most recent call last):
+  None
+PYTHONPATH:
+  C:\Users\Daniel\AppData\Roaming\JetBrains\IntelliJIdea2023.2\plugins\robotframework-intellij\lib\robotframework_debug_adapter
+  C:\Users\Daniel\Documents\GitHub\RoboUICheck
+  C:\Users\Daniel\AppData\Roaming\JetBrains\IntelliJIdea2023.2\plugins\robotframework-intellij\lib
+  C:\Users\Daniel\AppData\Roaming\JetBrains\IntelliJIdea2023.2\plugins\robotframework-intellij\lib\robotframework_ls\vendored
+  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\python311.zip
+  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\DLLs
+  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\Lib
+  C:\Users\Daniel\AppData\Local\Programs\Python\Python311
+  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\Lib\site-packages
+  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\Lib\site-packages\win32
+  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\Lib\site-packages\win32\lib
+  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\Lib\site-packages\Pythonwin</msg>
+</errors>
+</robot>
