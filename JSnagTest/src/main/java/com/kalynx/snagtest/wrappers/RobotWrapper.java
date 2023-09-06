@@ -5,6 +5,10 @@ import java.awt.*;
 public class RobotWrapper implements RobotControl{
 
     private Robot robot;
+
+    public RobotWrapper(Robot robot) {
+        this.robot = robot;
+    }
     @Override
     public void mouseMove(int x, int y) {
         robot.mouseMove(x,y);

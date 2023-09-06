@@ -19,7 +19,7 @@ public class MainController {
     private MainController() {
         try {
             robot = new Robot();
-            RobotWrapper robot = new RobotWrapper();
+            RobotWrapper robotWrapper = new RobotWrapper(robot);
 
             List<Rectangle> displays = new ArrayList<>();
             GraphicsDevice[] d = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
@@ -28,7 +28,7 @@ public class MainController {
                 displays.add(rectangle);
             }
 
-            mouseController = new MouseController(robot, new MouseInfoWrapper(),displays);
+            mouseController = new MouseController(robotWrapper, new MouseInfoWrapper(),displays);
             keyboardController = new KeyboardController(timeSettings, this.robot);
             cvMonitor = new CvMonitor(0.95, displays);
         } catch (AWTException e) {

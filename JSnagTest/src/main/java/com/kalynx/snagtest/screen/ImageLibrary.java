@@ -3,10 +3,9 @@ package com.kalynx.snagtest.screen;
 import com.kalynx.snagtest.data.FailedResult;
 import com.kalynx.snagtest.data.Result;
 import com.kalynx.snagtest.data.SuccessfulResult;
+import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -17,9 +16,17 @@ public class ImageLibrary {
         imageLibraries.add(newLibrary);
     }
 
-    public Result<BufferedImage> findImage(Path imagePath) {
+    public List<String> getLibraryPaths() {
+        return imageLibraries.stream().map(Path::toString).toList();
+    }
+
+    public Result<Mat> findImage(Path imagePath) {
         List<Path> paths = imageLibraries.stream().filter(basePath ->  basePath.resolve(imagePath).toFile().exists()).toList();
-        if(paths.isEmpty()) return new FailedResult<>("No Image in any given library called" + imagePath.toString());
+        if(paths.isEmpty()) return new FailedResult<>("""
+        "No Image in any given library called: '%s'
+        Available Libraries:
+        %s
+        """.formatted(imagePath.toString(), Arrays.toString(imageLibraries.toArray())));
         if(paths.size() > 1) {
             return new FailedResult<>("""
                     Image with given path %s exists in multiple libraries. Found in:
@@ -27,11 +34,6 @@ public class ImageLibrary {
                     """.formatted(imagePath, Arrays.toString(paths.toArray())));
         }
         Path p = paths.get(0);
-
-        try {
-            return new SuccessfulResult<>(Optional.of(ImageIO.read(p.toFile())));
-        } catch (IOException e) {
-            return new FailedResult<>("Ïmage must be either jpg or png. Given Image: " + p);
-        }
+        return new SuccessfulResult<>(Optional.of(Imgcodecs.imread(p.resolve(imagePath).toAbsolutePath().toString(),Imgcodecs.IMREAD_COLOR)));
     }
 }

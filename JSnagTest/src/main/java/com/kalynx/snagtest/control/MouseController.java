@@ -8,36 +8,62 @@ import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
+
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 public class MouseController {
 
-    private RobotControl robot;
-    private MouseInfoControl mouseInfo;
+    private long mouseMoveSpeed = 700;
+    private final RobotControl robot;
+    private final MouseInfoControl mouseInfo;
     private final List<Rectangle> displays;
+    private final Consumer<Point> defaultPerformMove =this::mouseMove;
+    private final Consumer<Point> performMove;
     public MouseController(RobotControl robot, MouseInfoControl mouseInfo, List<Rectangle> displays) {
+        this(robot, mouseInfo,displays, null);
+
+    }
+
+    public MouseController(RobotControl robot, MouseInfoControl mouseInfo, List<Rectangle> displays, Consumer<Point> performMove) {
+       if(performMove != null) {
+           this.performMove = performMove;
+       } else {
+           this.performMove = defaultPerformMove;
+       }
         this.robot = Objects.requireNonNull(robot);
         this.mouseInfo = Objects.requireNonNull(mouseInfo);
         this.displays = Objects.requireNonNull(displays);
     }
-    public void moveMouseToLocation(int display, int x, int y) {
+
+    /**
+     * Moves the mouse based on the mouse original location.
+     * @param x The relative x distance to be moved.
+     * @param y The relative y distance to be moved.
+     */
+    public void moveMouse(int x, int y) {
+        int actualX = mouseInfo.getMousePosition().x + x;
+        int actualY = mouseInfo.getMousePosition().y + y;
+        performMove.accept(new Point(actualX, actualY));
+    }
+
+    public void moveMouseTo(int display, int x, int y) throws Exception {
         Rectangle r = displays.get(display);
-        if(x < 0 || x > r.width) throw new AssertionError("Mouse location x: " + x + " must be equal to or between " + 0 + "-" + r.width);
-        if(y < 0 || y > r.height) throw new AssertionError("Mouse location y: " + y + " must be equal to or between " + 0 + "-" + r.height);
+        if(x < 0 || x > r.width) throw new Exception("Mouse location x: " + x + " must be equal to or between " + 0 + "-" + r.width);
+        if(y < 0 || y > r.height) throw new Exception("Mouse location y: " + y + " must be equal to or between " + 0 + "-" + r.height);
 
         robot.mouseMove(x + r.x, y + r.y);
     }
 
-    public void moveMouseToLocation(int x, int y) {
+    public void moveMouseTo(int x, int y) throws Exception {
         Point mousePos = mouseInfo.getMousePosition();
-        Optional<Rectangle> currDisplay = displays.stream().filter(display -> mousePos.x >= display.x &&
-                                 mousePos.x <= display.x + display.width &&
-                                 mousePos.y >= display.y &&
-                                 mousePos.y <= display.y + display.height).findFirst();
+        Rectangle currDisplay = getCurrentDisplay(mousePos);
 
-        if(currDisplay.isEmpty()) throw new AssertionError("Can't find mouse on screen! Please report this issue and provide your configuration setup to help stop this from happening again!");
+        if(currDisplay == null) throw new Exception("Can't find mouse on screen! Please report this issue and provide your configuration setup to help stop this from happening again!");
 
-        if(x < 0 || x > currDisplay.get().width || y < 0 || y > currDisplay.get().height)
-            throw new AssertionError("x %s and y %s out of bounds for current display width %s and height %s".formatted(x,y, currDisplay.get().width, currDisplay.get().height));
+        if(x < 0 || x > currDisplay.width || y < 0 || y > currDisplay.height)
+            throw new Exception("x %s and y %s out of bounds for current display width %s and height %s".formatted(x,y, currDisplay.width, currDisplay.height));
 
         robot.mouseMove(x, y);
     }
@@ -64,5 +90,49 @@ public class MouseController {
 
     public void mouseScroll(int scrollAmount) {
         robot.mouseWheel(scrollAmount);
+    }
+
+    public void setMouseMoveSpeed(long mouseMoveSpeed) {
+        if(mouseMoveSpeed < 0) throw new IllegalArgumentException("Mouse Move Speed must be greater than 0");
+        this.mouseMoveSpeed = mouseMoveSpeed;
+    }
+
+    public Rectangle getCurrentDisplay(Point p) {
+        Optional<Rectangle> currDisplay = displays.stream().filter(display -> p.x >= display.x &&
+                p.x <= display.x + display.width &&
+                p.y >= display.y &&
+                p.y <= display.y + display.height).findFirst();
+        return currDisplay.orElse(null);
+    }
+    private void mouseMove(Point destination) {
+        long lastTime = System.currentTimeMillis();
+        Point current = mouseInfo.getMousePosition();
+        double startDistance = current.distance(destination);
+        double distancePerMs = startDistance / mouseMoveSpeed;
+        System.out.println("sd:  " + startDistance);
+        System.out.println("dps: " +distancePerMs);
+        while(!destination.equals(current)) {
+            current = mouseInfo.getMousePosition();
+            long timeDifference = System.currentTimeMillis() - lastTime;
+            lastTime = System.currentTimeMillis();
+            double calcDistanceOnTime = distancePerMs * timeDifference;
+            double angle = Math.toRadians(Math.atan2(destination.getY() - current.getY(), destination.getX() - current.getX() ) * ( 180 / Math.PI ));
+
+            double distanceToFinalLocation = current.distance(destination);
+            if(distanceToFinalLocation > calcDistanceOnTime) {
+                long xStep = Math.round(calcDistanceOnTime * cos(angle));
+                long yStep = Math.round(calcDistanceOnTime * sin(angle));
+                robot.mouseMove((int)(current.getX() + xStep), (int) (current.getY() + yStep));
+            } else {
+                robot.mouseMove(destination.x, destination.y);
+                break;
+            }
+            try {
+                //noinspection BusyWait
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

@@ -1,0 +1,4 @@
+SnagTest~=1.0
+PyYAML~=6.0.1
+robotframework~=6.1.1
+setuptools~=65.5.0

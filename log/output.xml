@@ -1,50 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 6.1.1 (Python 3.11.5 on win32)" generated="20230903 16:54:57.967" rpa="false" schemaversion="4">
+<robot generator="Robot 6.1.1 (Python 3.11.5 on win32)" generated="20230905 20:54:01.987" rpa="false" schemaversion="4">
 <suite id="s1" name="SnagTest" source="C:\Users\Daniel\Documents\GitHub\RoboUICheck\RobotSnagTest\SnagTest.robot">
-<test id="s1-t1" name="Test Robot Setup" line="6">
+<test id="s1-t1" name="Test DynamicTest" line="9">
+<kw name="Start" library="SnagTest">
+<arg>1337</arg>
+<doc>Starts the Snag Test Service</doc>
+<msg timestamp="20230905 20:54:02.054" level="INFO">Starting process:
+java -jar C:\Users\Daniel\Documents\GitHub\RoboUICheck\PySnagTest\src\\..\..\JSnagTest\target\SnagTest.jar --port 1337</msg>
+<status status="PASS" starttime="20230905 20:54:02.053" endtime="20230905 20:54:04.064"/>
+</kw>
+<kw name="Add Image Path" library="SnagTest">
+<arg>C:\\Users\\Daniel\\Documents\\GitHub\\RoboUICheck\\RobotSnagTest/images</arg>
+<doc>Add Image Path</doc>
+<status status="PASS" starttime="20230905 20:54:04.064" endtime="20230905 20:54:04.213"/>
+</kw>
+<kw name="Get Image Paths" library="SnagTest">
+<var>${res}</var>
+<doc>Get Image Paths</doc>
+<msg timestamp="20230905 20:54:04.220" level="INFO">${res} = None</msg>
+<status status="PASS" starttime="20230905 20:54:04.213" endtime="20230905 20:54:04.221"/>
+</kw>
 <kw name="Log" library="BuiltIn">
-<arg>Set up correctly!</arg>
+<arg>${res}</arg>
 <doc>Logs the given message with the given level.</doc>
-<msg timestamp="20230903 16:54:58.014" level="INFO">Set up correctly!</msg>
-<status status="PASS" starttime="20230903 16:54:58.013" endtime="20230903 16:54:58.014"/>
+<msg timestamp="20230905 20:54:04.222" level="INFO">None</msg>
+<status status="PASS" starttime="20230905 20:54:04.221" endtime="20230905 20:54:04.222"/>
 </kw>
-<status status="PASS" starttime="20230903 16:54:58.012" endtime="20230903 16:54:58.014"/>
-</test>
-<test id="s1-t2" name="Test SnagTest Connection" line="9">
-<kw name="ping">
-<msg timestamp="20230903 16:54:58.017" level="FAIL">No keyword with name 'ping' found.</msg>
-<status status="FAIL" starttime="20230903 16:54:58.017" endtime="20230903 16:54:58.017"/>
+<kw name="Find Image" library="SnagTest">
+<arg>hammer.png</arg>
+<doc>Find Image</doc>
+<status status="PASS" starttime="20230905 20:54:04.222" endtime="20230905 20:54:05.362"/>
 </kw>
-<status status="FAIL" starttime="20230903 16:54:58.015" endtime="20230903 16:54:58.017">No keyword with name 'ping' found.</status>
+<kw name="Find Image" library="SnagTest">
+<arg>debug.png</arg>
+<doc>Find Image</doc>
+<status status="PASS" starttime="20230905 20:54:05.363" endtime="20230905 20:54:06.348"/>
+</kw>
+<kw name="Shutdown" library="SnagTest">
+<doc>Shutdown
+Shuts down JSnagTest</doc>
+<status status="PASS" starttime="20230905 20:54:06.348" endtime="20230905 20:54:06.354"/>
+</kw>
+<status status="PASS" starttime="20230905 20:54:02.052" endtime="20230905 20:54:06.354"/>
 </test>
-<status status="FAIL" starttime="20230903 16:54:57.971" endtime="20230903 16:54:58.018"/>
+<status status="PASS" starttime="20230905 20:54:01.991" endtime="20230905 20:54:06.355"/>
 </suite>
 <statistics>
 <total>
-<stat pass="1" fail="1" skip="0">All Tests</stat>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat pass="1" fail="1" skip="0" id="s1" name="SnagTest">SnagTest</stat>
+<stat pass="1" fail="0" skip="0" id="s1" name="SnagTest">SnagTest</stat>
 </suite>
 </statistics>
 <errors>
-<msg timestamp="20230903 16:54:58.008" level="ERROR">Error in file 'C:\Users\Daniel\Documents\GitHub\RoboUICheck\RobotSnagTest\SnagTest.robot' on line 2: Importing library '../PySnagTest/PySnagTest/SnagTest.py CONNECT' failed: ModuleNotFoundError: No module named '.'
-Traceback (most recent call last):
-  None
-PYTHONPATH:
-  C:\Users\Daniel\AppData\Roaming\JetBrains\IntelliJIdea2023.2\plugins\robotframework-intellij\lib\robotframework_debug_adapter
-  C:\Users\Daniel\Documents\GitHub\RoboUICheck
-  C:\Users\Daniel\AppData\Roaming\JetBrains\IntelliJIdea2023.2\plugins\robotframework-intellij\lib
-  C:\Users\Daniel\AppData\Roaming\JetBrains\IntelliJIdea2023.2\plugins\robotframework-intellij\lib\robotframework_ls\vendored
-  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\python311.zip
-  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\DLLs
-  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\Lib
-  C:\Users\Daniel\AppData\Local\Programs\Python\Python311
-  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\Lib\site-packages
-  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\Lib\site-packages\win32
-  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\Lib\site-packages\win32\lib
-  C:\Users\Daniel\AppData\Local\Programs\Python\Python311\Lib\site-packages\Pythonwin</msg>
 </errors>
 </robot>

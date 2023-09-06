@@ -3,6 +3,7 @@ package com.kalynx.snagtest;
 
 import com.kalynx.snagtest.arg.ArgParser;
 import com.kalynx.snagtest.control.MainController;
+import nu.pattern.OpenCV;
 import org.robotframework.javalib.library.AnnotationLibrary;
 import org.robotframework.javalib.library.KeywordDocumentationRepository;
 import org.robotframework.javalib.library.RobotFrameworkDynamicAPI;
@@ -10,19 +11,22 @@ import org.robotframework.remoteserver.RemoteServer;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 
 public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkDynamicAPI {
     
     private final AnnotationLibrary annotationLibrary;
-    private final MainController mainController;
-
+    private static RemoteServer remoteServer;
     private SnagTest() {
         annotationLibrary = new AnnotationLibrary("com/kalynx/snagtest/**/*.class");
-        mainController = MainController.getInstance();
+        MainController.getInstance();
     }
     public static void main(String... args) throws Exception {
+        OpenCV.loadShared();
+//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         RemoteServer.configureLogging();
         SnagTest snagTest = new SnagTest();
         ArgParser argParser = new ArgParser();
@@ -48,6 +52,20 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
 
         robotRemoteServer.get().putLibrary("/", snagTest);
         robotRemoteServer.get().start();
+        remoteServer = robotRemoteServer.get();
+        snagTest.getKeywordNames();
+
+    }
+
+    public static void shutdown() {
+        Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+            try {
+                remoteServer.stop();
+                System.exit(0);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        },2, TimeUnit.SECONDS);
     }
 
     @Override

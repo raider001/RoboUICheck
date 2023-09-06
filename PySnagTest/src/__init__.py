@@ -1,9 +1,10 @@
-from SnagTest import SnagTest
+from src.SnagTest import SnagTest
 
 
 def main():
-    lib = SnagTest(mode='CONNECT')
+    lib = SnagTest()
+    lib.generate_keywords()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

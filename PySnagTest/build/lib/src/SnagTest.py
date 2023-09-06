@@ -6,12 +6,6 @@ from urllib import request
 from robot.libraries.Process import Process
 from robot.libraries.Remote import Remote
 
-try:
-    from .keywords import KEYWORDS
-except ImportError:
-    pass
-
-
 class SnagTest:
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
@@ -41,22 +35,6 @@ class SnagTest:
         if not process.is_process_running():
             raise Exception("Program failed to start.")
         return self._connect()
-
-    def generate_keywords(self, port: int):
-        keywordDict = {}
-        try:
-            keywordList = self.get_keyword_names()
-            for keywordName in keywordList:
-                keywordDict[keywordName] = {}
-                keywordDict[keywordName]['arg'] = self.get_keyword_arguments(keywordName)
-                keywordDict[keywordName]['doc'] = self.get_keyword_documentation(keywordName)
-            with codecs.open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'keywords.py'), 'w',
-                             encoding='utf-8') as f:
-                f.write('# -*- coding: utf-8 -*-\n')
-                # keywords = ','.join(['"%s": %s' % (k, keywordDict[k]) for k in keywordDict.keys()])
-                f.write('KEYWORDS = %s' % keywordDict )
-        finally:
-            print("Complete")
 
     def _connect(self) -> Remote:
         print("Waiting for handshake")

@@ -26,6 +26,7 @@
       <artifactId>opencv</artifactId>
       <version>4.7.0-0</version>
     </dependency>
+    <!-- Logging -->
     <!-- Unit Test dependencies -->
     <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
     <dependency>
