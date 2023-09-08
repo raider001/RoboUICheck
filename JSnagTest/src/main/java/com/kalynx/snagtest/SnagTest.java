@@ -26,7 +26,6 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
     }
     public static void main(String... args) throws Exception {
         OpenCV.loadShared();
-//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         RemoteServer.configureLogging();
         SnagTest snagTest = new SnagTest();
         ArgParser argParser = new ArgParser();
@@ -53,8 +52,6 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
         robotRemoteServer.get().putLibrary("/", snagTest);
         robotRemoteServer.get().start();
         remoteServer = robotRemoteServer.get();
-        snagTest.getKeywordNames();
-
     }
 
     public static void shutdown() {

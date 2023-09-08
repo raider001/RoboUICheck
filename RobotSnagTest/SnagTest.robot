@@ -7,12 +7,12 @@ Test Robot Setup
     Log  Set up correctly!
 
 Test DynamicTest
-    Start  1337
+    Connect  1337
     Add Image Path  ${CURDIR}/images
     ${res}=  Get Image Paths
     Log  ${res}
     Find Image  hammer.png
     Find Image  debug.png
-    Shutdown
+    #[Teardown]  Shutdown
 
 

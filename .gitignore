@@ -28,3 +28,8 @@ target
 *.pyc
 *.pyc
 *.pyc
+log/log.html
+log/log.html
+log/report.html
+log/output.xml
+log/log.html

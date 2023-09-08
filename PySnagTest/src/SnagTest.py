@@ -31,6 +31,10 @@ class SnagTest:
     def __init__(self):
         self.remote = None
 
+    @keyword("Connect", types={"port": int})
+    def connect(self, port: int = 1337):
+        self.remote = Remote("127.0.0.1:" + str(port) + "/")
+
     @keyword("Start", types={"port": int})
     def start(self, port: int = 1337):
         args: [str] = ["-jar", _path() + "\\..\\..\\JSnagTest\\target\\SnagTest.jar", "--port", str(port)]
@@ -51,6 +55,8 @@ class SnagTest:
     def run_keyword(self, name, args, kwargs):
         if name == "start":
             self.start(args[0])
+        elif name == "connect":
+            self.connect(args[0])
         else:
             self.remote.run_keyword(name, args, kwargs)
 
@@ -84,6 +90,9 @@ class SnagTest:
         keywords["start"] = {}
         keywords["start"][self.ARGS] = ["port"]
         keywords["start"][self.DOC] = "Starts the Snag Test Service"
+        keywords["connect"] = {}
+        keywords["connect"][self.ARGS] = ["port"]
+        keywords["connect"][self.DOC] = "Connects to the Snag Test Service"
 
     def stop(self):
         self.remote.run_keyword("shutdown", [], {})

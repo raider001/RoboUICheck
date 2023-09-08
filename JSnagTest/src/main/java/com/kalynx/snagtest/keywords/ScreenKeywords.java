@@ -2,8 +2,8 @@ package com.kalynx.snagtest.keywords;
 
 import com.kalynx.snagtest.control.MainController;
 import com.kalynx.snagtest.data.Result;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
@@ -13,7 +13,7 @@ import java.time.Duration;
 
 @RobotKeywords
 public class ScreenKeywords {
-    private static final Log LOG = LogFactory.getLog(ScreenKeywords.class);
+    private static final Logger LOG = LogManager.getLogger(ScreenKeywords.class);
     @RobotKeyword("""
             Set Min Similarity
             """)
@@ -47,7 +47,7 @@ public class ScreenKeywords {
         if(result.isFailure()) {
             throw new Exception(result.getInfo());
         } else {
-            LOG.info(result.getInfo());
+            LOG.info("Great Success");
         }
     }
 
