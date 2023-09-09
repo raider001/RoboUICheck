@@ -34,8 +34,9 @@ public class CvMonitor {
     private final List<Rectangle> displays;
     private final Map<Rectangle, Rectangle> displayRegions = new HashMap<>();
     private Rectangle selectedDisplay;
+    private final Path imageResultRelativeLocation = Path.of(".", "image_results");
+    private Path resultLocation = Path.of(".", imageResultRelativeLocation.toString());
 
-    private Path resultLocation = Path.of(".", "image_results");
     public CvMonitor(double matchScore, List<Rectangle> screenDisplays) throws AWTException, IOException {
 
         if (matchScore <= 0 || matchScore >=1) throw new AssertionError("matchScore can only be between 0 and 1");
@@ -48,19 +49,15 @@ public class CvMonitor {
         for(int i = 0; i < cores; i++) {
             robotInstances.add(new Robot());
         }
-
-        if(!resultLocation.toFile().exists())
-            Files.createDirectories(resultLocation);
     }
 
-    public Result<String> setResultsLocation(Path resultLocation) throws Exception {
-        if(resultLocation.toFile().exists() && !resultLocation.toFile().isDirectory()) return new FailedResult<>(resultLocation.toString() + " is not a directory.");
+    public void setResultsLocation(Path resultLocation) throws Exception {
+        resultLocation = resultLocation.resolve(imageResultRelativeLocation);
+        if(resultLocation.toFile().exists() && !resultLocation.toFile().isDirectory()) throw new Exception(resultLocation.toString() + " is not a directory.");
         this.resultLocation = resultLocation;
 
         if(!resultLocation.toFile().exists())
             Files.createDirectories(resultLocation);
-
-        return new SuccessfulResult<>();
     }
 
     public void addImagePath(String imagePath) {
@@ -155,6 +152,7 @@ public class CvMonitor {
             results.add(res);
             return res;
         };
+
         Function<Result<ScreenshotData>, Boolean> condition = Result::isSuccess;
 
         TemporaryThreadingService.schedule(action).forEvery(pollRate).over(timeoutTime).orUntil(condition).andWaitForCompletion();
@@ -181,11 +179,20 @@ public class CvMonitor {
         Imgproc.rectangle(res.getData().screenshot(), locRes.minLoc, new Point(locRes.minLoc.x + template.cols(), locRes.minLoc.y + template.rows()),
                 new Scalar(0, 0, 255), 2, 8, 0);
         BufferedImage buffImage = (BufferedImage)HighGui.toBufferedImage(res.getData().screenshot());
-        Path resultLoc = Path.of(resultLocation.toString(), res.getData().timeTaken + ".jpg");
+        String fileName = res.getData().timeTaken + ".jpg";
+        Path resultLoc = Path.of(resultLocation.toString(), fileName);
+        Path expectedResultPath = Path.of(resultLocation.toString(), res.getData().timeTaken + "_expected.jpg");
+        Imgcodecs.imwrite(expectedResultPath.toString(), template);
         ImageIO.write(buffImage, "jpg", resultLoc.toFile());
         return new FailedResult<>("""
         Image not found, closest match: %s
-        """.formatted(1 - locRes.minVal));
+        Best Match:
+        <img src="%s"></img>
+        Wanted Image:
+        <img src="%s"></img>
+        """.formatted(1 - locRes.minVal,
+                Path.of(imageResultRelativeLocation.toString(), fileName),
+                Path.of(imageResultRelativeLocation.toString(), expectedResultPath.getFileName().toString())));
     }
 
     private Result<ScreenshotData> match(Mat template, Mat mask, double matchScore) {

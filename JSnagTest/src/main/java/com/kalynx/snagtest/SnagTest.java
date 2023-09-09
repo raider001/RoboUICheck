@@ -1,6 +1,5 @@
 package com.kalynx.snagtest;
 
-
 import com.kalynx.snagtest.arg.ArgParser;
 import com.kalynx.snagtest.control.MainController;
 import nu.pattern.OpenCV;
@@ -9,12 +8,12 @@ import org.robotframework.javalib.library.KeywordDocumentationRepository;
 import org.robotframework.javalib.library.RobotFrameworkDynamicAPI;
 import org.robotframework.remoteserver.RemoteServer;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-
 
 public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkDynamicAPI {
     
@@ -27,6 +26,7 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
     public static void main(String... args) throws Exception {
         OpenCV.loadShared();
         RemoteServer.configureLogging();
+
         SnagTest snagTest = new SnagTest();
         ArgParser argParser = new ArgParser();
 
@@ -38,14 +38,15 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
                 .setDefault(1337)
                 .setHelp("Sets the port number for the service.");
 
-        argParser.addArg("gen", Boolean.class)
-                .setShortKey('g')
-                .setDefault(false)
-                .setHelp("Generates a python file with the related keywords in the Java library.")
-                .ignoreWhenNotProvided().setCommand(val -> {
-                    List<String> keyWords = snagTest.getKeywordNames();
-                    System.out.println(keyWords);
-                    System.exit(0);
+        argParser.addArg("image-loc", String.class)
+                .setShortKey('i')
+                .setHelp("Defines the directory name for image results.")
+                .setCommand(val -> {
+                    try {
+                        MainController.getInstance().getCvMonitor().setResultsLocation(Path.of(val));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 });
         argParser.parse(args);
 

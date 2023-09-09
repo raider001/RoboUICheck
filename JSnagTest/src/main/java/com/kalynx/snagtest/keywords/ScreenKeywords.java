@@ -13,6 +13,8 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Optional;
 
+import static com.kalynx.snagtest.data.TestFailureException.throwException;
+
 @RobotKeywords
 public class ScreenKeywords {
 
@@ -48,7 +50,7 @@ public class ScreenKeywords {
     @ArgumentNames({"image"})
     public void findImage(String image) throws Exception {
         Result<?> r = MainController.getInstance().getCvMonitor().monitorFor(image);
-        if(r.isFailure()) throw new Exception(r.getInfo());
+        if(r.isFailure()) throwException(r.getInfo());
         LOGGER.info(r.getInfo());
     }
 
@@ -69,6 +71,8 @@ public class ScreenKeywords {
 
     @RobotKeyword("""
             Set Result Path
+            The result path should be defined as a relative path
+            based on where log files are written to.
             """)
     public void setResultPath(String resultPath) throws Exception {
          Path p = Path.of(resultPath);
