@@ -1,4 +1,4 @@
-import logging
+
 import pathlib
 import sys
 import os
@@ -9,7 +9,7 @@ from robot.api import Failure
 from robot.api.deco import keyword
 from robot.libraries.Process import Process
 from robot.libraries.Remote import Remote
-from Result import Result
+from robot.libraries.BuiltIn import BuiltIn
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 
@@ -31,9 +31,11 @@ class SnagTest:
     DOC = "doc"
     keywords = {}
     remote: Remote | None = None
+    built_int: BuiltIn
 
     def __init__(self):
         self.remote = None
+        self.built_in = BuiltIn()
 
     @keyword("Connect", types={"port": int})
     def connect(self, port: int = 1337):
@@ -41,9 +43,13 @@ class SnagTest:
 
     @keyword("Start", types={"port": int})
     def start(self, port: int = 1337):
-        args: [str] = ["-jar", _path() + "\\..\\..\\JSnagTest\\target\\SnagTest.jar", "--port", str(port)]
+        output_dir: str = self.built_in.get_variable_value('${OUTPUT DIR}') + "\\" + "image_results"
+        args: [str] = ["-jar", _path() + "\\..\\..\\JSnagTest\\target\\SnagTest.jar",
+                       "--port", str(port),
+                       "--image-loc", output_dir]
         java = 'java'
         process: Process = Process()
+
         process.start_process(java, *args, shell=True)
         time.sleep(2)
         if not process.is_process_running():

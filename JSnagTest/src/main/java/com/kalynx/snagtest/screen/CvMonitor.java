@@ -167,8 +167,11 @@ public class CvMonitor {
             BufferedImage buffImage = (BufferedImage)HighGui.toBufferedImage(finalResult.get().getData().screenshot());
             Path resultLoc = Path.of(resultLocation.toString(),  finalResult.get().getData().timeTaken + ".jpg");
             ImageIO.write(buffImage, "jpg", resultLoc.toFile());
+            String htmlResult = generateHTMLResult(true, 1 - locRes.minVal,
+                    finalResult.get().getData().timeTaken,template,
+                    buffImage);
 
-            return finalResult.get();
+            return new SuccessfulResult<>(htmlResult);
         }
 
         Comparator<Result<ScreenshotData>> comp = Comparator.comparingDouble(data -> data.getData().foundLocation.minVal);
@@ -179,22 +182,38 @@ public class CvMonitor {
         Imgproc.rectangle(res.getData().screenshot(), locRes.minLoc, new Point(locRes.minLoc.x + template.cols(), locRes.minLoc.y + template.rows()),
                 new Scalar(0, 0, 255), 2, 8, 0);
         BufferedImage buffImage = (BufferedImage)HighGui.toBufferedImage(res.getData().screenshot());
-        String fileName = res.getData().timeTaken + ".jpg";
-        Path resultLoc = Path.of(resultLocation.toString(), fileName);
-        Path expectedResultPath = Path.of(resultLocation.toString(), res.getData().timeTaken + "_expected.jpg");
-        Imgcodecs.imwrite(expectedResultPath.toString(), template);
-        ImageIO.write(buffImage, "jpg", resultLoc.toFile());
-        return new FailedResult<>("""
-        Image not found, closest match: %s
-        Best Match:
-        <img src="%s"></img>
-        Wanted Image:
-        <img src="%s"></img>
-        """.formatted(1 - locRes.minVal,
-                Path.of(imageResultRelativeLocation.toString(), fileName),
-                Path.of(imageResultRelativeLocation.toString(), expectedResultPath.getFileName().toString())));
+
+        return new FailedResult<>(generateHTMLResult(true,
+                                             1 - locRes.minVal,
+                                            res.getData().timeTaken,
+                                            template,
+                                            buffImage));
     }
 
+    private String generateHTMLResult(boolean isSuccessful, double similarity, long time, Mat template, BufferedImage screenshot) throws IOException {
+        String screenshotFileName = time + "_screenshot.jpg";
+        String expectedFileName = time + "_expected.jpg";
+        // Path to write
+        Path screenshotPath = Path.of(resultLocation.toString(), screenshotFileName);
+        Path expectedResultPath = Path.of(resultLocation.toString(), expectedFileName);
+        Imgcodecs.imwrite(expectedResultPath.toString(), template);
+        ImageIO.write(screenshot, "jpg", screenshotPath.toFile());
+        // logLocation
+        Path relativeToLogScreenshot = Path.of(imageResultRelativeLocation.toString(), screenshotFileName);
+        Path relativeToLogExpected = Path.of(imageResultRelativeLocation.toString(), expectedFileName);
+        return """
+               %s.
+                Best match score: %s
+                Best Match:
+                <a href="%s"><img src="%s" height="100" width="100"></img></a>
+                Wanted Image:
+                <img src="%s"></img>
+               """.formatted(isSuccessful ? "Image found" : "Image not found",
+                            similarity,
+                            relativeToLogScreenshot.toString(),
+                            relativeToLogScreenshot.toString(),
+                            relativeToLogExpected.toString());
+    }
     private Result<ScreenshotData> match(Mat template, Mat mask, double matchScore) {
         Robot robot = robotInstances.poll();
         assert robot != null;

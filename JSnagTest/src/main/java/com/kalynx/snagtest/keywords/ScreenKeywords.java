@@ -13,7 +13,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Optional;
 
-import static com.kalynx.snagtest.data.TestFailureException.throwException;
 
 @RobotKeywords
 public class ScreenKeywords {
@@ -50,7 +49,7 @@ public class ScreenKeywords {
     @ArgumentNames({"image"})
     public void findImage(String image) throws Exception {
         Result<?> r = MainController.getInstance().getCvMonitor().monitorFor(image);
-        if(r.isFailure()) throwException(r.getInfo());
+        if(r.isFailure()) throw new Exception("*HTML*" + r.getInfo());
         LOGGER.info(r.getInfo());
     }
 
