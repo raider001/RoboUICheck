@@ -1,11 +1,13 @@
 package com.kalynx.snagtest.data;
 
+import com.google.gson.Gson;
+
 import java.util.Optional;
 
 public class Result<T> {
     private final boolean isSuccess;
     private final T data;
-    private String info;
+    private final String info;
 
     public Result(boolean isSuccess, String info) {
         this(isSuccess, Optional.empty(), info);
@@ -23,8 +25,11 @@ public class Result<T> {
     public T getData() {
         return data;
     }
-
     public String getInfo() {
         return info;
+    }
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

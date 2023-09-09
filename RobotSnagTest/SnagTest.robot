@@ -13,6 +13,9 @@ Test DynamicTest
     Log  ${res}
     Find Image  hammer.png
     Find Image  debug.png
+    Find Image  fail.png
     #[Teardown]  Shutdown
 
-
+Test Shutdown
+    Connect  1337
+    Shutdown

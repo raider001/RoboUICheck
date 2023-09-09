@@ -1,14 +1,18 @@
+import logging
 import pathlib
 import sys
 import os
 import time
 import codecs
+
 from robot.api import Failure
 from robot.api.deco import keyword
 from robot.libraries.Process import Process
 from robot.libraries.Remote import Remote
+from Result import Result
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
+
 try:
     from keywords import data
 except ImportError:
@@ -53,12 +57,21 @@ class SnagTest:
         return list(data.keys())
 
     def run_keyword(self, name, args, kwargs):
+        if self._run_static_words(name, *args, **kwargs):
+            return
+        return self.remote.run_keyword(name, args, kwargs)
+
+    def _run_static_words(self, name, *args, **kwargs) -> bool:
+        """
+        Returns true if it is a keyword, otherwise false.
+        """
         if name == "start":
             self.start(args[0])
+            return True
         elif name == "connect":
             self.connect(args[0])
-        else:
-            self.remote.run_keyword(name, args, kwargs)
+            return True
+        return False
 
     def get_keyword_arguments(self, name):
         return data[name][self.ARGS]

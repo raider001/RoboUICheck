@@ -2,19 +2,23 @@ package com.kalynx.snagtest.keywords;
 
 import com.kalynx.snagtest.control.MainController;
 import com.kalynx.snagtest.data.Result;
+import com.kalynx.snagtest.data.SuccessfulResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
-import java.awt.image.BufferedImage;
+import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Optional;
 
 @RobotKeywords
 public class ScreenKeywords {
-    private static final Logger LOG = LogManager.getLogger(ScreenKeywords.class);
-    @RobotKeyword("""
+
+     private final Logger LOGGER = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
+
+     @RobotKeyword("""
             Set Min Similarity
             """)
     @ArgumentNames({"Minimum Similarity"})
@@ -43,12 +47,9 @@ public class ScreenKeywords {
             """)
     @ArgumentNames({"image"})
     public void findImage(String image) throws Exception {
-        Result<BufferedImage> result = MainController.getInstance().getCvMonitor().monitorFor(image);
-        if(result.isFailure()) {
-            throw new Exception(result.getInfo());
-        } else {
-            LOG.info("Great Success");
-        }
+        Result<?> r = MainController.getInstance().getCvMonitor().monitorFor(image);
+        if(r.isFailure()) throw new Exception(r.getInfo());
+        LOGGER.info(r.getInfo());
     }
 
     @RobotKeyword("""
@@ -62,7 +63,15 @@ public class ScreenKeywords {
     @RobotKeyword("""
             Get Image Paths
             """)
-    public String[] getImagePaths() {
-        return MainController.getInstance().getCvMonitor().getImagePaths().toArray(new String[0]);
+    public String getImagePaths() {
+        return new SuccessfulResult<>(Optional.of(MainController.getInstance().getCvMonitor().getImagePaths().toArray(new String[0]))).toJson();
     }
-}
+
+    @RobotKeyword("""
+            Set Result Path
+            """)
+    public void setResultPath(String resultPath) throws Exception {
+         Path p = Path.of(resultPath);
+         MainController.getInstance().getCvMonitor().setResultsLocation(p);
+    }
+ }

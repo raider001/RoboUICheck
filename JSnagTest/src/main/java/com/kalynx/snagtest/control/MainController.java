@@ -6,6 +6,7 @@ import com.kalynx.snagtest.screen.CvMonitor;
 import com.kalynx.snagtest.settings.TimeSettings;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,8 @@ public class MainController {
             cvMonitor = new CvMonitor(0.95, displays);
         } catch (AWTException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
     }
