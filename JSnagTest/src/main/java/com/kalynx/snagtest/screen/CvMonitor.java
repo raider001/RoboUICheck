@@ -148,15 +148,19 @@ public class CvMonitor {
         List<Result<ScreenshotData>> results = new ArrayList<>();
 
         Supplier<Result<ScreenshotData>> action = () -> {
-            Result<ScreenshotData> res = match(template, mask, matchScore);
-            results.add(res);
-            return res;
+            try {
+                Result<ScreenshotData> res = match(template, mask, matchScore);
+                results.add(res);
+                return res;
+            } catch(Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e.toString());
+            }
         };
 
         Function<Result<ScreenshotData>, Boolean> condition = Result::isSuccess;
 
         TemporaryThreadingService.schedule(action).forEvery(pollRate).over(timeoutTime).orUntil(condition).andWaitForCompletion();
-
         Optional<Result<ScreenshotData>> finalResult = results.stream().filter(Result::isSuccess).findFirst();
 
         if(finalResult.isPresent()) {
@@ -182,9 +186,9 @@ public class CvMonitor {
         Imgproc.rectangle(res.getData().screenshot(), locRes.minLoc, new Point(locRes.minLoc.x + template.cols(), locRes.minLoc.y + template.rows()),
                 new Scalar(0, 0, 255), 2, 8, 0);
         BufferedImage buffImage = (BufferedImage)HighGui.toBufferedImage(res.getData().screenshot());
-
+        double actualScore = locRes.minVal == Double.NEGATIVE_INFINITY ? 0 : locRes.minVal == Double.POSITIVE_INFINITY ? 1 : locRes.minVal;
         return new FailedResult<>(generateHTMLResult(true,
-                                             1 - locRes.minVal,
+                                             1 - actualScore,
                                             res.getData().timeTaken,
                                             template,
                                             buffImage));
@@ -201,15 +205,19 @@ public class CvMonitor {
         // logLocation
         Path relativeToLogScreenshot = Path.of(imageResultRelativeLocation.toString(), screenshotFileName);
         Path relativeToLogExpected = Path.of(imageResultRelativeLocation.toString(), expectedFileName);
+        BigDecimal bd = BigDecimal.valueOf(Double.isInfinite(similarity) ? 1 : similarity);
+        bd = bd.setScale(5, RoundingMode.HALF_UP);
         return """
                %s.
                 Best match score: %s
+                Needed: %s
                 Best Match:
                 <a href="%s"><img src="%s" height="100" width="100"></img></a>
                 Wanted Image:
                 <img src="%s"></img>
                """.formatted(isSuccessful ? "Image found" : "Image not found",
                             similarity,
+                            matchScore,
                             relativeToLogScreenshot.toString(),
                             relativeToLogScreenshot.toString(),
                             relativeToLogExpected.toString());
@@ -230,22 +238,18 @@ public class CvMonitor {
         // TODO - Note for SQDIFF. Lower numbers are better
         Imgproc.matchTemplate(screenshot, template, result, Imgproc.TM_SQDIFF_NORMED, mask);
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-        BigDecimal bd = BigDecimal.valueOf(mmr.minVal);
+        BigDecimal bd = BigDecimal.valueOf(Double.isInfinite(mmr.minVal) ? 1 : mmr.minVal);
         bd = bd.setScale(5, RoundingMode.HALF_UP);
-        double actualScore = 1 - mmr.minVal;
+        double actualScore = mmr.minVal == Double.NEGATIVE_INFINITY ? 1 : mmr.minVal == Double.POSITIVE_INFINITY ? 0 : bd.doubleValue();
+        System.out.println("Matching..");
         if(actualScore > matchScore) {
             return new SuccessfulResult<>(Optional.of(new ScreenshotData(takenTime,screenshot, mmr)),
                     """
-                    Image found with similarity of %s
-                    <img src="fake.png"></img>
-                    """.formatted(actualScore));
+                    """);
         }
 
         return new FailedResult<>("""
-                Image with min similarity of %s not found.
-                Best similarity: %s
-                <img src="fake.png"> </img>
-                """.formatted(this.matchScore, matchScore),Optional.of(new ScreenshotData(takenTime, screenshot,mmr)));
+                """,Optional.of(new ScreenshotData(takenTime, screenshot,mmr)));
     }
 
     private static Mat imageToMat(BufferedImage sourceImg) {
