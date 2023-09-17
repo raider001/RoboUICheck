@@ -30,11 +30,10 @@ class SnagTest:
     ARGS = "args"
     DOC = "doc"
     keywords = {}
-    remote: Remote | None = None
+    remote: Remote = None
     built_int: BuiltIn
 
     def __init__(self):
-        self.remote = None
         self.built_in = BuiltIn()
 
     @keyword("Connect", types={"port": int})
@@ -83,7 +82,10 @@ class SnagTest:
         return data[name][self.ARGS]
 
     def get_keyword_documentation(self, name):
+        if name == "__intro__":
+            return 'This library provides UI automation.'
         return data[name][self.DOC]
+
 
     def _generate_keywords(self):
         self.start(1337)
