@@ -3,12 +3,14 @@ package com.kalynx.snagtest.keywords;
 import com.kalynx.snagtest.control.MainController;
 import com.kalynx.snagtest.data.Result;
 import com.kalynx.snagtest.data.SuccessfulResult;
+import com.sun.tools.javac.Main;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
+import java.awt.*;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Optional;
@@ -76,5 +78,20 @@ public class ScreenKeywords {
     public void setResultPath(String resultPath) throws Exception {
          Path p = Path.of(resultPath);
          MainController.getInstance().getCvMonitor().setResultsLocation(p);
+    }
+
+    @RobotKeyword("""
+            Set Display
+            Sets the display to look at.
+            """)
+    public void setDisplay(int display) {
+         MainController.getInstance().getCvMonitor().setDisplay(display);
+    }
+    @RobotKeyword("""
+            Set Capture Region
+            Sets the display to look at.
+            """)
+    public void setCaptureRegion(int x, int y, int width, int height) {
+         MainController.getInstance().getCvMonitor().setCaptureRegion(new Rectangle(x,y,width,height));
     }
  }

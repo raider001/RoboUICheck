@@ -70,7 +70,7 @@ public class CvMonitor {
     }
 
     public void setDisplay (int display) {
-        if(display < 0 || display > displays.size()) throw new AssertionError("Given display outside of display range.");
+        if(display < 0 || display >= displays.size()) throw new AssertionError("Given display outside of display range.");
         selectedDisplay = displays.get(display);
     }
     /**
@@ -145,7 +145,7 @@ public class CvMonitor {
         final Mat template = result.getData();
         final Mat mask = new Mat(template.rows(),template.cols(), Imgcodecs.IMREAD_GRAYSCALE);
         Imgproc.threshold(template, mask,0,255,Imgproc.THRESH_BINARY);
-        List<Result<ScreenshotData>> results = new ArrayList<>();
+        List<Result<ScreenshotData>> results  = Collections.synchronizedList(new ArrayList<>());
 
         Supplier<Result<ScreenshotData>> action = () -> {
             try {
@@ -208,15 +208,20 @@ public class CvMonitor {
         BigDecimal bd = BigDecimal.valueOf(Double.isInfinite(similarity) ? 1 : similarity);
         bd = bd.setScale(5, RoundingMode.HALF_UP);
         return """
-               %s.
                 Best match score: %s
                 Needed: %s
                 Best Match:
-                <a href="%s"><img src="%s" height="100" width="100"></img></a>
-                Wanted Image:
-                <img src="%s"></img>
-               """.formatted(isSuccessful ? "Image found" : "Image not found",
-                            similarity,
+                <table>
+                    <tr>
+                        <td>Best Match</td>
+                        <td>Wanted</td>
+                    </tr>
+                    <tr>
+                        <td><a href="%s"><img src="%s" height="100" width="100"></img></a></td>
+                        <td><img src="%s"></img></td>
+                    </tr>
+                </table>
+               """.formatted(bd.toString(),
                             matchScore,
                             relativeToLogScreenshot.toString(),
                             relativeToLogScreenshot.toString(),
@@ -238,18 +243,12 @@ public class CvMonitor {
         // TODO - Note for SQDIFF. Lower numbers are better
         Imgproc.matchTemplate(screenshot, template, result, Imgproc.TM_SQDIFF_NORMED, mask);
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-        BigDecimal bd = BigDecimal.valueOf(Double.isInfinite(mmr.minVal) ? 1 : mmr.minVal);
-        bd = bd.setScale(5, RoundingMode.HALF_UP);
-        double actualScore = mmr.minVal == Double.NEGATIVE_INFINITY ? 1 : mmr.minVal == Double.POSITIVE_INFINITY ? 0 : bd.doubleValue();
-        System.out.println("Matching..");
+        double actualScore = mmr.minVal == Double.NEGATIVE_INFINITY ? 1 : mmr.minVal == Double.POSITIVE_INFINITY ? 0 : 1 - mmr.minVal;
         if(actualScore > matchScore) {
-            return new SuccessfulResult<>(Optional.of(new ScreenshotData(takenTime,screenshot, mmr)),
-                    """
-                    """);
+            return new SuccessfulResult<>(Optional.of(new ScreenshotData(takenTime,screenshot, mmr)));
         }
 
-        return new FailedResult<>("""
-                """,Optional.of(new ScreenshotData(takenTime, screenshot,mmr)));
+        return new FailedResult<>("",Optional.of(new ScreenshotData(takenTime, screenshot,mmr)));
     }
 
     private static Mat imageToMat(BufferedImage sourceImg) {

@@ -41,6 +41,7 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
         argParser.addArg("image-loc", String.class)
                 .setShortKey('i')
                 .setHelp("Defines the directory name for image results.")
+                .setDefault("./")
                 .setCommand(val -> {
                     try {
                         MainController.getInstance().getCvMonitor().setResultsLocation(Path.of(val));

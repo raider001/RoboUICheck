@@ -37,15 +37,13 @@ class SnagTest:
         self.built_in = BuiltIn()
 
     @keyword("Connect", types={"port": int})
-    def connect(self, port: int = 1337):
+    def connect(self, port: int = 1338):
         self.remote = Remote("127.0.0.1:" + str(port) + "/")
 
     @keyword("Start", types={"port": int})
-    def start(self, port: int = 1337):
-        output_dir: str = self.built_in.get_variable_value('${OUTPUT DIR}') + "\\" + "image_results"
+    def start(self, port: int = 1338):
         args: [str] = ["-jar", _path() + "\\..\\..\\JSnagTest\\target\\SnagTest.jar",
-                       "--port", str(port),
-                       "--image-loc", output_dir]
+                       "--port", str(port)]
         java = 'java'
         process: Process = Process()
 
@@ -88,7 +86,7 @@ class SnagTest:
 
 
     def _generate_keywords(self):
-        self.start(1337)
+        self.start()
         keyword_data = {}
         keyword_names: [str] = self.remote.get_keyword_names()
         for name in keyword_names:

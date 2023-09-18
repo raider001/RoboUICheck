@@ -82,7 +82,8 @@ public class TemporaryThreadingService<T> {
 
         public void andWaitForCompletion() throws InterruptedException {
             handleThread();
-            service.workerService.awaitTermination(service.threadTimeoutDuration.toMillis() + service.forPeriod.toMillis(), TimeUnit.MILLISECONDS);
+            service.timerService.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+            service.workerService.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
             service.completionService.shutdown();
         }
 

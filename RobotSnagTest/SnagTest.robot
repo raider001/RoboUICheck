@@ -8,7 +8,9 @@ Test Robot Setup
     Log  Set up correctly!
 
 Test DynamicTest
-    Connect  1337
+    Connect  1338
+    #Start    1338
+    Set Display    1
     Add Image Path  ${CURDIR}/images
     ${res}=  Get Image Paths
     Log  ${res}
@@ -18,5 +20,5 @@ Test DynamicTest
     #[Teardown]  Shutdown
 
 Test Shutdown
-    Connect  1337
+    Connect  1338
     Shutdown

@@ -25,7 +25,7 @@ public class MainController {
             List<Rectangle> displays = new ArrayList<>();
             GraphicsDevice[] d = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
             for(int i = 0; i < d.length; i++) {
-                Rectangle rectangle = d[0].getConfigurations()[0].getBounds();
+                Rectangle rectangle = d[i].getConfigurations()[0].getBounds();
                 displays.add(rectangle);
             }
 
