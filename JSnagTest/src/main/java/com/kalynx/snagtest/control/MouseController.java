@@ -19,7 +19,6 @@ public class MouseController {
     private final RobotControl robot;
     private final MouseInfoControl mouseInfo;
     private final List<Rectangle> displays;
-    private final Consumer<Point> defaultPerformMove =this::mouseMove;
     private final Consumer<Point> performMove;
     public MouseController(RobotControl robot, MouseInfoControl mouseInfo, List<Rectangle> displays) {
         this(robot, mouseInfo,displays, null);
@@ -30,7 +29,7 @@ public class MouseController {
        if(performMove != null) {
            this.performMove = performMove;
        } else {
-           this.performMove = defaultPerformMove;
+           this.performMove = this::mouseMove;
        }
         this.robot = Objects.requireNonNull(robot);
         this.mouseInfo = Objects.requireNonNull(mouseInfo);
@@ -64,11 +63,6 @@ public class MouseController {
         if(x < 0 || x > currDisplay.width || y < 0 || y > currDisplay.height)
             throw new Exception("x %s and y %s out of bounds for current display width %s and height %s".formatted(x,y, currDisplay.width, currDisplay.height));
         performMove.accept(new Point(x + currDisplay.x, y + currDisplay.y));
-    }
-
-    public void moveMouseRelative(int xOffset, int yOffset) {
-        Point p = MouseInfo.getPointerInfo().getLocation();
-        robot.mouseMove(p.x + xOffset, p.y + yOffset);
     }
 
     public void mousePress(MouseButtonDown button) {
@@ -107,8 +101,6 @@ public class MouseController {
         Point current = mouseInfo.getMousePosition();
         double startDistance = current.distance(destination);
         double distancePerMs = startDistance / mouseMoveSpeed;
-        System.out.println("sd:  " + startDistance);
-        System.out.println("dps: " +distancePerMs);
         while(!destination.equals(current)) {
             current = mouseInfo.getMousePosition();
             long timeDifference = System.currentTimeMillis() - lastTime;

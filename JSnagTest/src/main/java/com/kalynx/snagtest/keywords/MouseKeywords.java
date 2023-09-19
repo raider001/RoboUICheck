@@ -1,13 +1,21 @@
 package com.kalynx.snagtest.keywords;
 
 import com.kalynx.snagtest.control.MainController;
+import com.kalynx.snagtest.data.Result;
+import com.kalynx.snagtest.screen.ScreenshotData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.opencv.core.Point;
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
+import java.awt.*;
+
 
 @RobotKeywords
 public class MouseKeywords {
+    private final Logger LOGGER = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
     @RobotKeyword("""
             Move Mouse
             Moves the mouse a relative distance based on its original location.
@@ -38,7 +46,13 @@ public class MouseKeywords {
             Moves the mouse to the center of the matched image on the screen.
             """)
     @ArgumentNames({"image"})
-    public boolean moveMouseToImage(String image) { return false;}
+    public void moveMouseToImage(String image) throws Exception {
+        Result<ScreenshotData> res = MainController.getInstance().getCvMonitor().monitorFor(image);
+        if(res.isFailure()) throw new Exception("*HTML*" + res.getInfo());
+        LOGGER.info(res.getInfo());
+        Rectangle p = res.getData().foundLocation();
+        MainController.getInstance().getMouseController().moveMouseTo(p.x + p.width / 2, p.y + + p.height / 2);
+    }
 
 
     @RobotKeyword("""

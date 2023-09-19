@@ -26,29 +26,34 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
 import java.util.function.Supplier;
 public class CvMonitor {
-    private final ConcurrentLinkedQueue<Robot> robotInstances = new ConcurrentLinkedQueue<>();
     private final ImageLibrary imageLibrary = new ImageLibrary();
     private double matchScore = 0.95;
     private Duration pollRate = Duration.ofMillis(100);
     private Duration timeoutTime = Duration.ofMillis(2000);
-    private final List<Rectangle> displays;
-    private final Map<Rectangle, Rectangle> displayRegions = new HashMap<>();
-    private Rectangle selectedDisplay;
+    private final Map<Integer, DisplayData> displayData = new HashMap<>();
+    private int selectedDisplay;
     private final Path imageResultRelativeLocation = Path.of(".", "image_results");
     private Path resultLocation = Path.of(".", imageResultRelativeLocation.toString());
 
-    public CvMonitor(double matchScore, List<Rectangle> screenDisplays) throws AWTException, IOException {
-
+    public CvMonitor(double matchScore, GraphicsDevice[] graphicDevices) throws AWTException {
         if (matchScore <= 0 || matchScore >=1) throw new AssertionError("matchScore can only be between 0 and 1");
-        int cores = Runtime.getRuntime().availableProcessors();
-        this.displays = screenDisplays;
-        this.displays.forEach(display -> displayRegions.put(display, display));
-        selectedDisplay = displays.get(0);
-        setCaptureRegion(displayRegions.get(this.displays.get(0)));
 
-        for(int i = 0; i < cores; i++) {
-            robotInstances.add(new Robot());
+        // This really isn't accurate anymore, used to ensure one robot per thread, but now double the robots are made.
+        // Leaving because worst case scenario is more memory usage(which is already quite small)
+        int cores = Runtime.getRuntime().availableProcessors();
+
+        for (int i = 0; i < graphicDevices.length; i++) {
+            Rectangle r = graphicDevices[i].getConfigurations()[0].getBounds();
+            Rectangle rectangle = new Rectangle(0,0,r.width,r.height);
+            ConcurrentLinkedQueue<Robot> robots = new ConcurrentLinkedQueue<>();
+
+            for (int j = 0; j < cores; j++) {
+                robots.add(new Robot(graphicDevices[i]));
+            }
+
+            displayData.put(i, new DisplayData(r, new Rectangle(r), robots));
         }
+        this.selectedDisplay = 0;
     }
 
     public void setResultsLocation(Path resultLocation) throws Exception {
@@ -70,8 +75,8 @@ public class CvMonitor {
     }
 
     public void setDisplay (int display) {
-        if(display < 0 || display >= displays.size()) throw new AssertionError("Given display outside of display range.");
-        selectedDisplay = displays.get(display);
+        if(display < 0 || display >= displayData.size()) throw new AssertionError("Given display outside of display range.");
+        selectedDisplay = display;
     }
     /**
      * Sets the capture region for the currently selected display.
@@ -81,17 +86,17 @@ public class CvMonitor {
         Objects.requireNonNull(screenRegion);
         if (screenRegion.width <= 0) throw new AssertionError("screenRegion width must be greater than 0");
         if (screenRegion.height <= 0) throw new AssertionError("screenRegion height must be greater than 0");
-
-        Rectangle adjustedToDisplay = new Rectangle(screenRegion.x + selectedDisplay.x,
-                screenRegion.y + selectedDisplay.y,
+        DisplayData d = displayData.get(selectedDisplay);
+        Rectangle adjustedToDisplay = new Rectangle(screenRegion.x + d.displayDimensions.x,
+                screenRegion.y + d.displayDimensions.y,
                 screenRegion.width,
                 screenRegion.height);
-        if(selectedDisplay.x < screenRegion.x ||
-           selectedDisplay.y < screenRegion.y ||
-           screenRegion.x + screenRegion.width > selectedDisplay.width + selectedDisplay.x ||
-           screenRegion.y + screenRegion.height > selectedDisplay.height + selectedDisplay.y) throw new AssertionError("Given parameters are not on the screen specified.");
+        if(d.displayDimensions.x < screenRegion.x ||
+           d.displayDimensions.y < screenRegion.y ||
+           screenRegion.x + screenRegion.width > d.displayDimensions.width + d.displayDimensions.x ||
+           screenRegion.y + screenRegion.height > d.displayDimensions.height + d.displayDimensions.y) throw new AssertionError("Given parameters are not on the screen specified.");
 
-        displayRegions.put(selectedDisplay, adjustedToDisplay);
+        d.displayRegion().setBounds(adjustedToDisplay);
     }
 
     public double getMatchScore() {
@@ -145,11 +150,11 @@ public class CvMonitor {
         final Mat template = result.getData();
         final Mat mask = new Mat(template.rows(),template.cols(), Imgcodecs.IMREAD_GRAYSCALE);
         Imgproc.threshold(template, mask,0,255,Imgproc.THRESH_BINARY);
-        List<Result<ScreenshotData>> results  = Collections.synchronizedList(new ArrayList<>());
+        List<Result<Data>> results  = Collections.synchronizedList(new ArrayList<>());
 
-        Supplier<Result<ScreenshotData>> action = () -> {
+        Supplier<Result<Data>> action = () -> {
             try {
-                Result<ScreenshotData> res = match(template, mask, matchScore);
+                Result<Data> res = match(template, mask, matchScore);
                 results.add(res);
                 return res;
             } catch(Exception e) {
@@ -158,38 +163,42 @@ public class CvMonitor {
             }
         };
 
-        Function<Result<ScreenshotData>, Boolean> condition = Result::isSuccess;
+        Function<Result<Data>, Boolean> condition = Result::isSuccess;
 
         TemporaryThreadingService.schedule(action).forEvery(pollRate).over(timeoutTime).orUntil(condition).andWaitForCompletion();
-        Optional<Result<ScreenshotData>> finalResult = results.stream().filter(Result::isSuccess).findFirst();
+        Optional<Result<Data>> finalResult = results.stream().filter(Result::isSuccess).findFirst();
 
         if(finalResult.isPresent()) {
-            Core.MinMaxLocResult locRes = finalResult.get().getData().foundLocation;
-            Imgproc.rectangle(finalResult.get().getData().screenshot(), locRes.minLoc, new Point(locRes.minLoc.x + template.cols(), locRes.minLoc.y + template.rows()),
+            Core.MinMaxLocResult locRes = finalResult.get().getData().res();
+            Point xy1 = locRes.minLoc;
+            Point xy2 = new Point(locRes.minLoc.x + template.cols(), locRes.minLoc.y + template.rows());
+
+            Imgproc.rectangle(finalResult.get().getData().screenshot(), xy1, xy2,
                 new Scalar(0, 0, 255), 2, 8, 0);
 
             BufferedImage buffImage = (BufferedImage)HighGui.toBufferedImage(finalResult.get().getData().screenshot());
-            Path resultLoc = Path.of(resultLocation.toString(),  finalResult.get().getData().timeTaken + ".jpg");
+            Path resultLoc = Path.of(resultLocation.toString(),  finalResult.get().getData().takenTime() + ".jpg");
             ImageIO.write(buffImage, "jpg", resultLoc.toFile());
             String htmlResult = generateHTMLResult(true, 1 - locRes.minVal,
-                    finalResult.get().getData().timeTaken,template,
+                    finalResult.get().getData().takenTime(),template,
                     buffImage);
-
-            return new SuccessfulResult<>(htmlResult);
+            Data data = finalResult.get().getData();
+            Rectangle rect = new Rectangle((int) xy1.x, (int) xy1.y, template.cols(), template.rows());
+            return new SuccessfulResult<>(Optional.of(new ScreenshotData(data.takenTime(), data.screenshot(), rect)), htmlResult);
         }
 
-        Comparator<Result<ScreenshotData>> comp = Comparator.comparingDouble(data -> data.getData().foundLocation.minVal);
+        Comparator<Result<Data>> comp = Comparator.comparingDouble(data -> data.getData().res().minVal);
         results.sort(comp);
-        Result<ScreenshotData> res = results.get(0);
+        Result<Data> res = results.get(0);
 
-        Core.MinMaxLocResult locRes = res.getData().foundLocation;
+        Core.MinMaxLocResult locRes = res.getData().res();
         Imgproc.rectangle(res.getData().screenshot(), locRes.minLoc, new Point(locRes.minLoc.x + template.cols(), locRes.minLoc.y + template.rows()),
                 new Scalar(0, 0, 255), 2, 8, 0);
         BufferedImage buffImage = (BufferedImage)HighGui.toBufferedImage(res.getData().screenshot());
         double actualScore = locRes.minVal == Double.NEGATIVE_INFINITY ? 0 : locRes.minVal == Double.POSITIVE_INFINITY ? 1 : locRes.minVal;
         return new FailedResult<>(generateHTMLResult(true,
                                              1 - actualScore,
-                                            res.getData().timeTaken,
+                                            res.getData().takenTime(),
                                             template,
                                             buffImage));
     }
@@ -227,12 +236,12 @@ public class CvMonitor {
                             relativeToLogScreenshot.toString(),
                             relativeToLogExpected.toString());
     }
-    private Result<ScreenshotData> match(Mat template, Mat mask, double matchScore) {
-        Robot robot = robotInstances.poll();
+    private Result<Data> match(Mat template, Mat mask, double matchScore) {
+        Robot robot = displayData.get(selectedDisplay).robots().poll();
         assert robot != null;
         long takenTime = System.currentTimeMillis();
-        BufferedImage image = robot.createScreenCapture(displayRegions.get(selectedDisplay));
-        robotInstances.add(robot);
+        BufferedImage image = robot.createScreenCapture(displayData.get(selectedDisplay).displayRegion());
+        displayData.get(selectedDisplay).robots().add(robot);
         Mat screenshot = imageToMat(image);
         int result_cols = screenshot.cols() - template.cols() + 1;
         int result_rows = screenshot.rows() - template.rows() + 1;
@@ -245,10 +254,10 @@ public class CvMonitor {
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
         double actualScore = mmr.minVal == Double.NEGATIVE_INFINITY ? 1 : mmr.minVal == Double.POSITIVE_INFINITY ? 0 : 1 - mmr.minVal;
         if(actualScore > matchScore) {
-            return new SuccessfulResult<>(Optional.of(new ScreenshotData(takenTime,screenshot, mmr)));
+            return new SuccessfulResult<>(Optional.of(new Data(takenTime,screenshot, mmr)));
         }
 
-        return new FailedResult<>("",Optional.of(new ScreenshotData(takenTime, screenshot,mmr)));
+        return new FailedResult<>("",Optional.of(new Data(takenTime, screenshot,mmr)));
     }
 
     private static Mat imageToMat(BufferedImage sourceImg) {
@@ -261,6 +270,7 @@ public class CvMonitor {
         }
         return Imgcodecs.imdecode(new MatOfByte(byteArrayOutputStream.toByteArray()), Imgcodecs.IMREAD_COLOR);
     }
+    private record Data (long takenTime, Mat screenshot, Core.MinMaxLocResult res){}
 
-    public record ScreenshotData(long timeTaken, Mat screenshot, Core.MinMaxLocResult foundLocation){}
+    private record DisplayData(Rectangle displayDimensions, Rectangle displayRegion, ConcurrentLinkedQueue<Robot> robots){};
 }

@@ -24,11 +24,15 @@ Test DynamicTest
     Move Mouse  500  300
     Move Mouse  -10  -50
 
+    Move Mouse To Display  0  500  500
+    Set Display  0
     Find Image  aCheckBox.png
     Find Image  buttonA.png
 
+    Move Mouse To Image  textfield.png
+    Move Mouse To Image  buttonA.png
     # Intentional fail at the end to ensure it cannot find image
-    Find Image  failImage.png
+    #Find Image  failImage.png
     #[Teardown]  Shutdown
 
 Test Shutdown

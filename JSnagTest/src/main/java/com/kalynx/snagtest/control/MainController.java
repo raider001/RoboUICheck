@@ -24,20 +24,17 @@ public class MainController {
 
             List<Rectangle> displays = new ArrayList<>();
             GraphicsDevice[] d = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
-            for(int i = 0; i < d.length; i++) {
-                Rectangle rectangle = d[i].getConfigurations()[0].getBounds();
+            for (GraphicsDevice graphicsDevice : d) {
+                Rectangle rectangle = graphicsDevice.getConfigurations()[0].getBounds();
                 displays.add(rectangle);
             }
 
             mouseController = new MouseController(robotWrapper, new MouseInfoWrapper(),displays);
             keyboardController = new KeyboardController(timeSettings, this.robot);
-            cvMonitor = new CvMonitor(0.95, displays);
+            cvMonitor = new CvMonitor(0.95, d);
         } catch (AWTException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
-
     }
 
     private static MainController INSTANCE;
