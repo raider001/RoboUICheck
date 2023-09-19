@@ -52,8 +52,7 @@ public class MouseController {
         Rectangle r = displays.get(display);
         if(x < 0 || x > r.width) throw new Exception("Mouse location x: " + x + " must be equal to or between " + 0 + "-" + r.width);
         if(y < 0 || y > r.height) throw new Exception("Mouse location y: " + y + " must be equal to or between " + 0 + "-" + r.height);
-
-        robot.mouseMove(x + r.x, y + r.y);
+        performMove.accept(new Point(x + r.x, y + r.y));
     }
 
     public void moveMouseTo(int x, int y) throws Exception {
@@ -64,8 +63,7 @@ public class MouseController {
 
         if(x < 0 || x > currDisplay.width || y < 0 || y > currDisplay.height)
             throw new Exception("x %s and y %s out of bounds for current display width %s and height %s".formatted(x,y, currDisplay.width, currDisplay.height));
-
-        robot.mouseMove(x, y);
+        performMove.accept(new Point(x + currDisplay.x, y + currDisplay.y));
     }
 
     public void moveMouseRelative(int xOffset, int yOffset) {

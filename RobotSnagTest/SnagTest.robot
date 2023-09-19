@@ -14,9 +14,21 @@ Test DynamicTest
     Add Image Path  ${CURDIR}/images
     ${res}=  Get Image Paths
     Log  ${res}
-    Find Image  hammer.png
-    Find Image  debug.png
-    Find Image  fail.png
+    # Will move the mouse to display 0 at fixed position 100 100
+    Move Mouse To Display  0  100  100
+    # Will move the mouse to fixed position on current display mouse is on
+    Move Mouse To  500  200
+     # Will move the mouse to display 1 at fixed position 100 100
+    Move Mouse To Display  1  100  100
+    # Will move the mouse to fixed position on current display mouse is on
+    Move Mouse  500  300
+    Move Mouse  -10  -50
+
+    Find Image  aCheckBox.png
+    Find Image  buttonA.png
+
+    # Intentional fail at the end to ensure it cannot find image
+    Find Image  failImage.png
     #[Teardown]  Shutdown
 
 Test Shutdown
