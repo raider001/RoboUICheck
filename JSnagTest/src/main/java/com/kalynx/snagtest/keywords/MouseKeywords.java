@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
+import org.robotframework.javalib.annotation.RobotKeywordOverload;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
 import java.awt.*;
@@ -61,12 +62,23 @@ public class MouseKeywords {
     @RobotKeyword("""
             Simulates a Mouse click
             Available options are:
-            <ul>
-            <li>LEFT</li><li>MIDDLE</li><li>RIGHT</li>
-            </ul>
-            
+             - LEFT
+             - MIDDLE
+             - RIGHT
             """)
-    @ArgumentNames({"button"})
+    @ArgumentNames({"button", "count=1"})
+    public void click(String button, int count) throws Exception {
+        if(count <= 0) throw new Exception("Mouse click count must be greater than 0");
+        try{
+            MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
+            MainController.getInstance().getMouseController().mouseClick(mask, count);
+        } catch (Exception e) {
+            throw new Exception("Invalid Click option %s given.".formatted(button));
+        }
+
+    }
+
+    @RobotKeywordOverload
     public void click(String button) throws Exception {
         try{
             MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
@@ -76,6 +88,9 @@ public class MouseKeywords {
         }
 
     }
+
+
+
 
     // Mouse Movement Settings
     @RobotKeyword("Set Mouse Move Speed")

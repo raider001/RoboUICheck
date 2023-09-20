@@ -1,4 +1,3 @@
-
 import pathlib
 import sys
 import os
@@ -84,7 +83,6 @@ class SnagTest:
             return 'This library provides UI automation.'
         return data[name][self.DOC]
 
-
     def _generate_keywords(self):
         self.start()
         keyword_data = {}
@@ -100,7 +98,6 @@ class SnagTest:
         with codecs.open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'keywords.py'), 'w',
                          encoding='utf-8') as f:
             f.write('# -*- coding: utf-8 -*-\n')
-            # keywords = ','.join(['"%s": %s' % (k, keywordDict[k]) for k in keywordDict.keys()])
             f.write('data = %s' % keyword_data)
 
         self.stop()

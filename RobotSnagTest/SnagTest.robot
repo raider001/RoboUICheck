@@ -2,7 +2,6 @@
 Library  BuiltIn
 Library    ../PySnagTest/src/SnagTest.py
 
-
 *** Test Cases ***
 Test Robot Setup
     Log  Set up correctly!
@@ -31,6 +30,7 @@ Test DynamicTest
 
     Move Mouse To Image  textfield.png
     Move Mouse To Image  buttonA.png
+    Click    LEFT
     # Intentional fail at the end to ensure it cannot find image
     #Find Image  failImage.png
     #[Teardown]  Shutdown
