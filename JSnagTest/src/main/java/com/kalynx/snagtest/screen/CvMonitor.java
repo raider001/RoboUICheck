@@ -248,10 +248,6 @@ public class CvMonitor {
         int result_rows = screenshot.rows() - template.rows() + 1;
         Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
 
-        // TODO - Add Masking capabilities
-        // TODO - Imgproc.TM_SQDIFF || match_method == Imgproc.TM_SQDIFF_NORMED
-        // TODO - TM_CCORR_NORMED and TM_SQDIFF are the only methods that support masking.
-        // TODO - Note for SQDIFF. Lower numbers are better
         Imgproc.matchTemplate(screenshot, template, result, Imgproc.TM_CCORR_NORMED, mask);
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
         double actualScore = mmr.maxVal == Double.NEGATIVE_INFINITY ? 1 : mmr.maxVal == Double.POSITIVE_INFINITY ? 0 : mmr.maxVal;
