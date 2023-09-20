@@ -5,6 +5,7 @@ import com.kalynx.snagtest.wrappers.MouseInfoControl;
 import com.kalynx.snagtest.wrappers.RobotControl;
 
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -73,10 +74,12 @@ public class MouseController {
         robot.mouseRelease(button.getButton());
     }
 
-    public void mouseClick(MouseButtonDown button, int totalClicks) {
+    public void mouseClick(MouseButtonDown button, int totalClicks) throws InterruptedException {
         for(int i = 0; i < totalClicks; i++) {
             mousePress(button);
+            Thread.sleep(150);
             mouseRelease(button);
+            Thread.sleep(150);
         }
     }
 
@@ -96,6 +99,8 @@ public class MouseController {
                 p.y <= display.y + display.height).findFirst();
         return currDisplay.orElse(null);
     }
+
+
     private void mouseMove(Point destination) {
         long lastTime = System.currentTimeMillis();
         Point current = mouseInfo.getMousePosition();

@@ -1,21 +1,25 @@
 package com.kalynx.snagtest.keywords;
 
+import com.kalynx.snagtest.MouseEvent.MouseButtonDown;
 import com.kalynx.snagtest.control.MainController;
 import com.kalynx.snagtest.data.Result;
 import com.kalynx.snagtest.screen.ScreenshotData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.opencv.core.Point;
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
 import java.awt.*;
+import java.awt.event.InputEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RobotKeywords
 public class MouseKeywords {
-    private final Logger LOGGER = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
+    private static final Logger LOGGER = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
+
     @RobotKeyword("""
             Move Mouse
             Moves the mouse a relative distance based on its original location.
@@ -54,18 +58,28 @@ public class MouseKeywords {
         MainController.getInstance().getMouseController().moveMouseTo(p.x + p.width / 2, p.y + + p.height / 2);
     }
 
-
     @RobotKeyword("""
-            Drag And Drop
+            Simulates a Mouse click
+            Available options are:
+            <ul>
+            <li>LEFT</li><li>MIDDLE</li><li>RIGHT</li>
+            </ul>
+            
             """)
-    @ArgumentNames({"x", "y"})
-    public boolean dragAndDrop(String image, String toImage) {
-        return false;
+    @ArgumentNames({"button"})
+    public void click(String button) throws Exception {
+        try{
+            MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
+            MainController.getInstance().getMouseController().mouseClick(mask, 1);
+        } catch (Exception e) {
+            throw new Exception("Invalid Click option %s given.".formatted(button));
+        }
+
     }
 
     // Mouse Movement Settings
     @RobotKeyword("Set Mouse Move Speed")
-    @ArgumentNames({"period"})
+    @ArgumentNames({"speed"})
     public void setMouseMoveSpeed(long speed) {
         MainController.getInstance().getMouseController().setMouseMoveSpeed(speed);
     }

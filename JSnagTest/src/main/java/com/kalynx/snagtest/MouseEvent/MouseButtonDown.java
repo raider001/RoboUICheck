@@ -4,9 +4,9 @@ import java.awt.event.InputEvent;
 
 public enum MouseButtonDown {
     // TODO - verify these are correct.
-    Left(InputEvent.BUTTON1_DOWN_MASK),
-    Middle(InputEvent.BUTTON2_DOWN_MASK),
-    Right(InputEvent.BUTTON3_DOWN_MASK);
+    LEFT(InputEvent.BUTTON1_DOWN_MASK),
+    MIDDLE(InputEvent.BUTTON2_DOWN_MASK),
+    RIGHT(InputEvent.BUTTON3_DOWN_MASK);
 
     private int id = 0;
     private MouseButtonDown(int mask) {
