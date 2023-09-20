@@ -149,7 +149,8 @@ public class CvMonitor {
         if(result.isFailure()) return new FailedResult<>(result.getInfo());
         final Mat template = result.getData();
         final Mat mask = new Mat(template.rows(),template.cols(), Imgcodecs.IMREAD_GRAYSCALE);
-        Imgproc.threshold(template, mask,0,255,Imgproc.THRESH_BINARY);
+        Imgproc.cvtColor(template, mask, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.threshold(mask, mask,0,255,Imgproc.THRESH_BINARY);
         List<Result<Data>> results  = Collections.synchronizedList(new ArrayList<>());
 
         Supplier<Result<Data>> action = () -> {
@@ -170,8 +171,8 @@ public class CvMonitor {
 
         if(finalResult.isPresent()) {
             Core.MinMaxLocResult locRes = finalResult.get().getData().res();
-            Point xy1 = locRes.minLoc;
-            Point xy2 = new Point(locRes.minLoc.x + template.cols(), locRes.minLoc.y + template.rows());
+            Point xy1 = locRes.maxLoc;
+            Point xy2 = new Point(locRes.maxLoc.x + template.cols(), locRes.maxLoc.y + template.rows());
 
             Imgproc.rectangle(finalResult.get().getData().screenshot(), xy1, xy2,
                 new Scalar(0, 0, 255), 2, 8, 0);
@@ -179,7 +180,7 @@ public class CvMonitor {
             BufferedImage buffImage = (BufferedImage)HighGui.toBufferedImage(finalResult.get().getData().screenshot());
             Path resultLoc = Path.of(resultLocation.toString(),  finalResult.get().getData().takenTime() + ".jpg");
             ImageIO.write(buffImage, "jpg", resultLoc.toFile());
-            String htmlResult = generateHTMLResult(true, 1 - locRes.minVal,
+            String htmlResult = generateHTMLResult(true, 1 - locRes.maxVal,
                     finalResult.get().getData().takenTime(),template,
                     buffImage);
             Data data = finalResult.get().getData();
@@ -187,17 +188,17 @@ public class CvMonitor {
             return new SuccessfulResult<>(Optional.of(new ScreenshotData(data.takenTime(), data.screenshot(), rect)), htmlResult);
         }
 
-        Comparator<Result<Data>> comp = Comparator.comparingDouble(data -> data.getData().res().minVal);
+        Comparator<Result<Data>> comp = Comparator.comparingDouble(data -> data.getData().res().maxVal);
         results.sort(comp);
         Result<Data> res = results.get(0);
 
         Core.MinMaxLocResult locRes = res.getData().res();
-        Imgproc.rectangle(res.getData().screenshot(), locRes.minLoc, new Point(locRes.minLoc.x + template.cols(), locRes.minLoc.y + template.rows()),
+        Imgproc.rectangle(res.getData().screenshot(), locRes.maxLoc, new Point(locRes.maxLoc.x + template.cols(), locRes.maxLoc.y + template.rows()),
                 new Scalar(0, 0, 255), 2, 8, 0);
         BufferedImage buffImage = (BufferedImage)HighGui.toBufferedImage(res.getData().screenshot());
-        double actualScore = locRes.minVal == Double.NEGATIVE_INFINITY ? 0 : locRes.minVal == Double.POSITIVE_INFINITY ? 1 : locRes.minVal;
+        double actualScore = locRes.maxVal == Double.NEGATIVE_INFINITY ? 0 : locRes.minVal == Double.POSITIVE_INFINITY ? 1 : locRes.maxVal;
         return new FailedResult<>(generateHTMLResult(true,
-                                             1 - actualScore,
+                                             actualScore,
                                             res.getData().takenTime(),
                                             template,
                                             buffImage));
@@ -249,10 +250,11 @@ public class CvMonitor {
 
         // TODO - Add Masking capabilities
         // TODO - Imgproc.TM_SQDIFF || match_method == Imgproc.TM_SQDIFF_NORMED
+        // TODO - TM_CCORR_NORMED and TM_SQDIFF are the only methods that support masking.
         // TODO - Note for SQDIFF. Lower numbers are better
-        Imgproc.matchTemplate(screenshot, template, result, Imgproc.TM_SQDIFF_NORMED, mask);
+        Imgproc.matchTemplate(screenshot, template, result, Imgproc.TM_CCORR_NORMED, mask);
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-        double actualScore = mmr.minVal == Double.NEGATIVE_INFINITY ? 1 : mmr.minVal == Double.POSITIVE_INFINITY ? 0 : 1 - mmr.minVal;
+        double actualScore = mmr.maxVal == Double.NEGATIVE_INFINITY ? 1 : mmr.maxVal == Double.POSITIVE_INFINITY ? 0 : mmr.maxVal;
         if(actualScore > matchScore) {
             return new SuccessfulResult<>(Optional.of(new Data(takenTime,screenshot, mmr)));
         }
