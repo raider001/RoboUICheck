@@ -31,9 +31,17 @@ Test DynamicTest
     Move Mouse To Image  textfield.png
     Move Mouse To Image  buttonA.png
     Click    LEFT
+    Move Mouse To Image  textfield.png
+    Click    LEFT
+    Type  Hello
+    Press Key  A
+
     # Intentional fail at the end to ensure it cannot find image
     #Find Image  failImage.png
     #[Teardown]  Shutdown
+
+Start
+    Start    1338
 
 Test Shutdown
     Connect  1338

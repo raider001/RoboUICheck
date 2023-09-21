@@ -25,11 +25,8 @@ replay_pid*
 target
 .idea
 .png~
-*.pyc
-*.pyc
-*.pyc
-log/log.html
+.jpg
+__pycache__
 log/log.html
 log/report.html
 log/output.xml
-log/log.html

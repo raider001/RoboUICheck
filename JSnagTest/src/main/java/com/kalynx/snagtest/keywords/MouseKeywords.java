@@ -1,21 +1,13 @@
 package com.kalynx.snagtest.keywords;
 
-import com.kalynx.snagtest.MouseEvent.MouseButtonDown;
-import com.kalynx.snagtest.control.MainController;
-import com.kalynx.snagtest.data.Result;
-import com.kalynx.snagtest.screen.ScreenshotData;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.robotframework.javalib.annotation.ArgumentNames;
-import org.robotframework.javalib.annotation.RobotKeyword;
-import org.robotframework.javalib.annotation.RobotKeywordOverload;
-import org.robotframework.javalib.annotation.RobotKeywords;
+import com.kalynx.snagtest.MouseEvent.*;
+import com.kalynx.snagtest.control.*;
+import com.kalynx.snagtest.data.*;
+import com.kalynx.snagtest.screen.*;
+import org.apache.logging.log4j.*;
+import org.robotframework.javalib.annotation.*;
 
 import java.awt.*;
-import java.awt.event.InputEvent;
-import java.util.HashMap;
-import java.util.Map;
-
 
 @RobotKeywords
 public class MouseKeywords {
@@ -27,7 +19,7 @@ public class MouseKeywords {
             """)
     @ArgumentNames({"xRelative", "yRelative"})
     public void moveMouse(int xRelative, int yRelative) {
-        MainController.getInstance().getMouseController().moveMouse(xRelative,yRelative);
+        MainController.getInstance().getMouseController().moveMouse(xRelative, yRelative);
     }
 
     @RobotKeyword("""
@@ -43,7 +35,7 @@ public class MouseKeywords {
             """)
     @ArgumentNames({"x", "y"})
     public void moveMouseTo(int x, int y) throws Exception {
-        MainController.getInstance().getMouseController().moveMouseTo(x,y);
+        MainController.getInstance().getMouseController().moveMouseTo(x, y);
     }
 
     @RobotKeyword("""
@@ -53,10 +45,10 @@ public class MouseKeywords {
     @ArgumentNames({"image"})
     public void moveMouseToImage(String image) throws Exception {
         Result<ScreenshotData> res = MainController.getInstance().getCvMonitor().monitorFor(image);
-        if(res.isFailure()) throw new Exception("*HTML*" + res.getInfo());
+        if (res.isFailure()) throw new Exception("*HTML*" + res.getInfo());
         LOGGER.info(res.getInfo());
         Rectangle p = res.getData().foundLocation();
-        MainController.getInstance().getMouseController().moveMouseTo(p.x + p.width / 2, p.y + + p.height / 2);
+        MainController.getInstance().getMouseController().moveMouseTo(p.x + p.width / 2, p.y + +p.height / 2);
     }
 
     @RobotKeyword("""
@@ -68,8 +60,8 @@ public class MouseKeywords {
             """)
     @ArgumentNames({"button", "count=1"})
     public void click(String button, int count) throws Exception {
-        if(count <= 0) throw new Exception("Mouse click count must be greater than 0");
-        try{
+        if (count <= 0) throw new Exception("Mouse click count must be greater than 0");
+        try {
             MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
             MainController.getInstance().getMouseController().mouseClick(mask, count);
         } catch (Exception e) {
@@ -80,7 +72,7 @@ public class MouseKeywords {
 
     @RobotKeywordOverload
     public void click(String button) throws Exception {
-        try{
+        try {
             MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
             MainController.getInstance().getMouseController().mouseClick(mask, 1);
         } catch (Exception e) {
@@ -88,8 +80,6 @@ public class MouseKeywords {
         }
 
     }
-
-
 
 
     // Mouse Movement Settings
