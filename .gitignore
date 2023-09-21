@@ -27,6 +27,4 @@ target
 .png~
 .jpg
 __pycache__
-log/log.html
-log/report.html
-log/output.xml
+log/*

@@ -219,7 +219,7 @@ public class CvMonitor {
         Imgproc.rectangle(res.getData().screenshot(), locRes.maxLoc, new Point(locRes.maxLoc.x + template.cols(), locRes.maxLoc.y + template.rows()),
                 new Scalar(0, 0, 255), 2, 8, 0);
         BufferedImage buffImage = (BufferedImage) HighGui.toBufferedImage(res.getData().screenshot());
-        double actualScore = locRes.maxVal == Double.NEGATIVE_INFINITY ? 0 : locRes.minVal == Double.POSITIVE_INFINITY ? 1 : locRes.maxVal;
+        double actualScore = locRes.maxVal == Double.NEGATIVE_INFINITY ? 0 : locRes.minVal == Double.POSITIVE_INFINITY ? 1 : 1 - locRes.maxVal;
         return new FailedResult<>(generateHTMLResult(true,
                 actualScore,
                 res.getData().takenTime(),

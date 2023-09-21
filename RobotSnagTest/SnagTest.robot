@@ -35,7 +35,7 @@ Test DynamicTest
     Click    LEFT
     Type  Hello
     Press Key  A
-
+    Find Image  failImage.png
     # Intentional fail at the end to ensure it cannot find image
     #Find Image  failImage.png
     #[Teardown]  Shutdown
