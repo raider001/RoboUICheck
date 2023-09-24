@@ -1,14 +1,14 @@
+import codecs
+import os
 import pathlib
 import sys
-import os
 import time
-import codecs
 
 from robot.api import Failure
 from robot.api.deco import keyword
+from robot.libraries.BuiltIn import BuiltIn
 from robot.libraries.Process import Process
 from robot.libraries.Remote import Remote
-from robot.libraries.BuiltIn import BuiltIn
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 
@@ -58,12 +58,12 @@ class SnagTest:
     def get_keyword_names(self):
         return list(data.keys())
 
-    def run_keyword(self, name, args, kwargs):
-        if self._run_static_words(name, *args, **kwargs):
+    def run_keyword(self, name, args=[]):
+        if self._run_static_words(name, args):
             return
-        return self.remote.run_keyword(name, args, kwargs)
+        return self.remote.run_keyword(name, args, None)
 
-    def _run_static_words(self, name, *args, **kwargs) -> bool:
+    def _run_static_words(self, name, *args) -> bool:
         """
         Returns true if it is a keyword, otherwise false.
         """

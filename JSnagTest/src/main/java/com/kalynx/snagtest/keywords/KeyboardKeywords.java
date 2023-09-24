@@ -6,6 +6,9 @@ import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
+import java.util.Collections;
+import java.util.List;
+
 @RobotKeywords
 public class KeyboardKeywords {
 
@@ -13,14 +16,14 @@ public class KeyboardKeywords {
             Types the given message
             """)
     @ArgumentNames({"message"})
-    public void type(String message) throws InterruptedException {
+    public void type(String message) throws Exception {
         MainController.getInstance().getKeyboardController().type(message);
     }
 
     @RobotKeyword("""
-            Presses the requested key
+            Holds the requested key. It wont be released until the release key has been called
                         
-            Available Options:   
+            Available Options:
              - ENTER
              - BACK_SPACE
              - TAB
@@ -98,7 +101,7 @@ public class KeyboardKeywords {
              - Z
             """)
     @ArgumentNames({"key"})
-    public void pressKey(String key) throws InterruptedException {
+    public void holdKey(String key) throws Exception {
         KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
         MainController.getInstance().getKeyboardController().keyPress(specialKey);
     }
@@ -106,7 +109,7 @@ public class KeyboardKeywords {
     @RobotKeyword("""
             Releases the requested key
                         
-            Available Options:   
+            Available Options:
              - ENTER
              - BACK_SPACE
              - TAB
@@ -184,8 +187,101 @@ public class KeyboardKeywords {
              - Z
             """)
     @ArgumentNames({"key"})
-    public void releaseKey(String key) throws InterruptedException {
+    public void releaseKey(String key) throws Exception {
         KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
         MainController.getInstance().getKeyboardController().keyRelease(specialKey);
+    }
+
+    @RobotKeyword("""
+            presses a set of keys, then releases them immediately afterwords.
+                        
+            Available Options:
+             - ENTER
+             - BACK_SPACE
+             - TAB
+             - CANCEL
+             - CLEAR
+             - SHIFT
+             - CONTROL
+             - ALT
+             - PAUSE
+             - CAPSLOCK
+             - ESCAPE
+             - SPACE
+             - PAGE_UP
+             - PAGE_DOWN
+             - END
+             - HOME
+             - LEFT
+             - UP
+             - RIGHT
+             - DOWN
+             - DELETE
+             - F1
+             - F2
+             - F3
+             - F4
+             - F5
+             - F6
+             - F7
+             - F8
+             - F9
+             - F10
+             - F11
+             - F12
+             - F13
+             - F14
+             - F15
+             - F16
+             - F17
+             - F18
+             - F19
+             - F20
+             - F21
+             - F22
+             - F23
+             - F24
+             - PRINT_SCREEN
+             - INSERT
+             - HELP
+             - META
+             - A
+             - B
+             - C
+             - D
+             - E
+             - F
+             - G
+             - H
+             - I
+             - J
+             - K
+             - L
+             - M
+             - N
+             - O
+             - P
+             - Q
+             - R
+             - S
+             - T
+             - U
+             - V
+             - W
+             - X
+             - Y
+             - Z
+            """)
+    @ArgumentNames({"keys"})
+    public void pressKeys(List<String> keys) throws Exception {
+        for (String key : keys) {
+            KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
+            MainController.getInstance().getKeyboardController().keyPress(specialKey);
+        }
+
+        for (String key : keys.stream().sorted(Collections.reverseOrder()).toList()) {
+            KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
+            MainController.getInstance().getKeyboardController().keyRelease(specialKey);
+        }
     }
 }

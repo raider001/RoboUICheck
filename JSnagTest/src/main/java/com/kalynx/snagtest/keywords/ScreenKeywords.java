@@ -74,6 +74,7 @@ public class ScreenKeywords {
             The result path should be defined as a relative path
             based on where log files are written to.
             """)
+    @ArgumentNames({"resultPath"})
     public void setResultPath(String resultPath) throws Exception {
         Path p = Path.of(resultPath);
         MainController.getInstance().getCvMonitor().setResultsLocation(p);
@@ -83,6 +84,7 @@ public class ScreenKeywords {
             Set Display
             Sets the display to look at.
             """)
+    @ArgumentNames({"displayId"})
     public void setDisplay(int display) {
         MainController.getInstance().getCvMonitor().setDisplay(display);
     }
@@ -91,6 +93,7 @@ public class ScreenKeywords {
             Set Capture Region
             Sets the display to look at.
             """)
+    @ArgumentNames({"x", "y", "width", "height"})
     public void setCaptureRegion(int x, int y, int width, int height) {
         MainController.getInstance().getCvMonitor().setCaptureRegion(new Rectangle(x, y, width, height));
     }

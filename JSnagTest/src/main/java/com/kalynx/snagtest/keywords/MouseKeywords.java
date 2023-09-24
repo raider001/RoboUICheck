@@ -1,13 +1,17 @@
 package com.kalynx.snagtest.keywords;
 
-import com.kalynx.snagtest.MouseEvent.*;
-import com.kalynx.snagtest.control.*;
-import com.kalynx.snagtest.data.*;
-import com.kalynx.snagtest.screen.*;
-import org.apache.logging.log4j.*;
-import org.robotframework.javalib.annotation.*;
+import com.kalynx.snagtest.MouseEvent.MouseButtonDown;
+import com.kalynx.snagtest.control.MainController;
+import com.kalynx.snagtest.data.Result;
+import com.kalynx.snagtest.screen.ScreenshotData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.robotframework.javalib.annotation.ArgumentNames;
+import org.robotframework.javalib.annotation.RobotKeyword;
+import org.robotframework.javalib.annotation.RobotKeywordOverload;
+import org.robotframework.javalib.annotation.RobotKeywords;
 
-import java.awt.*;
+import java.awt.Rectangle;
 
 @RobotKeywords
 public class MouseKeywords {
@@ -80,7 +84,6 @@ public class MouseKeywords {
         }
 
     }
-
 
     // Mouse Movement Settings
     @RobotKeyword("Set Mouse Move Speed")
