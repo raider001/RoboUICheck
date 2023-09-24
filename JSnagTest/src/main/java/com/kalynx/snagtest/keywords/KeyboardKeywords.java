@@ -272,14 +272,15 @@ public class KeyboardKeywords {
              - Y
              - Z
             """)
-    @ArgumentNames({"keys"})
-    public void pressKeys(List<String> keys) throws Exception {
-        for (String key : keys) {
+    @ArgumentNames({"key1", "key2=None", "key3=None", "key4=None", "key5=None"})
+    public void pressKeys(List<Object> keys) throws Exception {
+        List<String> trans = keys.stream().map(Object::toString).toList();
+        for (String key : trans) {
             KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
             MainController.getInstance().getKeyboardController().keyPress(specialKey);
         }
 
-        for (String key : keys.stream().sorted(Collections.reverseOrder()).toList()) {
+        for (String key : trans.stream().sorted(Collections.reverseOrder()).toList()) {
             KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
             MainController.getInstance().getKeyboardController().keyRelease(specialKey);
         }
