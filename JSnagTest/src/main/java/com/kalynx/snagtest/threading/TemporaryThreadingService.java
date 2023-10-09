@@ -3,28 +3,26 @@ package com.kalynx.snagtest.threading;
 
 import java.time.Duration;
 import java.util.concurrent.*;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class TemporaryThreadingService<T> {
-    private final Duration threadTimeoutDuration = Duration.ofSeconds(60);
-    private Supplier<T> runnable;
-    private Duration forEvery;
-    private Duration forPeriod;
-
-    private Function<T, Boolean> until = val -> false;
-
     // Thread used to handle the timing and delegation to the worker thread.
     private final ScheduledExecutorService timerService = Executors.newSingleThreadScheduledExecutor();
     // The actual worker thread pool used for handling process.
     private final ExecutorService workerService = Executors.newCachedThreadPool();
     // The timeout thread used to cancel all other threads once the time is met.
     private final ScheduledExecutorService completionService = Executors.newSingleThreadScheduledExecutor();
+    private Supplier<T> runnable;
+    private Duration forEvery;
+    private Duration forPeriod;
+    private Predicate<T> until = val -> false;
 
     // Hide CTOR
     private TemporaryThreadingService() {
 
     }
+
     public static <T> Runner<T> schedule(Supplier<T> runnable) {
 
         TemporaryThreadingService<T> tempThreadingService = new TemporaryThreadingService<>();
@@ -33,6 +31,7 @@ public class TemporaryThreadingService<T> {
 
     public static class Runner<T> {
         private final TemporaryThreadingService<T> service;
+
         private Runner(TemporaryThreadingService<T> service, Supplier<T> runnable) {
             this.service = service;
             service.runnable = runnable;
@@ -52,22 +51,23 @@ public class TemporaryThreadingService<T> {
         }
 
         public Until<T> over(Duration period) {
-           return new Until<>(service, period);
+            return new Until<>(service, period);
         }
 
-        public Until<T> until(Function<T, Boolean> until) {
+        public Until<T> until(Predicate<T> until) {
             return new Until<>(service, until);
         }
     }
 
     public static class Until<T> {
         private final TemporaryThreadingService<T> service;
+
         private Until(TemporaryThreadingService<T> service, Duration duration) {
             this.service = service;
             service.forPeriod = duration;
         }
 
-        private Until(TemporaryThreadingService<T> service, Function<T, Boolean> until) {
+        private Until(TemporaryThreadingService<T> service, Predicate<T> until) {
             this.service = service;
             service.until = until;
         }
@@ -76,7 +76,7 @@ public class TemporaryThreadingService<T> {
             return new Until<>(service, period);
         }
 
-        public Until<T> orUntil(Function<T, Boolean> until) {
+        public Until<T> orUntil(Predicate<T> until) {
             return new Until<>(service, until);
         }
 
@@ -93,7 +93,7 @@ public class TemporaryThreadingService<T> {
 
         private void handleThread() {
 
-            ThreadingServiceRunnable<T> serviceRunnable = new ThreadingServiceRunnable<>(service.runnable,service.until, service);
+            ThreadingServiceRunnable<T> serviceRunnable = new ThreadingServiceRunnable<>(service.runnable, service.until, service);
             Future<?> future = service.timerService.scheduleAtFixedRate(serviceRunnable,
                     0,
                     service.forEvery.toMillis(),
@@ -101,7 +101,7 @@ public class TemporaryThreadingService<T> {
             // Really strange and could lead to strange behaviour..
             serviceRunnable.setFuture(future);
 
-            service.completionService.schedule(() ->{
+            service.completionService.schedule(() -> {
                 future.cancel(false);
                 service.workerService.shutdown();
                 service.timerService.shutdown();
@@ -111,10 +111,11 @@ public class TemporaryThreadingService<T> {
 
     private static class ThreadingServiceRunnable<T> implements Runnable {
         private final Supplier<T> runnableSupplier;
-        private final Function<T, Boolean> conditionalCheck;
+        private final Predicate<T> conditionalCheck;
         private final TemporaryThreadingService<T> service;
         private Future<?> future;
-        public ThreadingServiceRunnable(Supplier<T> runnableSupplier, Function<T,Boolean> conditionalCheck, TemporaryThreadingService<T> service)  {
+
+        public ThreadingServiceRunnable(Supplier<T> runnableSupplier, Predicate<T> conditionalCheck, TemporaryThreadingService<T> service) {
             this.runnableSupplier = runnableSupplier;
             this.conditionalCheck = conditionalCheck;
             this.service = service;
@@ -126,8 +127,8 @@ public class TemporaryThreadingService<T> {
 
         @Override
         public void run() {
-            Boolean res = conditionalCheck.apply(runnableSupplier.get());
-            if (res == null || !res) {
+            boolean res = conditionalCheck.test(runnableSupplier.get());
+            if (!res) {
                 return;
             }
             cancel();

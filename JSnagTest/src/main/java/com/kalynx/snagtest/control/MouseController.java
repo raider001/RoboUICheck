@@ -1,14 +1,20 @@
 package com.kalynx.snagtest.control;
 
-import com.kalynx.snagtest.MouseEvent.*;
-import com.kalynx.snagtest.wrappers.*;
+import com.kalynx.lwdi.DI;
+import com.kalynx.snagtest.MouseEvent.MouseButtonDown;
+import com.kalynx.snagtest.data.DisplayList;
+import com.kalynx.snagtest.wrappers.MouseInfoControl;
+import com.kalynx.snagtest.wrappers.RobotControl;
 
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.List;
-import java.util.*;
-import java.util.function.*;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
 
-import static java.lang.Math.*;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 public class MouseController {
 
@@ -18,7 +24,8 @@ public class MouseController {
     private final Consumer<Point> performMove;
     private long mouseMoveSpeed = 700;
 
-    public MouseController(RobotControl robot, MouseInfoControl mouseInfo, List<Rectangle> displays) {
+    @DI
+    public MouseController(RobotControl robot, MouseInfoControl mouseInfo, DisplayList displays) {
         this(robot, mouseInfo, displays, null);
 
     }

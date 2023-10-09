@@ -6,4 +6,7 @@
     <orderEntry type="jdk" jdkName="Python 3.9 (RoboUICheck)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="b4422d34-3b60-4792-8b55-2c923318bff8" />
+  </component>
 </module>

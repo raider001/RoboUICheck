@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 class TemporaryThreadingServiceTests {
@@ -20,14 +20,14 @@ class TemporaryThreadingServiceTests {
                 .over(Duration.ofSeconds(1))
                 .andWaitForCompletion();
 
-        Assertions.assertEquals( 11, testInt.get());
+        Assertions.assertEquals(11, testInt.get());
     }
 
     @Test
     void testConditionalEnd() throws InterruptedException {
         AtomicInteger testInt = new AtomicInteger();
 
-        Function<Integer, Boolean> conditional = i -> i == 3;
+        Predicate<Integer> conditional = i -> i == 3;
 
         TemporaryThreadingService.schedule(testInt::incrementAndGet)
                 .forEvery(Duration.ofMillis(100))
@@ -35,15 +35,15 @@ class TemporaryThreadingServiceTests {
                 .orUntil(conditional)
                 .andWaitForCompletion();
 
-        Assertions.assertEquals( 3, testInt.get());
+        Assertions.assertEquals(3, testInt.get());
     }
 
     @Test
     void testDurationGoesOverCondition() throws InterruptedException {
         AtomicInteger testInt = new AtomicInteger();
 
-        Function<Integer, Boolean> conditional = i -> i == 30;
-        Supplier<Integer> runnable = testInt::incrementAndGet;;
+        Predicate<Integer> conditional = i -> i == 30;
+        Supplier<Integer> runnable = testInt::incrementAndGet;
 
         TemporaryThreadingService.schedule(runnable)
                 .forEvery(Duration.ofMillis(100))
@@ -51,14 +51,14 @@ class TemporaryThreadingServiceTests {
                 .orOver(Duration.ofSeconds(2))
                 .andWaitForCompletion();
 
-        Assertions.assertEquals( 21, testInt.get());
+        Assertions.assertEquals(21, testInt.get());
     }
 
     @Test
     void testDontWait() {
         AtomicInteger testInt = new AtomicInteger();
 
-        Function<Integer, Boolean> conditional = i -> i == 30;
+        Predicate<Integer> conditional = i -> i == 30;
 
         TemporaryThreadingService.schedule(testInt::incrementAndGet)
                 .forEvery(Duration.ofMillis(100))

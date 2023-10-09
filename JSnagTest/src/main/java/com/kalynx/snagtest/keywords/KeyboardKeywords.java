@@ -1,6 +1,7 @@
 package com.kalynx.snagtest.keywords;
 
-import com.kalynx.snagtest.control.MainController;
+import com.kalynx.snagtest.SnagTest;
+import com.kalynx.snagtest.control.KeyboardController;
 import com.kalynx.snagtest.data.KeyboardSpecialKeys;
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
@@ -12,12 +13,14 @@ import java.util.List;
 @RobotKeywords
 public class KeyboardKeywords {
 
+    private static final KeyboardController KEYBOARD_CONTROLLER = SnagTest.DI.getDependency(KeyboardController.class);
+
     @RobotKeyword("""
             Types the given message
             """)
     @ArgumentNames({"message"})
     public void type(String message) throws Exception {
-        MainController.getInstance().getKeyboardController().type(message);
+        KEYBOARD_CONTROLLER.type(message);
     }
 
     @RobotKeyword("""
@@ -103,7 +106,7 @@ public class KeyboardKeywords {
     @ArgumentNames({"key"})
     public void holdKey(String key) throws Exception {
         KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
-        MainController.getInstance().getKeyboardController().keyPress(specialKey);
+        KEYBOARD_CONTROLLER.keyPress(specialKey);
     }
 
     @RobotKeyword("""
@@ -189,7 +192,7 @@ public class KeyboardKeywords {
     @ArgumentNames({"key"})
     public void releaseKey(String key) throws Exception {
         KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
-        MainController.getInstance().getKeyboardController().keyRelease(specialKey);
+        KEYBOARD_CONTROLLER.keyRelease(specialKey);
     }
 
     @RobotKeyword("""
@@ -277,12 +280,12 @@ public class KeyboardKeywords {
         List<String> trans = keys.stream().map(Object::toString).toList();
         for (String key : trans) {
             KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
-            MainController.getInstance().getKeyboardController().keyPress(specialKey);
+            KEYBOARD_CONTROLLER.keyPress(specialKey);
         }
 
         for (String key : trans.stream().sorted(Collections.reverseOrder()).toList()) {
             KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
-            MainController.getInstance().getKeyboardController().keyRelease(specialKey);
+            KEYBOARD_CONTROLLER.keyRelease(specialKey);
         }
     }
 }

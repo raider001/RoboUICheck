@@ -1,13 +1,24 @@
 package com.kalynx.snagtest;
 
+import com.kalynx.lwdi.DependencyInjectionException;
+import com.kalynx.lwdi.DependencyInjector;
 import com.kalynx.snagtest.arg.ArgParser;
-import com.kalynx.snagtest.control.MainController;
+import com.kalynx.snagtest.control.KeyboardController;
+import com.kalynx.snagtest.control.MouseController;
+import com.kalynx.snagtest.data.DisplayList;
+import com.kalynx.snagtest.screen.CvMonitor;
+import com.kalynx.snagtest.settings.TimeSettings;
+import com.kalynx.snagtest.wrappers.MouseInfoControl;
+import com.kalynx.snagtest.wrappers.MouseInfoWrapper;
+import com.kalynx.snagtest.wrappers.RobotControl;
+import com.kalynx.snagtest.wrappers.RobotWrapper;
 import nu.pattern.OpenCV;
 import org.robotframework.javalib.library.AnnotationLibrary;
 import org.robotframework.javalib.library.KeywordDocumentationRepository;
 import org.robotframework.javalib.library.RobotFrameworkDynamicAPI;
 import org.robotframework.remoteserver.RemoteServer;
 
+import java.awt.*;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -16,13 +27,32 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkDynamicAPI {
-    
-    private final AnnotationLibrary annotationLibrary;
+
+    public static final DependencyInjector DI = new DependencyInjector();
     private static RemoteServer remoteServer;
-    private SnagTest() {
+    private final AnnotationLibrary annotationLibrary;
+
+    private SnagTest() throws AWTException, DependencyInjectionException {
+
+        DisplayList displays = new DisplayList();
+        GraphicsDevice[] d = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+        for (GraphicsDevice graphicsDevice : d) {
+            Rectangle rectangle = graphicsDevice.getConfigurations()[0].getBounds();
+            displays.add(rectangle);
+        }
+
+        DI.add(RobotControl.class, new RobotWrapper(new Robot()));
+        DI.add(MouseInfoControl.class, new MouseInfoWrapper());
+        DI.add(displays);
+        DI.add(new TimeSettings());
+        DI.inject(MouseController.class);
+        DI.add(new CvMonitor(0.95, d));
+        DI.inject(KeyboardController.class);
+
         annotationLibrary = new AnnotationLibrary("com/kalynx/snagtest/**/*.class");
-        MainController.getInstance();
+
     }
+
     public static void main(String... args) throws Exception {
         OpenCV.loadShared();
         RemoteServer.configureLogging();
@@ -44,7 +74,7 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
                 .setDefault("./")
                 .setCommand(val -> {
                     try {
-                        MainController.getInstance().getCvMonitor().setResultsLocation(Path.of(val));
+                        DI.getDependency(CvMonitor.class).setResultsLocation(Path.of(val));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -64,7 +94,7 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        },2, TimeUnit.SECONDS);
+        }, 2, TimeUnit.SECONDS);
     }
 
     @Override

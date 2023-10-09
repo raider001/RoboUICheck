@@ -3,6 +3,7 @@ package com.kalynx.snagtest.control;
 import com.kalynx.snagtest.data.KeyboardMap;
 import com.kalynx.snagtest.data.KeyboardSpecialKeys;
 import com.kalynx.snagtest.settings.TimeSettings;
+import com.kalynx.snagtest.wrappers.RobotControl;
 
 import java.awt.Robot;
 import java.util.concurrent.TimeUnit;
@@ -13,8 +14,8 @@ public class KeyboardController {
     private final KeyboardMap keyboardMap = new KeyboardMap();
     private int TYPE_DELAY_MS = 20;
 
-    public KeyboardController(TimeSettings timeSettings, Robot robot) {
-        this.robot = robot;
+    public KeyboardController(TimeSettings timeSettings, RobotControl robot) {
+        this.robot = robot.getRobot();
         timeSettings.addTypeDelayListener(typeDelay -> TYPE_DELAY_MS = typeDelay);
     }
 

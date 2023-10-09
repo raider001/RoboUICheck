@@ -1,17 +1,18 @@
 package com.kalynx.snagtest.wrappers;
 
-import java.awt.*;
+import java.awt.Robot;
 
-public class RobotWrapper implements RobotControl{
+public class RobotWrapper implements RobotControl {
 
-    private Robot robot;
+    private final Robot robot;
 
     public RobotWrapper(Robot robot) {
         this.robot = robot;
     }
+
     @Override
     public void mouseMove(int x, int y) {
-        robot.mouseMove(x,y);
+        robot.mouseMove(x, y);
     }
 
     @Override
@@ -28,4 +29,11 @@ public class RobotWrapper implements RobotControl{
     public void mouseWheel(int scrollAmount) {
         robot.mouseWheel(scrollAmount);
     }
+
+    @Override
+    public Robot getRobot() {
+        return robot;
+    }
+
+
 }

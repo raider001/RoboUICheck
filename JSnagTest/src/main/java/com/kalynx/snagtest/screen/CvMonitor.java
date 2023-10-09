@@ -24,7 +24,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class CvMonitor {
@@ -187,7 +187,7 @@ public class CvMonitor {
             }
         };
 
-        Function<Result<Data>, Boolean> condition = Result::isSuccess;
+        Predicate<Result<Data>> condition = Result::isSuccess;
 
         TemporaryThreadingService.schedule(action).forEvery(pollRate).over(timeoutTime).orUntil(condition).andWaitForCompletion();
         Optional<Result<Data>> finalResult = results.stream().filter(Result::isSuccess).findFirst();
