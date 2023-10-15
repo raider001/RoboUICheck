@@ -1,4 +1,4 @@
-from src.SnagTest import SnagTest
+from src.SnagTest2 import SnagTest
 
 
 def main():

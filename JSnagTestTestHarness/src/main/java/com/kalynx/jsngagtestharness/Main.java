@@ -30,7 +30,8 @@ public class Main {
         mappers.add(new FieldMapper<>(trainingLocation, JCheckBox.class));
         mappers.add(new FieldMapper<>(trainingLocation, JLabel.class));
         mappers.add(new FieldMapper<>(trainingLocation, JList.class));
-        trainingDataGenerator();
+        testHarnessForm();
+//        trainingDataGenerator();
 
     }
 

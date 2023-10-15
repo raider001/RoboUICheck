@@ -35,7 +35,7 @@ public class ScreenKeywords {
             sequentially to assess the actual time the image has been displayed on the screen (with the accuracy of the poll rate).
                         
             """)
-    @ArgumentNames({"Set Poll Rate"})
+    @ArgumentNames({"pollRate"})
     public void setPollRate(long pollRate) {
         CV_MONITOR.setPollRate(Duration.ofMillis(pollRate));
     }
@@ -49,7 +49,7 @@ public class ScreenKeywords {
             Sets the minimum accepted similarity as a percentage. When attempting to find image matching, if the image
             score is below the given similarity, it wil lbe considered a failure
             """)
-    @ArgumentNames({"Minimum Similarity"})
+    @ArgumentNames({"minSimilarity"})
     public void setMinSimilarity(double minSimilarity) {
         CV_MONITOR.setMatchScore(minSimilarity);
     }

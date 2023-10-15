@@ -6,8 +6,10 @@ import com.kalynx.snagtest.arg.ArgParser;
 import com.kalynx.snagtest.control.KeyboardController;
 import com.kalynx.snagtest.control.MouseController;
 import com.kalynx.snagtest.data.DisplayList;
+import com.kalynx.snagtest.data.MethodModelGenerator;
 import com.kalynx.snagtest.screen.CvMonitor;
 import com.kalynx.snagtest.settings.TimeSettings;
+import com.kalynx.snagtest.template.TemplateRetreiver;
 import com.kalynx.snagtest.wrappers.MouseInfoControl;
 import com.kalynx.snagtest.wrappers.MouseInfoWrapper;
 import com.kalynx.snagtest.wrappers.RobotControl;
@@ -19,6 +21,7 @@ import org.robotframework.javalib.library.RobotFrameworkDynamicAPI;
 import org.robotframework.remoteserver.RemoteServer;
 
 import java.awt.*;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +82,19 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
                         throw new RuntimeException(e);
                     }
                 });
+
+        argParser.addArg("generate", Boolean.class).setShortKey('g').setHelp("Generates the keywords.resource file.").setCommand(val -> {
+            MethodModelGenerator gen = new MethodModelGenerator();
+            if (!val) return;
+            gen.addMethods(snagTest.annotationLibrary);
+            try {
+                TemplateRetreiver retriever = new TemplateRetreiver();
+                retriever.generateKeywords(gen.getMethods());
+                System.exit(0);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }).setDefault(false);
         argParser.parse(args);
 
         robotRemoteServer.get().putLibrary("/", snagTest);

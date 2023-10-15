@@ -1,6 +1,6 @@
 *** Settings ***
 Library  BuiltIn
-Library    ../PySnagTest/src/SnagTest.py
+Library    ../PySnagTest/SnagTest.py
 
 *** Test Cases ***
 Test Robot Setup
@@ -22,7 +22,6 @@ Test DynamicTest
     # Will move the mouse to fixed position on current display mouse is on
     Move Mouse  500  300
     Move Mouse  -10  -50
-
     Move Mouse To Display  0  500  500
     Set Display  0
     Find Image  aCheckBox.png
@@ -34,7 +33,7 @@ Test DynamicTest
     Move Mouse To Image  textfield.png
     Click    LEFT
     Type  Hello
-    Press Key  A
+    Press Keys  CONTROL  A
     Find Image  failImage.png
     # Intentional fail at the end to ensure it cannot find image
     #Find Image  failImage.png

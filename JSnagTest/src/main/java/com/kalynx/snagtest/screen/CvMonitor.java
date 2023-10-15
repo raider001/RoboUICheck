@@ -1,9 +1,9 @@
 package com.kalynx.snagtest.screen;
 
+import com.kalynx.simplethreadingservice.ThreadService;
 import com.kalynx.snagtest.data.FailedResult;
 import com.kalynx.snagtest.data.Result;
 import com.kalynx.snagtest.data.SuccessfulResult;
-import com.kalynx.snagtest.threading.TemporaryThreadingService;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -189,7 +189,7 @@ public class CvMonitor {
 
         Predicate<Result<Data>> condition = Result::isSuccess;
 
-        TemporaryThreadingService.schedule(action).forEvery(pollRate).over(timeoutTime).orUntil(condition).andWaitForCompletion();
+        ThreadService.schedule(action).forEvery(pollRate).over(timeoutTime).orUntil(condition).andWaitForCompletion();
         Optional<Result<Data>> finalResult = results.stream().filter(Result::isSuccess).findFirst();
 
         if (finalResult.isPresent()) {
@@ -203,7 +203,7 @@ public class CvMonitor {
             BufferedImage buffImage = (BufferedImage) HighGui.toBufferedImage(finalResult.get().getData().screenshot());
             Path resultLoc = Path.of(resultLocation.toString(), finalResult.get().getData().takenTime() + ".jpg");
             ImageIO.write(buffImage, "jpg", resultLoc.toFile());
-            String htmlResult = generateHTMLResult(true, 1 - locRes.maxVal,
+            String htmlResult = generateHTMLResult(true, locRes.maxVal,
                     finalResult.get().getData().takenTime(), template,
                     buffImage);
             Data data = finalResult.get().getData();

@@ -22,7 +22,7 @@ def _path() -> str:
     return os.path.dirname(os.path.realpath(__file__)) + "\\"
 
 
-class SnagTest:
+class SnagTest2:
     """
     Provides a library for interacting and validating programs within an Operating system.
     """
@@ -30,7 +30,7 @@ class SnagTest:
     DOC = "doc"
     keywords = {}
     remote: Remote = None
-    built_int: BuiltIn
+    built_in: BuiltIn
 
     def __init__(self):
         self.built_in = BuiltIn()
@@ -95,7 +95,7 @@ class SnagTest:
 
         self._add_non_dynamic_keywords(keyword_data)
 
-        with codecs.open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'keywords.py'), 'w',
+        with codecs.open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'Keywords.py'), 'w',
                          encoding='utf-8') as f:
             f.write('# -*- coding: utf-8 -*-\n')
             f.write('data = %s' % keyword_data)

@@ -5,10 +5,8 @@ import com.kalynx.snagtest.control.KeyboardController;
 import com.kalynx.snagtest.data.KeyboardSpecialKeys;
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
+import org.robotframework.javalib.annotation.RobotKeywordOverload;
 import org.robotframework.javalib.annotation.RobotKeywords;
-
-import java.util.Collections;
-import java.util.List;
 
 @RobotKeywords
 public class KeyboardKeywords {
@@ -276,16 +274,50 @@ public class KeyboardKeywords {
              - Z
             """)
     @ArgumentNames({"key1", "key2=None", "key3=None", "key4=None", "key5=None"})
-    public void pressKeys(List<Object> keys) throws Exception {
-        List<String> trans = keys.stream().map(Object::toString).toList();
-        for (String key : trans) {
-            KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
-            KEYBOARD_CONTROLLER.keyPress(specialKey);
-        }
+    public void pressKeys(String key1, String key2, String key3, String key4, String key5) throws Exception {
+        pressKey(key1);
+        pressKey(key2);
+        pressKey(key3);
+        pressKey(key4);
+        pressKey(key5);
+        releaseKey(key1);
+        releaseKey(key2);
+        releaseKey(key3);
+        releaseKey(key4);
+        releaseKey(key5);
+    }
 
-        for (String key : trans.stream().sorted(Collections.reverseOrder()).toList()) {
+    @RobotKeywordOverload
+    public void pressKeys(String key1, String key2, String key3, String key4) throws Exception {
+        pressKeys(key1, key2, key3, key4, null);
+    }
+
+    @RobotKeywordOverload
+    public void pressKeys(String key1, String key2, String key3) throws Exception {
+        pressKeys(key1, key2, key3, null, null);
+    }
+
+    @RobotKeywordOverload
+    public void pressKeys(String key1, String key2) throws Exception {
+        pressKeys(key1, key2, null, null, null);
+    }
+
+    @RobotKeywordOverload
+    public void pressKeys(String key1) throws Exception {
+        pressKeys(key1, null, null, null, null);
+    }
+
+    private void rKey(String key) throws InterruptedException {
+        if (key != null) {
             KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
             KEYBOARD_CONTROLLER.keyRelease(specialKey);
+        }
+    }
+
+    private void pressKey(String key) throws InterruptedException {
+        if (key != null) {
+            KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
+            KEYBOARD_CONTROLLER.keyPress(specialKey);
         }
     }
 }
