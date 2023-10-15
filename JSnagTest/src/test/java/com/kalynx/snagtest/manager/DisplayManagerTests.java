@@ -11,13 +11,13 @@ public class DisplayManagerTests {
 
     @BeforeEach
     public void beforeEach() {
-        DisplayAttributes primary = new DisplayAttributes(1, true, 0, 0, 1920, 1080);
-        DisplayAttributes top = new DisplayAttributes(0, false, 0, -1920, 1920, 1080);
-        DisplayAttributes bottom = new DisplayAttributes(2, false, 0, 1920, 1920, 1080);
-        DisplayAttributes left = new DisplayAttributes(3, false, -1920, 0, 1920, 1080);
-        DisplayAttributes right = new DisplayAttributes(4, false, 1920, 0, 1920, 1080);
-        DisplayAttributes smaller = new DisplayAttributes(5, false, -2920, 0, 960, 540);
-        DisplayAttributes larger = new DisplayAttributes(6, false, 0, 3840, 3840, 2160);
+        DisplayAttributes primary = new DisplayAttributes(1, null, true, 0, 0, 1920, 1080);
+        DisplayAttributes top = new DisplayAttributes(0, null, false, 0, -1920, 1920, 1080);
+        DisplayAttributes bottom = new DisplayAttributes(2, null, false, 0, 1920, 1920, 1080);
+        DisplayAttributes left = new DisplayAttributes(3, null, false, -1920, 0, 1920, 1080);
+        DisplayAttributes right = new DisplayAttributes(4, null, false, 1920, 0, 1920, 1080);
+        DisplayAttributes smaller = new DisplayAttributes(5, null, false, -2920, 0, 960, 540);
+        DisplayAttributes larger = new DisplayAttributes(6, null, false, 0, 3840, 3840, 2160);
         sut = new DisplayManager(primary, top, bottom, left, right, smaller, larger);
     }
 

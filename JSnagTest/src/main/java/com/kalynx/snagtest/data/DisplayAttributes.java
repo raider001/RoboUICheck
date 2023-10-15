@@ -1,5 +1,8 @@
 package com.kalynx.snagtest.data;
 
-public record DisplayAttributes(int displayId, boolean primary, int x, int y, int width, int height) {
+import java.awt.GraphicsDevice;
+
+public record DisplayAttributes(int displayId, GraphicsDevice graphicsDevice, boolean primary, int x, int y, int width,
+                                int height) {
 
 }

@@ -1,9 +1,11 @@
 package com.kalynx.snagtest.screen;
 
 import com.kalynx.simplethreadingservice.ThreadService;
+import com.kalynx.snagtest.data.DisplayAttributes;
 import com.kalynx.snagtest.data.FailedResult;
 import com.kalynx.snagtest.data.Result;
 import com.kalynx.snagtest.data.SuccessfulResult;
+import com.kalynx.snagtest.manager.DisplayManager;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -11,7 +13,6 @@ import org.opencv.imgproc.Imgproc;
 
 import javax.imageio.ImageIO;
 import java.awt.AWTException;
-import java.awt.GraphicsDevice;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
@@ -31,29 +32,30 @@ public class CvMonitor {
     private final ImageLibrary imageLibrary = new ImageLibrary();
     private final Map<Integer, DisplayData> displayData = new HashMap<>();
     private final Path imageResultRelativeLocation = Path.of(".", "image_results");
+    DisplayManager displayManager;
     private double matchScore = 0.95;
     private Duration pollRate = Duration.ofMillis(100);
     private Duration timeoutTime = Duration.ofMillis(2000);
     private int selectedDisplay;
     private Path resultLocation = Path.of(".", imageResultRelativeLocation.toString());
 
-    public CvMonitor(double matchScore, GraphicsDevice[] graphicDevices) throws AWTException {
+    public CvMonitor(double matchScore, DisplayManager displayManager) throws AWTException {
         if (matchScore <= 0 || matchScore >= 1) throw new AssertionError("matchScore can only be between 0 and 1");
 
         // This really isn't accurate anymore, used to ensure one robot per thread, but now double the robots are made.
         // Leaving because worst case scenario is more memory usage(which is already quite small)
         int cores = Runtime.getRuntime().availableProcessors();
 
-        for (int i = 0; i < graphicDevices.length; i++) {
-            Rectangle r = graphicDevices[i].getConfigurations()[0].getBounds();
-            Rectangle rectangle = new Rectangle(0, 0, r.width, r.height);
+        for (int i = 0; i < displayManager.getDisplays().size(); i++) {
+            DisplayAttributes r = displayManager.getDisplay(i);
+            Rectangle rectangle = new Rectangle(0, 0, r.width(), r.height());
             ConcurrentLinkedQueue<Robot> robots = new ConcurrentLinkedQueue<>();
 
             for (int j = 0; j < cores; j++) {
-                robots.add(new Robot(graphicDevices[i]));
+                robots.add(new Robot(displayManager.getDisplay(i).graphicsDevice()));
             }
 
-            displayData.put(i, new DisplayData(r, new Rectangle(r), robots));
+            displayData.put(i, new DisplayData(new Rectangle(r.x(), r.y(), r.width(), r.height()), new Rectangle(r.x(), r.y(), r.width(), r.height()), robots));
         }
         this.selectedDisplay = 0;
     }

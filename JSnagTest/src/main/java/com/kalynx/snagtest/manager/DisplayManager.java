@@ -1,5 +1,6 @@
 package com.kalynx.snagtest.manager;
 
+import com.kalynx.lwdi.DI;
 import com.kalynx.snagtest.data.DisplayAttributes;
 
 import java.awt.GraphicsDevice;
@@ -12,21 +13,30 @@ public class DisplayManager {
     private final Map<Integer, DisplayAttributes> displayIdToDimensionMap = new HashMap<>();
     private final Map<String, DisplayAttributes> displayNameToDimensionMap = new HashMap<>();
 
+    @DI
     public DisplayManager() {
         GraphicsDevice[] d = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
         for (int i = 0; i < d.length; i++) {
             Rectangle rectangle = d[i].getConfigurations()[0].getBounds();
             GraphicsDevice defaultDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-            displayIdToDimensionMap.put(i, new DisplayAttributes(i, defaultDevice.equals(d[i]), rectangle.x, rectangle.y, rectangle.width, rectangle.height));
+            displayIdToDimensionMap.put(i, new DisplayAttributes(i, d[i], defaultDevice.equals(d[i]), rectangle.x, rectangle.y, rectangle.width, rectangle.height));
         }
     }
 
-    DisplayManager(DisplayAttributes... attrs) {
+    public DisplayManager(DisplayAttributes... attrs) {
         Arrays.stream(attrs).toList().forEach(attr -> displayIdToDimensionMap.put(attr.displayId(), attr));
     }
 
     public DisplayAttributes getDisplay(String reference) {
         return displayNameToDimensionMap.get(reference);
+    }
+
+    public DisplayAttributes getDisplay(int reference) {
+        return displayIdToDimensionMap.get(reference);
+    }
+
+    public List<DisplayAttributes> getDisplays() {
+        return displayIdToDimensionMap.values().stream().toList();
     }
 
     public void setPrimaryReference(String referenceName) {

@@ -7,6 +7,7 @@ import com.kalynx.snagtest.control.KeyboardController;
 import com.kalynx.snagtest.control.MouseController;
 import com.kalynx.snagtest.data.DisplayList;
 import com.kalynx.snagtest.data.MethodModelGenerator;
+import com.kalynx.snagtest.manager.DisplayManager;
 import com.kalynx.snagtest.screen.CvMonitor;
 import com.kalynx.snagtest.settings.TimeSettings;
 import com.kalynx.snagtest.template.TemplateRetreiver;
@@ -44,12 +45,13 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
             displays.add(rectangle);
         }
 
+        DI.add(DisplayManager.class);
         DI.add(RobotControl.class, new RobotWrapper(new Robot()));
         DI.add(MouseInfoControl.class, new MouseInfoWrapper());
         DI.add(displays);
         DI.add(new TimeSettings());
         DI.inject(MouseController.class);
-        DI.add(new CvMonitor(0.95, d));
+        DI.add(new CvMonitor(0.95, DI.getDependency(DisplayManager.class)));
         DI.inject(KeyboardController.class);
 
         annotationLibrary = new AnnotationLibrary("com/kalynx/snagtest/**/*.class");

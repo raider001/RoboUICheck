@@ -2,13 +2,12 @@ package com.kalynx.snagtest.control;
 
 import com.kalynx.lwdi.DI;
 import com.kalynx.snagtest.MouseEvent.MouseButtonDown;
-import com.kalynx.snagtest.data.DisplayList;
+import com.kalynx.snagtest.data.DisplayAttributes;
+import com.kalynx.snagtest.manager.DisplayManager;
 import com.kalynx.snagtest.wrappers.MouseInfoControl;
 import com.kalynx.snagtest.wrappers.RobotControl;
 
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -20,17 +19,17 @@ public class MouseController {
 
     private final RobotControl robot;
     private final MouseInfoControl mouseInfo;
-    private final List<Rectangle> displays;
+    private final DisplayManager displayManager;
     private final Consumer<Point> performMove;
     private long mouseMoveSpeed = 700;
 
     @DI
-    public MouseController(RobotControl robot, MouseInfoControl mouseInfo, DisplayList displays) {
-        this(robot, mouseInfo, displays, null);
+    public MouseController(RobotControl robot, MouseInfoControl mouseInfo, DisplayManager displayManager) {
+        this(robot, mouseInfo, displayManager, null);
 
     }
 
-    public MouseController(RobotControl robot, MouseInfoControl mouseInfo, List<Rectangle> displays, Consumer<Point> performMove) {
+    public MouseController(RobotControl robot, MouseInfoControl mouseInfo, DisplayManager displayManager, Consumer<Point> performMove) {
         if (performMove != null) {
             this.performMove = performMove;
         } else {
@@ -38,7 +37,7 @@ public class MouseController {
         }
         this.robot = Objects.requireNonNull(robot);
         this.mouseInfo = Objects.requireNonNull(mouseInfo);
-        this.displays = Objects.requireNonNull(displays);
+        this.displayManager = displayManager;
     }
 
     /**
@@ -54,24 +53,24 @@ public class MouseController {
     }
 
     public void moveMouseTo(int display, int x, int y) throws Exception {
-        Rectangle r = displays.get(display);
-        if (x < 0 || x > r.width)
-            throw new Exception("Mouse location x: " + x + " must be equal to or between " + 0 + "-" + r.width);
-        if (y < 0 || y > r.height)
-            throw new Exception("Mouse location y: " + y + " must be equal to or between " + 0 + "-" + r.height);
-        performMove.accept(new Point(x + r.x, y + r.y));
+        DisplayAttributes r = displayManager.getDisplay(display);
+        if (x < 0 || x > r.width())
+            throw new Exception("Mouse location x: " + x + " must be equal to or between " + 0 + "-" + r.width());
+        if (y < 0 || y > r.height())
+            throw new Exception("Mouse location y: " + y + " must be equal to or between " + 0 + "-" + r.height());
+        performMove.accept(new Point(x + r.x(), y + r.y()));
     }
 
     public void moveMouseTo(int x, int y) throws Exception {
         Point mousePos = mouseInfo.getMousePosition();
-        Rectangle currDisplay = getCurrentDisplay(mousePos);
+        DisplayAttributes currDisplay = getCurrentDisplay(mousePos);
 
         if (currDisplay == null)
             throw new Exception("Can't find mouse on screen! Please report this issue and provide your configuration setup to help stop this from happening again!");
 
-        if (x < 0 || x > currDisplay.width || y < 0 || y > currDisplay.height)
-            throw new Exception("x %s and y %s out of bounds for current display width %s and height %s".formatted(x, y, currDisplay.width, currDisplay.height));
-        performMove.accept(new Point(x + currDisplay.x, y + currDisplay.y));
+        if (x < 0 || x > currDisplay.width() || y < 0 || y > currDisplay.height())
+            throw new Exception("x %s and y %s out of bounds for current display width %s and height %s".formatted(x, y, currDisplay.width(), currDisplay.height()));
+        performMove.accept(new Point(x + currDisplay.x(), y + currDisplay.y()));
     }
 
     public void mousePress(MouseButtonDown button) {
@@ -100,11 +99,11 @@ public class MouseController {
         this.mouseMoveSpeed = mouseMoveSpeed;
     }
 
-    public Rectangle getCurrentDisplay(Point p) {
-        Optional<Rectangle> currDisplay = displays.stream().filter(display -> p.x >= display.x &&
-                p.x <= display.x + display.width &&
-                p.y >= display.y &&
-                p.y <= display.y + display.height).findFirst();
+    public DisplayAttributes getCurrentDisplay(Point p) {
+        Optional<DisplayAttributes> currDisplay = displayManager.getDisplays().stream().filter(display -> p.x >= display.x() &&
+                p.x <= display.x() + display.width() &&
+                p.y >= display.y() &&
+                p.y <= display.y() + display.height()).findFirst();
         return currDisplay.orElse(null);
     }
 
