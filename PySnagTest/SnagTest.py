@@ -539,3 +539,26 @@ Available options are:
         """
         return self.remote.run_keyword("click", [button, count], None)
 
+    @keyword("Set Reference")
+    def set_reference(self, arg0, arg1, arg2):
+        """
+            Sets the reference display to the given reference name
+    Options:
+     LEFT
+     RIGHT
+     ABOVE
+     BELOW
+     SMALLER_THAN
+     LARGER_THAN
+
+        """
+        return self.remote.run_keyword("setReference", [arg0, arg1, arg2], None)
+
+    @keyword("Set Primary Display Reference")
+    def set_primary_display_reference(self, reference_name):
+        """
+        Sets the primary display to the given reference name
+
+        """
+        return self.remote.run_keyword("setPrimaryDisplayReference", [reference_name], None)
+

@@ -45,7 +45,7 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
             displays.add(rectangle);
         }
 
-        DI.add(DisplayManager.class);
+        DI.add(new DisplayManager());
         DI.add(RobotControl.class, new RobotWrapper(new Robot()));
         DI.add(MouseInfoControl.class, new MouseInfoWrapper());
         DI.add(displays);
