@@ -189,8 +189,14 @@ public class KeyboardKeywords {
             """)
     @ArgumentNames({"key"})
     public void releaseKey(String key) throws Exception {
-        KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
-        KEYBOARD_CONTROLLER.keyRelease(specialKey);
+        if (key != null && !key.isEmpty()) {
+            try {
+                KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
+                KEYBOARD_CONTROLLER.keyRelease(specialKey);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Key %s is not a valid key".formatted(key));
+            }
+        }
     }
 
     @RobotKeyword("""
@@ -308,16 +314,24 @@ public class KeyboardKeywords {
     }
 
     private void rKey(String key) throws InterruptedException {
-        if (key != null) {
-            KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
-            KEYBOARD_CONTROLLER.keyRelease(specialKey);
+        if (key != null && !key.isEmpty()) {
+            try {
+                KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key.toUpperCase());
+                KEYBOARD_CONTROLLER.keyRelease(specialKey);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Key %s is not a valid key".formatted(key));
+            }
         }
     }
 
     private void pressKey(String key) throws InterruptedException {
-        if (key != null) {
-            KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
-            KEYBOARD_CONTROLLER.keyPress(specialKey);
+        if (key != null && !key.isEmpty()) {
+            try {
+                KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key.toUpperCase());
+                KEYBOARD_CONTROLLER.keyPress(specialKey);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Key %s is not a valid key".formatted(key));
+            }
         }
     }
 }

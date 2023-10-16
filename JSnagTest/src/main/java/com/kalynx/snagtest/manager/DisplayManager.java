@@ -130,7 +130,7 @@ public class DisplayManager {
                 });
     }
 
-    class Relative {
+    public class Relative {
         private final String referenceName;
 
         private Relative(String referenceName) {
@@ -142,7 +142,7 @@ public class DisplayManager {
         }
     }
 
-    class Existing {
+    public class Existing {
         private final String newReference;
         private final RelativeEnum rel;
 

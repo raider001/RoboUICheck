@@ -30,13 +30,13 @@ import java.util.function.Supplier;
 
 public class CvMonitor {
     private final ImageLibrary imageLibrary = new ImageLibrary();
-    private final Map<Integer, DisplayData> displayData = new HashMap<>();
+    private final Map<DisplayAttributes, DisplayData> displayData = new HashMap<>();
     private final Path imageResultRelativeLocation = Path.of(".", "image_results");
     DisplayManager displayManager;
     private double matchScore = 0.95;
     private Duration pollRate = Duration.ofMillis(100);
     private Duration timeoutTime = Duration.ofMillis(2000);
-    private int selectedDisplay;
+    private DisplayAttributes selectedDisplay;
     private Path resultLocation = Path.of(".", imageResultRelativeLocation.toString());
 
     public CvMonitor(double matchScore, DisplayManager displayManager) throws AWTException {
@@ -55,9 +55,9 @@ public class CvMonitor {
                 robots.add(new Robot(displayManager.getDisplay(i).graphicsDevice()));
             }
 
-            displayData.put(i, new DisplayData(new Rectangle(r.x(), r.y(), r.width(), r.height()), new Rectangle(r.x(), r.y(), r.width(), r.height()), robots));
+            displayData.put(r, new DisplayData(new Rectangle(r.x(), r.y(), r.width(), r.height()), robots));
         }
-        this.selectedDisplay = 0;
+        this.selectedDisplay = displayData.keySet().stream().filter(DisplayAttributes::primary).findFirst().orElseThrow();
     }
 
     private static Mat imageToMat(BufferedImage sourceImg) {
@@ -90,10 +90,16 @@ public class CvMonitor {
         return imageLibrary.getLibraryPaths();
     }
 
+    public void setDisplay(String display) {
+        DisplayAttributes attributes = displayManager.getDisplay(display);
+        if (attributes == null) throw new IllegalArgumentException("Display " + display + " does not exist");
+        selectedDisplay = attributes;
+    }
+
     public void setDisplay(int display) {
-        if (display < 0 || display >= displayData.size())
-            throw new AssertionError("Given display outside of display range.");
-        selectedDisplay = display;
+        selectedDisplay = displayData.keySet().stream()
+                .filter(data -> data.displayId() == display).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Display " + display + " does not exist"));
     }
 
     /**
@@ -106,14 +112,14 @@ public class CvMonitor {
         if (screenRegion.width <= 0) throw new AssertionError("screenRegion width must be greater than 0");
         if (screenRegion.height <= 0) throw new AssertionError("screenRegion height must be greater than 0");
         DisplayData d = displayData.get(selectedDisplay);
-        Rectangle adjustedToDisplay = new Rectangle(screenRegion.x + d.displayDimensions.x,
-                screenRegion.y + d.displayDimensions.y,
+        Rectangle adjustedToDisplay = new Rectangle(screenRegion.x + selectedDisplay.x(),
+                screenRegion.y + selectedDisplay.y(),
                 screenRegion.width,
                 screenRegion.height);
-        if (d.displayDimensions.x < screenRegion.x ||
-                d.displayDimensions.y < screenRegion.y ||
-                screenRegion.x + screenRegion.width > d.displayDimensions.width + d.displayDimensions.x ||
-                screenRegion.y + screenRegion.height > d.displayDimensions.height + d.displayDimensions.y)
+        if (selectedDisplay.x() < screenRegion.x ||
+                selectedDisplay.y() < screenRegion.y ||
+                screenRegion.x + screenRegion.width > selectedDisplay.width() + selectedDisplay.x() ||
+                screenRegion.y + screenRegion.height > selectedDisplay.height() + selectedDisplay.y())
             throw new AssertionError("Given parameters are not on the screen specified.");
 
         d.displayRegion().setBounds(adjustedToDisplay);
@@ -286,8 +292,7 @@ public class CvMonitor {
     private record Data(long takenTime, Mat screenshot, Core.MinMaxLocResult res) {
     }
 
-    private record DisplayData(Rectangle displayDimensions, Rectangle displayRegion,
-                               ConcurrentLinkedQueue<Robot> robots) {
+    private record DisplayData(Rectangle displayRegion, ConcurrentLinkedQueue<Robot> robots) {
     }
 
 }
