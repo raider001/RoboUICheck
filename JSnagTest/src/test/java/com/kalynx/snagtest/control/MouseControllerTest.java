@@ -29,6 +29,7 @@ public class MouseControllerTest {
                 new DisplayAttributes(1, null, false, 0, 0, 1000, 1000),
                 new DisplayAttributes(2, null, false, 0, 0, 1000, 1000),
                 new DisplayAttributes(3, null, false, 1000, 0, 1000, 500));
+        displayManager.setPrimaryReference("PRIMARY");
 
     }
 
@@ -42,7 +43,7 @@ public class MouseControllerTest {
     @Test
     void mouseMoveToDisplay_insideBounds_mouseMoved() throws Exception {
         Mockito.when(mouseInfoControl.getMousePosition()).thenReturn(new Point(10, 10));
-        sut.moveMouseTo(2, 100, 100);
+        sut.moveMouseTo("PRIMARY", 100, 100);
         Mockito.verify(robotControl, Mockito.times(1)).mouseMove(1100, 100);
     }
 

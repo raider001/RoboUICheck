@@ -29,11 +29,11 @@ public class DisplayKeywords {
                  SMALLER_THAN
                  LARGER_THAN
             """)
-    public void setReference(String originReference, String relativeState, String newReferenceName) {
+    public void setDisplayReference(String originReference, String relativeState, String newReferenceName) {
 
         RelativeEnum e = RelativeEnum.valueOf(relativeState.toUpperCase());
-        displayManager.setReference(newReferenceName)
+        displayManager.setReference(originReference)
                 .relative(e)
-                .of(originReference);
+                .of(newReferenceName);
     }
 }

@@ -52,7 +52,7 @@ public class MouseController {
         performMove.accept(new Point(actualX, actualY));
     }
 
-    public void moveMouseTo(int display, int x, int y) throws Exception {
+    public void moveMouseTo(String display, int x, int y) throws Exception {
         DisplayAttributes r = displayManager.getDisplay(display);
         if (x < 0 || x > r.width())
             throw new Exception("Mouse location x: " + x + " must be equal to or between " + 0 + "-" + r.width());

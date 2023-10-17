@@ -133,12 +133,26 @@ public class ScreenKeywords {
             Set Display
                         
             | variable       | default  | unit                  |
-            | displayId      |   0      | integer               |
+            | displayId      |   0      | integer|String        |
                         
             Sets the display to look at.
             """)
     @ArgumentNames({"displayId"})
     public void setDisplay(int display) {
+        CV_MONITOR.setDisplay(display);
+    }
+
+    @RobotKeyword("""
+            Set Display Reference
+                        
+            | variable       | default  | unit                  |
+            | display        |   N/A    | string                |
+                        
+            Sets the display to look at.
+            """
+    )
+    @ArgumentNames({"display"})
+    public void setDisplayByReference(String display) {
         CV_MONITOR.setDisplay(display);
     }
 

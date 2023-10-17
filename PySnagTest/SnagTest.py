@@ -57,7 +57,7 @@ Adds a path to search for images. Multiple paths can be added.
         Set Display
 
 | variable       | default  | unit                  |
-| displayId      |   0      | integer               |
+| displayId      |   0      | integer|String        |
 
 Sets the display to look at.
 
@@ -77,6 +77,19 @@ as it does not include evaluation time.
 
         """
         return self.remote.run_keyword("setTimeoutTime", [timeout_time], None)
+
+    @keyword("Set Display By Reference")
+    def set_display_by_reference(self, display):
+        """
+        Set Display Reference
+
+| variable       | default  | unit                  |
+| displayId      |   N/A    | string                |
+
+Sets the display to look at.
+
+        """
+        return self.remote.run_keyword("setDisplayByReference", [display], None)
 
     @keyword("Set Result Path")
     def set_result_path(self, result_path):
@@ -539,8 +552,8 @@ Available options are:
         """
         return self.remote.run_keyword("click", [button, count], None)
 
-    @keyword("Set Reference")
-    def set_reference(self, arg0, arg1, arg2):
+    @keyword("Set Display Reference")
+    def set_display_reference(self, arg0, arg1, arg2):
         """
             Sets the reference display to the given reference name
     Options:
@@ -552,7 +565,7 @@ Available options are:
      LARGER_THAN
 
         """
-        return self.remote.run_keyword("setReference", [arg0, arg1, arg2], None)
+        return self.remote.run_keyword("setDisplayReference", [arg0, arg1, arg2], None)
 
     @keyword("Set Primary Display Reference")
     def set_primary_display_reference(self, reference_name):

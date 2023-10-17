@@ -45,7 +45,7 @@ public class MouseKeywords {
                         
             """)
     @ArgumentNames({"display", "x", "y"})
-    public void moveMouseToDisplay(int display, int x, int y) throws Exception {
+    public void moveMouseToDisplay(String display, int x, int y) throws Exception {
         MOUSE_CONTROLLER.moveMouseTo(display, x, y);
     }
 
