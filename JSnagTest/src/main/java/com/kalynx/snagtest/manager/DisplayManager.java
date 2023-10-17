@@ -6,12 +6,16 @@ import com.kalynx.snagtest.data.DisplayAttributes;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.awt.Robot;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class DisplayManager {
 
     private final Map<Integer, DisplayAttributes> displayIdToDimensionMap = new HashMap<>();
     private final Map<String, DisplayAttributes> displayNameToDimensionMap = new HashMap<>();
+    private final Map<DisplayAttributes, DisplayData> displayData = new HashMap<>();
+    private DisplayAttributes selectedDisplay;
 
     @DI
     public DisplayManager() {
@@ -19,7 +23,11 @@ public class DisplayManager {
         for (int i = 0; i < d.length; i++) {
             Rectangle rectangle = d[i].getConfigurations()[0].getBounds();
             GraphicsDevice defaultDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-            displayIdToDimensionMap.put(i, new DisplayAttributes(i, d[i], defaultDevice.equals(d[i]), rectangle.x, rectangle.y, rectangle.width, rectangle.height));
+            DisplayAttributes attr = new DisplayAttributes(i, d[i], defaultDevice.equals(d[i]), rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+            displayIdToDimensionMap.put(i, attr);
+            if (attr.primary()) {
+                selectedDisplay = attr;
+            }
         }
     }
 
@@ -39,11 +47,27 @@ public class DisplayManager {
         return displayIdToDimensionMap.values().stream().toList();
     }
 
+    public void setDisplay(String display) {
+        DisplayAttributes attributes = getDisplay(display);
+        if (attributes == null) throw new IllegalArgumentException("Display " + display + " does not exist");
+        selectedDisplay = attributes;
+    }
+
+    public void setDisplay(int display) {
+        selectedDisplay = displayData.keySet().stream()
+                .filter(data -> data.displayId() == display).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Display " + display + " does not exist"));
+    }
+
     public void setPrimaryReference(String referenceName) {
         displayIdToDimensionMap.values().stream()
                 .filter(DisplayAttributes::primary)
                 .findFirst()
                 .ifPresent(displayAttributes -> displayNameToDimensionMap.put(Objects.requireNonNull(referenceName), displayAttributes));
+    }
+
+    public DisplayData getSelectedDisplayRegion() {
+        return displayData.get(selectedDisplay);
     }
 
     public Relative setReference(String referenceName) {
@@ -82,6 +106,10 @@ public class DisplayManager {
                 .ifPresentOrElse(res -> displayNameToDimensionMap.put(displayName, res), () -> {
                 });
 
+    }
+
+    public DisplayAttributes getSelectedDisplay() {
+        return selectedDisplay;
     }
 
     private void determineDisplayClosestToTop(String referenced, DisplayAttributes referenceAttr, String displayName) {
@@ -128,6 +156,9 @@ public class DisplayManager {
                 }).max(Comparator.comparingInt(distAttr -> distAttr.width() * distAttr.height()))
                 .ifPresentOrElse(res -> displayNameToDimensionMap.put(displayName, res), () -> {
                 });
+    }
+
+    public record DisplayData(Rectangle displayRegion, ConcurrentLinkedQueue<Robot> robots) {
     }
 
     public class Relative {

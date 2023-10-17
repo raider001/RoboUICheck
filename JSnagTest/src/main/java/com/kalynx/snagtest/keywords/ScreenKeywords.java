@@ -3,6 +3,7 @@ package com.kalynx.snagtest.keywords;
 import com.kalynx.snagtest.SnagTest;
 import com.kalynx.snagtest.data.Result;
 import com.kalynx.snagtest.data.SuccessfulResult;
+import com.kalynx.snagtest.manager.DisplayManager;
 import com.kalynx.snagtest.screen.CvMonitor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,6 +22,7 @@ public class ScreenKeywords {
 
     private static final Logger LOGGER = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
     private static final CvMonitor CV_MONITOR = SnagTest.DI.getDependency(CvMonitor.class);
+    private static final DisplayManager DISPLAY_MANAGER = SnagTest.DI.getDependency(DisplayManager.class);
 
     @RobotKeyword("""
             Set Poll Rate
@@ -139,7 +141,7 @@ public class ScreenKeywords {
             """)
     @ArgumentNames({"displayId"})
     public void setDisplay(int display) {
-        CV_MONITOR.setDisplay(display);
+        DISPLAY_MANAGER.setDisplay(display);
     }
 
     @RobotKeyword("""
@@ -153,7 +155,7 @@ public class ScreenKeywords {
     )
     @ArgumentNames({"display"})
     public void setDisplayByReference(String display) {
-        CV_MONITOR.setDisplay(display);
+        DISPLAY_MANAGER.setDisplay(display);
     }
 
     @RobotKeyword("""

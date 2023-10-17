@@ -84,7 +84,7 @@ as it does not include evaluation time.
         Set Display Reference
 
 | variable       | default  | unit                  |
-| displayId      |   N/A    | string                |
+| display        |   N/A    | string                |
 
 Sets the display to look at.
 
@@ -201,6 +201,13 @@ Shuts down JSnagTest
 
         """
         return self.remote.run_keyword("shutdown", [], None)
+
+    @keyword("Get Text")
+    def get_text(self):
+        """
+        
+        """
+        return self.remote.run_keyword("getText", [], None)
 
     @keyword("Set Psm")
     def set_psm(self, psm):

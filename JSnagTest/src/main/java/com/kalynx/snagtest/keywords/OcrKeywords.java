@@ -1,11 +1,17 @@
 package com.kalynx.snagtest.keywords;
 
+import com.kalynx.snagtest.SnagTest;
+import com.kalynx.snagtest.screen.Ocr;
+import net.sourceforge.tess4j.TesseractException;
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
 @RobotKeywords
 public class OcrKeywords {
+
+    private final Ocr OCR = SnagTest.DI.getDependency(Ocr.class);
+
     @RobotKeyword("""
             Set PSM
             Existing Modes
@@ -27,5 +33,11 @@ public class OcrKeywords {
     @ArgumentNames({"psm"})
     public boolean setPsm(int psm) {
         return false;
+    }
+
+    @RobotKeyword("""
+            """)
+    public void getText() throws TesseractException {
+        OCR.getText();
     }
 }

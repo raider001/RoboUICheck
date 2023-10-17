@@ -30,18 +30,18 @@ import java.util.function.Supplier;
 
 public class CvMonitor {
     private final ImageLibrary imageLibrary = new ImageLibrary();
-    private final Map<DisplayAttributes, DisplayData> displayData = new HashMap<>();
     private final Path imageResultRelativeLocation = Path.of(".", "image_results");
+    private final Map<DisplayAttributes, Queue<Robot>> robots = new HashMap<>();
     DisplayManager displayManager;
     private double matchScore = 0.95;
     private Duration pollRate = Duration.ofMillis(100);
     private Duration timeoutTime = Duration.ofMillis(2000);
-    private DisplayAttributes selectedDisplay;
     private Path resultLocation = Path.of(".", imageResultRelativeLocation.toString());
 
     public CvMonitor(double matchScore, DisplayManager displayManager) throws AWTException {
         if (matchScore <= 0 || matchScore >= 1) throw new AssertionError("matchScore can only be between 0 and 1");
-
+        this.matchScore = matchScore;
+        this.displayManager = displayManager;
         // This really isn't accurate anymore, used to ensure one robot per thread, but now double the robots are made.
         // Leaving because worst case scenario is more memory usage(which is already quite small)
         int cores = Runtime.getRuntime().availableProcessors();
@@ -54,10 +54,8 @@ public class CvMonitor {
             for (int j = 0; j < cores; j++) {
                 robots.add(new Robot(displayManager.getDisplay(i).graphicsDevice()));
             }
-
-            displayData.put(r, new DisplayData(new Rectangle(r.x(), r.y(), r.width(), r.height()), robots));
+            this.robots.put(r, robots);
         }
-        this.selectedDisplay = displayData.keySet().stream().filter(DisplayAttributes::primary).findFirst().orElseThrow();
     }
 
     private static Mat imageToMat(BufferedImage sourceImg) {
@@ -90,18 +88,6 @@ public class CvMonitor {
         return imageLibrary.getLibraryPaths();
     }
 
-    public void setDisplay(String display) {
-        DisplayAttributes attributes = displayManager.getDisplay(display);
-        if (attributes == null) throw new IllegalArgumentException("Display " + display + " does not exist");
-        selectedDisplay = attributes;
-    }
-
-    public void setDisplay(int display) {
-        selectedDisplay = displayData.keySet().stream()
-                .filter(data -> data.displayId() == display).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Display " + display + " does not exist"));
-    }
-
     /**
      * Sets the capture region for the currently selected display.
      *
@@ -111,7 +97,7 @@ public class CvMonitor {
         Objects.requireNonNull(screenRegion);
         if (screenRegion.width <= 0) throw new AssertionError("screenRegion width must be greater than 0");
         if (screenRegion.height <= 0) throw new AssertionError("screenRegion height must be greater than 0");
-        DisplayData d = displayData.get(selectedDisplay);
+        DisplayAttributes selectedDisplay = displayManager.getSelectedDisplay();
         Rectangle adjustedToDisplay = new Rectangle(screenRegion.x + selectedDisplay.x(),
                 screenRegion.y + selectedDisplay.y(),
                 screenRegion.width,
@@ -121,8 +107,7 @@ public class CvMonitor {
                 screenRegion.x + screenRegion.width > selectedDisplay.width() + selectedDisplay.x() ||
                 screenRegion.y + screenRegion.height > selectedDisplay.height() + selectedDisplay.y())
             throw new AssertionError("Given parameters are not on the screen specified.");
-
-        d.displayRegion().setBounds(adjustedToDisplay);
+        displayManager.getSelectedDisplayRegion().displayRegion().setBounds(adjustedToDisplay);
     }
 
     public double getMatchScore() {
@@ -268,12 +253,20 @@ public class CvMonitor {
                 relativeToLogExpected.toString());
     }
 
-    private Result<Data> match(Mat template, Mat mask, double matchScore) {
-        Robot robot = displayData.get(selectedDisplay).robots().poll();
+    public BufferedImage capture() {
+        DisplayManager.DisplayData displayData = displayManager.getSelectedDisplayRegion();
+        Robot robot = robots.get(displayManager.getSelectedDisplay()).poll();
         assert robot != null;
+        BufferedImage img = robot.createScreenCapture(displayData.displayRegion());
+        robots.get(displayManager.getSelectedDisplay()).add(robot);
+        return img;
+    }
+
+    private Result<Data> match(Mat template, Mat mask, double matchScore) {
+
         long takenTime = System.currentTimeMillis();
-        BufferedImage image = robot.createScreenCapture(displayData.get(selectedDisplay).displayRegion());
-        displayData.get(selectedDisplay).robots().add(robot);
+        BufferedImage image = capture();
+
         Mat screenshot = imageToMat(image);
         int result_cols = screenshot.cols() - template.cols() + 1;
         int result_rows = screenshot.rows() - template.rows() + 1;

@@ -9,12 +9,15 @@ import com.kalynx.snagtest.data.DisplayList;
 import com.kalynx.snagtest.data.MethodModelGenerator;
 import com.kalynx.snagtest.manager.DisplayManager;
 import com.kalynx.snagtest.screen.CvMonitor;
+import com.kalynx.snagtest.screen.Ocr;
 import com.kalynx.snagtest.settings.TimeSettings;
 import com.kalynx.snagtest.template.TemplateRetreiver;
 import com.kalynx.snagtest.wrappers.MouseInfoControl;
 import com.kalynx.snagtest.wrappers.MouseInfoWrapper;
 import com.kalynx.snagtest.wrappers.RobotControl;
 import com.kalynx.snagtest.wrappers.RobotWrapper;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
 import nu.pattern.OpenCV;
 import org.robotframework.javalib.library.AnnotationLibrary;
 import org.robotframework.javalib.library.KeywordDocumentationRepository;
@@ -44,7 +47,7 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
             Rectangle rectangle = graphicsDevice.getConfigurations()[0].getBounds();
             displays.add(rectangle);
         }
-
+        DI.add(new Tesseract());
         DI.add(new DisplayManager());
         DI.add(RobotControl.class, new RobotWrapper(new Robot()));
         DI.add(MouseInfoControl.class, new MouseInfoWrapper());
@@ -53,9 +56,13 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
         DI.inject(MouseController.class);
         DI.add(new CvMonitor(0.95, DI.getDependency(DisplayManager.class)));
         DI.inject(KeyboardController.class);
-
+        Ocr ocr = DI.inject(Ocr.class);
+        try {
+            ocr.getText();
+        } catch (TesseractException e) {
+            throw new RuntimeException(e);
+        }
         annotationLibrary = new AnnotationLibrary("com/kalynx/snagtest/**/*.class");
-
     }
 
     public static void main(String... args) throws Exception {
