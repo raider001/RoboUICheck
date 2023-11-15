@@ -3,10 +3,8 @@ package com.kalynx.snagtest.manager;
 import com.kalynx.lwdi.DI;
 import com.kalynx.snagtest.data.DisplayAttributes;
 
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
-import java.awt.Robot;
+import java.awt.*;
+import java.util.List;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -18,7 +16,7 @@ public class DisplayManager {
     private DisplayAttributes selectedDisplay;
 
     @DI
-    public DisplayManager() {
+    public DisplayManager() throws AWTException {
         GraphicsDevice[] d = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
         for (int i = 0; i < d.length; i++) {
             Rectangle rectangle = d[i].getConfigurations()[0].getBounds();
@@ -28,11 +26,44 @@ public class DisplayManager {
             if (attr.primary()) {
                 selectedDisplay = attr;
             }
+
+            int cores = Runtime.getRuntime().availableProcessors();
+            ConcurrentLinkedQueue<Robot> robots = new ConcurrentLinkedQueue<>();
+            for (int j = 0; j < cores * 10; j++) {
+
+                robots.add(new Robot(defaultDevice));
+            }
+            displayData.put(attr, new DisplayData(rectangle, robots));
         }
     }
 
     public DisplayManager(DisplayAttributes... attrs) {
-        Arrays.stream(attrs).toList().forEach(attr -> displayIdToDimensionMap.put(attr.displayId(), attr));
+        Arrays.stream(attrs).toList().forEach(attr -> {
+            displayIdToDimensionMap.put(attr.displayId(), attr);
+            int cores = Runtime.getRuntime().availableProcessors();
+            ConcurrentLinkedQueue<Robot> robots = new ConcurrentLinkedQueue<>();
+            for (int j = 0; j < cores; j++) {
+                try {
+                    robots.add(new Robot(attr.graphicsDevice()));
+                } catch (AWTException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            displayData.put(attr, new DisplayData(new Rectangle(attr.x(), attr.y(), attr.width(), attr.height()), robots));
+        });
+    }
+
+    public void setCores(int cores) {
+        displayData.keySet().forEach(key -> {
+            displayData.get(key).robots().clear();
+            for (int i = 0; i < cores; i++) {
+                try {
+                    displayData.get(key).robots().add(new Robot(key.graphicsDevice()));
+                } catch (AWTException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     public DisplayAttributes getDisplay(String reference) {

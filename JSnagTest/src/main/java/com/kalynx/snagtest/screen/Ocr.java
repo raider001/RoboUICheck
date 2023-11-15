@@ -16,6 +16,7 @@ public class Ocr {
     public String getText() throws TesseractException {
         return tesseract.doOCR(cvMonitor.capture());
     }
+    
 
     public void setPsm(int psm) {
         tesseract.setPageSegMode(psm);

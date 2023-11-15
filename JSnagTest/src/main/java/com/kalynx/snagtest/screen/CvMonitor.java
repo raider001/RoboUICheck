@@ -31,7 +31,6 @@ import java.util.function.Supplier;
 public class CvMonitor {
     private final ImageLibrary imageLibrary = new ImageLibrary();
     private final Path imageResultRelativeLocation = Path.of(".", "image_results");
-    private final Map<DisplayAttributes, Queue<Robot>> robots = new HashMap<>();
     DisplayManager displayManager;
     private double matchScore = 0.95;
     private Duration pollRate = Duration.ofMillis(100);
@@ -51,10 +50,6 @@ public class CvMonitor {
             Rectangle rectangle = new Rectangle(0, 0, r.width(), r.height());
             ConcurrentLinkedQueue<Robot> robots = new ConcurrentLinkedQueue<>();
 
-            for (int j = 0; j < cores; j++) {
-                robots.add(new Robot(displayManager.getDisplay(i).graphicsDevice()));
-            }
-            this.robots.put(r, robots);
         }
     }
 
@@ -255,10 +250,11 @@ public class CvMonitor {
 
     public BufferedImage capture() {
         DisplayManager.DisplayData displayData = displayManager.getSelectedDisplayRegion();
-        Robot robot = robots.get(displayManager.getSelectedDisplay()).poll();
+
+        Robot robot = displayManager.getSelectedDisplayRegion().robots().poll();
         assert robot != null;
         BufferedImage img = robot.createScreenCapture(displayData.displayRegion());
-        robots.get(displayManager.getSelectedDisplay()).add(robot);
+        displayManager.getSelectedDisplayRegion().robots().add(robot);
         return img;
     }
 
@@ -278,7 +274,6 @@ public class CvMonitor {
         if (actualScore > matchScore) {
             return new SuccessfulResult<>(Optional.of(new Data(takenTime, screenshot, mmr)));
         }
-
         return new FailedResult<>("", Optional.of(new Data(takenTime, screenshot, mmr)));
     }
 

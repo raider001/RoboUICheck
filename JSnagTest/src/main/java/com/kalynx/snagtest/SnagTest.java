@@ -8,6 +8,7 @@ import com.kalynx.snagtest.control.MouseController;
 import com.kalynx.snagtest.data.DisplayList;
 import com.kalynx.snagtest.data.MethodModelGenerator;
 import com.kalynx.snagtest.manager.DisplayManager;
+import com.kalynx.snagtest.manager.SnagAnnotationLibrary;
 import com.kalynx.snagtest.screen.CvMonitor;
 import com.kalynx.snagtest.screen.Ocr;
 import com.kalynx.snagtest.settings.TimeSettings;
@@ -19,7 +20,6 @@ import com.kalynx.snagtest.wrappers.RobotWrapper;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import nu.pattern.OpenCV;
-import org.robotframework.javalib.library.AnnotationLibrary;
 import org.robotframework.javalib.library.KeywordDocumentationRepository;
 import org.robotframework.javalib.library.RobotFrameworkDynamicAPI;
 import org.robotframework.remoteserver.RemoteServer;
@@ -37,7 +37,7 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
 
     public static final DependencyInjector DI = new DependencyInjector();
     private static RemoteServer remoteServer;
-    private final AnnotationLibrary annotationLibrary;
+    private final SnagAnnotationLibrary annotationLibrary;
 
     private SnagTest() throws AWTException, DependencyInjectionException {
 
@@ -62,7 +62,7 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
         } catch (TesseractException e) {
             throw new RuntimeException(e);
         }
-        annotationLibrary = new AnnotationLibrary("com/kalynx/snagtest/**/*.class");
+        annotationLibrary = new SnagAnnotationLibrary("com/kalynx/snagtest/**/*.class");
     }
 
     public static void main(String... args) throws Exception {
@@ -94,7 +94,7 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
 
         argParser.addArg("generate", Boolean.class).setShortKey('g').setHelp("Generates the keywords.resource file.").setCommand(val -> {
             MethodModelGenerator gen = new MethodModelGenerator();
-            if (!val) return;
+            if (Boolean.FALSE.equals(val)) return;
             gen.addMethods(snagTest.annotationLibrary);
             try {
                 TemplateRetreiver retriever = new TemplateRetreiver();

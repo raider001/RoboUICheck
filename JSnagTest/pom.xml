@@ -70,7 +70,7 @@
             <artifactId>tess4j</artifactId>
             <version>5.8.0</version>
         </dependency>
-
+        
         <!-- Unit Test dependencies -->
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
         <dependency>

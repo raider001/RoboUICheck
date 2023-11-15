@@ -37,7 +37,7 @@ class SnagTest:
             Failure("Service failed to start")
             self.remote = Remote("127.0.0.1:" + str(port) + "/")
 
-    @keyword("Add Image Path")
+    @keyword("addImagePath")
     def add_image_path(self, path):
         """
         Add Image Path
@@ -51,7 +51,7 @@ Adds a path to search for images. Multiple paths can be added.
         """
         return self.remote.run_keyword("addImagePath", [path], None)
 
-    @keyword("Set Display")
+    @keyword("setDisplay")
     def set_display(self, display_id):
         """
         Set Display
@@ -64,7 +64,7 @@ Sets the display to look at.
         """
         return self.remote.run_keyword("setDisplay", [display_id], None)
 
-    @keyword("Set Timeout Time")
+    @keyword("setTimeoutTime")
     def set_timeout_time(self, timeout_time):
         """
         Set Timeout Time
@@ -78,7 +78,7 @@ as it does not include evaluation time.
         """
         return self.remote.run_keyword("setTimeoutTime", [timeout_time], None)
 
-    @keyword("Set Display By Reference")
+    @keyword("setDisplayByReference")
     def set_display_by_reference(self, display):
         """
         Set Display Reference
@@ -91,7 +91,7 @@ Sets the display to look at.
         """
         return self.remote.run_keyword("setDisplayByReference", [display], None)
 
-    @keyword("Set Result Path")
+    @keyword("setResultPath")
     def set_result_path(self, result_path):
         """
         Set Result Path
@@ -105,7 +105,7 @@ based on where log files are written to.
         """
         return self.remote.run_keyword("setResultPath", [result_path], None)
 
-    @keyword("Find Image")
+    @keyword("findImage")
     def find_image(self, image_path):
         """
         Find Image
@@ -125,7 +125,7 @@ for more information
         """
         return self.remote.run_keyword("findImage", [image_path], None)
 
-    @keyword("Set Min Similarity")
+    @keyword("setMinSimilarity")
     def set_min_similarity(self, min_similarity):
         """
         Set Min Similarity
@@ -139,7 +139,7 @@ score is below the given similarity, it wil lbe considered a failure
         """
         return self.remote.run_keyword("setMinSimilarity", [min_similarity], None)
 
-    @keyword("Set Poll Rate")
+    @keyword("setPollRate")
     def set_poll_rate(self, poll_rate):
         """
         Set Poll Rate
@@ -157,7 +157,7 @@ sequentially to assess the actual time the image has been displayed on the scree
         """
         return self.remote.run_keyword("setPollRate", [poll_rate], None)
 
-    @keyword("Get Image Paths")
+    @keyword("getImagePaths")
     def get_image_paths(self):
         """
         Get Image Paths
@@ -168,7 +168,7 @@ Useful for debugging.
         """
         return self.remote.run_keyword("getImagePaths", [], None)
 
-    @keyword("Set Capture Region")
+    @keyword("setCaptureRegion")
     def set_capture_region(self, x, y, width, height):
         """
         Set Capture Region
@@ -185,7 +185,14 @@ The display is selected by:
         """
         return self.remote.run_keyword("setCaptureRegion", [x, y, width, height], None)
 
-    @keyword("Ping")
+    @keyword("Verify ${image} Is On ${display}")
+    def image_on_display(self, arg0, arg1):
+        """
+        
+        """
+        return self.remote.run_keyword("imageOnDisplay", [arg0, arg1], None)
+
+    @keyword("ping")
     def ping(self):
         """
         Ping
@@ -193,7 +200,7 @@ The display is selected by:
         """
         return self.remote.run_keyword("ping", [], None)
 
-    @keyword("Shutdown")
+    @keyword("shutdown")
     def shutdown(self):
         """
         Shutdown
@@ -202,14 +209,14 @@ Shuts down JSnagTest
         """
         return self.remote.run_keyword("shutdown", [], None)
 
-    @keyword("Get Text")
+    @keyword("getText")
     def get_text(self):
         """
         
         """
         return self.remote.run_keyword("getText", [], None)
 
-    @keyword("Set Psm")
+    @keyword("setPsm")
     def set_psm(self, psm):
         """
         Set PSM
@@ -232,7 +239,7 @@ Existing Modes
         """
         return self.remote.run_keyword("setPsm", [psm], None)
 
-    @keyword("Hold Key")
+    @keyword("holdKey")
     def hold_key(self, key):
         """
         Holds the requested key. It wont be released until the release key has been called
@@ -317,7 +324,7 @@ Available Options:
         """
         return self.remote.run_keyword("holdKey", [key], None)
 
-    @keyword("Press Keys")
+    @keyword("pressKeys")
     def press_keys(self, key1, key2=None, key3=None, key4=None, key5=None):
         """
         presses a set of keys, then releases them immediately afterwords.
@@ -402,7 +409,7 @@ Available Options:
         """
         return self.remote.run_keyword("pressKeys", [key1, key2, key3, key4, key5], None)
 
-    @keyword("Release Key")
+    @keyword("releaseKey")
     def release_key(self, key):
         """
         Releases the requested key
@@ -487,7 +494,7 @@ Available Options:
         """
         return self.remote.run_keyword("releaseKey", [key], None)
 
-    @keyword("Type")
+    @keyword("type")
     def type(self, message):
         """
         Types the given message
@@ -495,7 +502,7 @@ Available Options:
         """
         return self.remote.run_keyword("type", [message], None)
 
-    @keyword("Move Mouse To Display")
+    @keyword("moveMouseToDisplay")
     def move_mouse_to_display(self, display, x, y):
         """
         Move Mouse To Display
@@ -509,7 +516,7 @@ Available Options:
         """
         return self.remote.run_keyword("moveMouseToDisplay", [display, x, y], None)
 
-    @keyword("Move Mouse To")
+    @keyword("moveMouseTo")
     def move_mouse_to(self, x, y):
         """
         Move Mouse To
@@ -517,14 +524,14 @@ Available Options:
         """
         return self.remote.run_keyword("moveMouseTo", [x, y], None)
 
-    @keyword("Set Mouse Move Speed")
+    @keyword("setMouseMoveSpeed")
     def set_mouse_move_speed(self, speed):
         """
         Set Mouse Move Speed
         """
         return self.remote.run_keyword("setMouseMoveSpeed", [speed], None)
 
-    @keyword("Move Mouse To Image")
+    @keyword("moveMouseToImage")
     def move_mouse_to_image(self, image):
         """
         Move Mouse To Image
@@ -533,7 +540,7 @@ Moves the mouse to the center of the matched image on the screen.
         """
         return self.remote.run_keyword("moveMouseToImage", [image], None)
 
-    @keyword("Move Mouse")
+    @keyword("moveMouse")
     def move_mouse(self, x_relative, y_relative):
         """
         Move Mouse
@@ -547,7 +554,7 @@ Moves the mouse a relative distance based on its original location.
         """
         return self.remote.run_keyword("moveMouse", [x_relative, y_relative], None)
 
-    @keyword("Click")
+    @keyword("click")
     def click(self, button, count=1):
         """
         Simulates a Mouse click
@@ -559,7 +566,7 @@ Available options are:
         """
         return self.remote.run_keyword("click", [button, count], None)
 
-    @keyword("Set Display Reference")
+    @keyword("setDisplayReference")
     def set_display_reference(self, arg0, arg1, arg2):
         """
             Sets the reference display to the given reference name
@@ -574,7 +581,7 @@ Available options are:
         """
         return self.remote.run_keyword("setDisplayReference", [arg0, arg1, arg2], None)
 
-    @keyword("Set Primary Display Reference")
+    @keyword("setPrimaryDisplayReference")
     def set_primary_display_reference(self, reference_name):
         """
         Sets the primary display to the given reference name
