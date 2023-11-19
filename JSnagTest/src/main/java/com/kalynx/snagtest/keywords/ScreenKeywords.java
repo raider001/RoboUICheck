@@ -46,7 +46,7 @@ public class ScreenKeywords {
             Set Min Similarity
                         
             | variable | default  | unit            |
-            | pollRate |   0.95   | percent decimal |
+            | similarity |   0.95   | percent decimal |
                   
             Sets the minimum accepted similarity as a percentage. When attempting to find image matching, if the image
             score is below the given similarity, it wil lbe considered a failure
@@ -73,14 +73,14 @@ public class ScreenKeywords {
     @RobotKeyword("""
             Verify Image Exists
                         
-            | variable | default  | unit            |
-            | image |   0.95   | percent decimal    |
+            | variable | default  | unit                                         |
+            | image    |   N/A    | relative path to image added image locations |
                         
             Looks for the given image on the screen.
             The time, tolerance and poll time for finding the image can be updated to address timing and other needs.
             See:
             - Set Timeout Time
-            - Set Minimum Simularity
+            - Set Minimum Similarity
             - Set Poll Rate            
                         
             for more information
@@ -119,8 +119,8 @@ public class ScreenKeywords {
     @RobotKeyword("""
             Set Result Path
                         
-            | variable       | default  | unit                  |
-            | resultPath     |   ./    | File Path location    |
+            | variable       | default  | unit                                        |
+            | resultPath     |   ./     | File Path location from jSnagTest server    |
                         
             The result path should be defined as a relative path
             based on where log files are written to.

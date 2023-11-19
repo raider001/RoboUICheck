@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * Manages the display referencing functionality.
+ */
 public class DisplayManager {
 
     private final Map<Integer, DisplayAttributes> displayIdToDimensionMap = new HashMap<>();

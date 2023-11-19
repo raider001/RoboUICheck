@@ -43,6 +43,7 @@ public class MouseKeywords {
             | x         |   N/A   | pixel        |
             | y         |   N/A   | pixel        |
                         
+            If the mouse x and y is outside of the display bounds, an exception will be fired.
             """)
     @ArgumentNames({"display", "x", "y"})
     public void moveMouseToDisplay(String display, int x, int y) throws Exception {
@@ -51,6 +52,9 @@ public class MouseKeywords {
 
     @RobotKeyword("""
             Move Mouse To
+                        
+            If the mouse x and y is outside of the monitor bounds it is on, an exception will be fired.
+            If wanting to change the mouse to another display, use the 'Move Mouse To Display' keyword.
             """)
     @ArgumentNames({"x", "y"})
     public void moveMouseTo(int x, int y) throws Exception {
@@ -76,6 +80,13 @@ public class MouseKeywords {
              - LEFT
              - MIDDLE
              - RIGHT
+                        
+            | variable  | default | unit         |
+            | display   |   N/A   | monitorId    |
+            | button    |   N/A   | option       |
+            | count     |    1    | Clicks       |
+                        
+            The number of clicks can also be defined.
             """)
     @ArgumentNames({"button", "count=1"})
     public void click(String button, int count) throws Exception {
