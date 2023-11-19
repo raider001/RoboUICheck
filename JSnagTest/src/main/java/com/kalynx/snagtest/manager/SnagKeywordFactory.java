@@ -21,7 +21,7 @@ public class SnagKeywordFactory extends AnnotationKeywordFactory {
     }
 
     public String getCustomKeywordName(String keywordName) {
-        return customKeywords.getOrDefault(keywordName, keywordName);
+        return customKeywords.getOrDefault(keywordName, null);
     }
 
     @Override

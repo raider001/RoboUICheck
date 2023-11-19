@@ -63,7 +63,7 @@ public class MouseKeywords {
             """)
     @ArgumentNames({"image"})
     public void moveMouseToImage(String image) throws Exception {
-        Result<ScreenshotData> res = CV_MONITOR.monitorFor(image);
+        Result<ScreenshotData> res = CV_MONITOR.monitorForImage(image);
         if (res.isFailure()) throw new Exception("*HTML*" + res.getInfo());
         LOGGER.info(res.getInfo());
         Rectangle p = res.getData().foundLocation();

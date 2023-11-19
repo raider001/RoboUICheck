@@ -25,7 +25,7 @@ public class CombinationKeywords {
     public void imageOnDisplay(String imageName, String display) throws Exception {
         DisplayAttributes currentDisplay = DISPLAY_MANAGER.getSelectedDisplay();
         DISPLAY_MANAGER.setDisplay(display);
-        Result<ScreenshotData> res = CV_MONITOR.monitorFor(imageName);
+        Result<ScreenshotData> res = CV_MONITOR.monitorForImage(imageName);
         DISPLAY_MANAGER.setDisplay(currentDisplay.displayId());
         if (res.isFailure()) throw new Exception("*HTML" + res.getInfo());
         LOGGER.info(res.getInfo());
@@ -36,7 +36,7 @@ public class CombinationKeywords {
     public void imageNotOnDisplay(String imageName, String display) throws Exception {
         DisplayAttributes currentDisplay = DISPLAY_MANAGER.getSelectedDisplay();
         DISPLAY_MANAGER.setDisplay(display);
-        Result<ScreenshotData> res = CV_MONITOR.monitorFor(imageName);
+        Result<ScreenshotData> res = CV_MONITOR.monitorForImage(imageName);
         DISPLAY_MANAGER.setDisplay(currentDisplay.displayId());
         if (res.isSuccess()) throw new Exception("*HTML" + res.getInfo());
         LOGGER.info(res.getInfo());

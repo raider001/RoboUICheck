@@ -71,7 +71,7 @@ public class ScreenKeywords {
     }
 
     @RobotKeyword("""
-            Find Image
+            Verify Image Exists
                         
             | variable | default  | unit            |
             | image |   0.95   | percent decimal    |
@@ -86,8 +86,8 @@ public class ScreenKeywords {
             for more information
             """)
     @ArgumentNames({"imagePath"})
-    public void findImage(String imagePath) throws Exception {
-        Result<?> r = CV_MONITOR.monitorFor(imagePath);
+    public void verifyImageExists(String imagePath) throws Exception {
+        Result<?> r = CV_MONITOR.monitorForImage(imagePath);
         if (r.isFailure()) throw new Exception("*HTML*" + r.getInfo());
         LOGGER.info(r.getInfo());
     }

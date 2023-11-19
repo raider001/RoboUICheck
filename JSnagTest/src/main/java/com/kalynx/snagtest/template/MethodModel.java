@@ -10,31 +10,21 @@ public class MethodModel {
     private String methodName;
     private List<ArgModel> arguments;
     private String document;
-    private String pyNameOverride;
 
     public MethodModel(String methodName, String document, List<ArgModel> arguments) {
         this.methodName = methodName;
         this.pyName = camelToSnake(methodName);
         this.robotName = sentenceCase(methodName);
         this.arguments = arguments;
-        this.document = document;
+        this.document = document.replace("\n", "\n        ");
     }
 
     public MethodModel(String methodName, String document, List<ArgModel> arguments, String pyNameOverride) {
         this.methodName = methodName;
         this.pyName = camelToSnake(methodName);
-        this.pyNameOverride = pyNameOverride;
         this.robotName = pyNameOverride;
         this.arguments = arguments;
-        this.document = document;
-    }
-
-    public String getPyNameOverride() {
-        return pyNameOverride;
-    }
-
-    public void setPyNameOverride(String pyNameOverride) {
-        this.pyNameOverride = pyNameOverride;
+        this.document = document.replace("\n", "\n        ");
     }
 
     public String getRobotName() {

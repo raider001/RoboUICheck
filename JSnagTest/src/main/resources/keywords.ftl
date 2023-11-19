@@ -23,7 +23,9 @@ class SnagTest:
 
     @keyword("Connect", types={"port": int})
     def connect(self, port: int = 1338):
-        self.remote = Remote("127.0.0.1:" + str(port) + "/")
+        url: str = "127.0.0.1" + ":" + str(port) + "/"
+        print("Connecting to " + url)
+        self.remote = Remote(url)
 
     @keyword("Start", types={"port": int})
     def start(self, port: int = 1338):

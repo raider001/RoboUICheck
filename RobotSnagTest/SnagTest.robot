@@ -19,7 +19,7 @@ Test dynamic Test
     Set Display Reference    SECONDARY    ABOVE    PRIMARY
     # Will move the mouse to display 0 at fixed position 100 100
     Move Mouse To Display    SECONDARY    100    100
-
+    Set Timeout Time    timeout_time
     # Will move the mouse to fixed position on current display mouse is on
     Move Mouse To    500    200
     # Will move the mouse to display 1 at fixed position 100 100
@@ -29,8 +29,8 @@ Test dynamic Test
     Move Mouse    -10    -50
     Move Mouse To Display    SECONDARY    500    500
     Set Display    SECONDARY
-    Find Image    aCheckBox.png
-    Find Image    buttonA.png
+    Verify Image Exists    aCheckBox.png
+    Verify Image Exists    buttonA.png
 
     Move Mouse To Image    textfield.png
     Move Mouse To Image    buttonA.png
