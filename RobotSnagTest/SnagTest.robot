@@ -39,7 +39,7 @@ Test dynamic Test
     Click    LEFT
     Type    Hello
     Press Keys    CONTROL    A
-    Find Image    failImage.png
+    Verify Image Exists    failImage.png
     Verify failImage.png is on PRIMARY
     # Intentional fail at the end to ensure it cannot find image
     # Find Image    failImage.png

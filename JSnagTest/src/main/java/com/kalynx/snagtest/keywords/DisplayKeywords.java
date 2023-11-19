@@ -9,14 +9,14 @@ import org.robotframework.javalib.annotation.RobotKeywords;
 
 @RobotKeywords
 public class DisplayKeywords {
-    private static final DisplayManager displayManager = SnagTest.DI.getDependency(DisplayManager.class);
+    private static final DisplayManager DISPLAY_MANAGER = SnagTest.DI.getDependency(DisplayManager.class);
 
     @RobotKeyword("""
             Sets the primary display to the given reference name
             """)
     @ArgumentNames({"referenceName"})
     public void setPrimaryDisplayReference(String referenceName) {
-        displayManager.setPrimaryReference(referenceName);
+        DISPLAY_MANAGER.setPrimaryReference(referenceName);
     }
 
     @RobotKeyword("""
@@ -32,8 +32,35 @@ public class DisplayKeywords {
     public void setDisplayReference(String originReference, String relativeState, String newReferenceName) {
 
         RelativeEnum e = RelativeEnum.valueOf(relativeState.toUpperCase());
-        displayManager.setReference(originReference)
+        DISPLAY_MANAGER.setReference(originReference)
                 .relative(e)
                 .of(newReferenceName);
+    }
+
+    @RobotKeyword("""
+            Set Display
+                        
+            | variable       | default  | unit                  |
+            | displayId      |   0      | integer|String        |
+                        
+            Sets the display to look at.
+            """)
+    @ArgumentNames({"displayId"})
+    public void setDisplay(int display) {
+        DISPLAY_MANAGER.setDisplay(display);
+    }
+
+    @RobotKeyword("""
+            Set Display Reference
+                        
+            | variable       | default  | unit                  |
+            | display        |   N/A    | string                |
+                        
+            Sets the display to look at.
+            """
+    )
+    @ArgumentNames({"display"})
+    public void setDisplayByReference(String display) {
+        DISPLAY_MANAGER.setDisplay(display);
     }
 }
