@@ -53,26 +53,13 @@ class SnagTest:
         """
         return self.remote.run_keyword("addImagePath", [path], None)
 
-    @keyword("Set Display")
-    def set_display(self, display_id):
-        """
-        Set Display
-        
-        | variable       | default  | unit                  |
-        | displayId      |   0      | integer|String        |
-        
-        Sets the display to look at.
-        
-        """
-        return self.remote.run_keyword("setDisplay", [display_id], None)
-
     @keyword("Set Timeout Time")
     def set_timeout_time(self, timeout_time):
         """
         Set Timeout Time
         
-        | variable | default  | unit            |
-        | pollRate |   0.95   | percent decimal |
+        | variable    | default  | unit            |
+        | timeoutTime |   2000   | milliseconds    |
         
         Sets the maximum time to wait for an image to appear. Note that the test event can take longer based on poll rate
         as it does not include evaluation time.
@@ -94,33 +81,6 @@ class SnagTest:
         """
         return self.remote.run_keyword("setResultPath", [result_path], None)
 
-    @keyword("Set Display By Reference")
-    def set_display_by_reference(self, display):
-        """
-        Set Display Reference
-        
-        | variable       | default  | unit                  |
-        | display        |   N/A    | string                |
-        
-        Sets the display to look at.
-        
-        """
-        return self.remote.run_keyword("setDisplayByReference", [display], None)
-
-    @keyword("Set Min Similarity")
-    def set_min_similarity(self, min_similarity):
-        """
-        Set Min Similarity
-        
-        | variable | default  | unit            |
-        | pollRate |   0.95   | percent decimal |
-        
-        Sets the minimum accepted similarity as a percentage. When attempting to find image matching, if the image
-        score is below the given similarity, it wil lbe considered a failure
-        
-        """
-        return self.remote.run_keyword("setMinSimilarity", [min_similarity], None)
-
     @keyword("Verify Image Exists")
     def verify_image_exists(self, image_path):
         """
@@ -140,6 +100,20 @@ class SnagTest:
         
         """
         return self.remote.run_keyword("verifyImageExists", [image_path], None)
+
+    @keyword("Set Min Similarity")
+    def set_min_similarity(self, min_similarity):
+        """
+        Set Min Similarity
+        
+        | variable | default  | unit            |
+        | pollRate |   0.95   | percent decimal |
+        
+        Sets the minimum accepted similarity as a percentage. When attempting to find image matching, if the image
+        score is below the given similarity, it wil lbe considered a failure
+        
+        """
+        return self.remote.run_keyword("setMinSimilarity", [min_similarity], None)
 
     @keyword("Set Poll Rate")
     def set_poll_rate(self, poll_rate):
@@ -526,6 +500,13 @@ class SnagTest:
         """
         return self.remote.run_keyword("moveMouseTo", [x, y], None)
 
+    @keyword("Set Mouse Move Speed")
+    def set_mouse_move_speed(self, speed):
+        """
+        Set Mouse Move Speed
+        """
+        return self.remote.run_keyword("setMouseMoveSpeed", [speed], None)
+
     @keyword("Move Mouse To Image")
     def move_mouse_to_image(self, image):
         """
@@ -534,13 +515,6 @@ class SnagTest:
         
         """
         return self.remote.run_keyword("moveMouseToImage", [image], None)
-
-    @keyword("Set Mouse Move Speed")
-    def set_mouse_move_speed(self, speed):
-        """
-        Set Mouse Move Speed
-        """
-        return self.remote.run_keyword("setMouseMoveSpeed", [speed], None)
 
     @keyword("Move Mouse")
     def move_mouse(self, x_relative, y_relative):
@@ -568,6 +542,19 @@ class SnagTest:
         """
         return self.remote.run_keyword("click", [button, count], None)
 
+    @keyword("Set Display")
+    def set_display(self, display_id):
+        """
+        Set Display
+        
+        | variable       | default  | unit                  |
+        | displayId      |   0      | integer|String        |
+        
+        Sets the display to look at.
+        
+        """
+        return self.remote.run_keyword("setDisplay", [display_id], None)
+
     @keyword("Set Display Reference")
     def set_display_reference(self, arg0, arg1, arg2):
         """
@@ -582,6 +569,19 @@ class SnagTest:
         
         """
         return self.remote.run_keyword("setDisplayReference", [arg0, arg1, arg2], None)
+
+    @keyword("Set Display By Reference")
+    def set_display_by_reference(self, display):
+        """
+        Set Display Reference
+        
+        | variable       | default  | unit                  |
+        | display        |   N/A    | string                |
+        
+        Sets the display to look at.
+        
+        """
+        return self.remote.run_keyword("setDisplayByReference", [display], None)
 
     @keyword("Set Primary Display Reference")
     def set_primary_display_reference(self, reference_name):

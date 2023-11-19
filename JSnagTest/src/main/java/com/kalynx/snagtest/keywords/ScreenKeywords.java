@@ -59,8 +59,8 @@ public class ScreenKeywords {
     @RobotKeyword("""
             Set Timeout Time
                         
-            | variable | default  | unit            |
-            | pollRate |   0.95   | percent decimal |
+            | variable    | default  | unit            |
+            | timeoutTime |   2000   | milliseconds    |
                       
             Sets the maximum time to wait for an image to appear. Note that the test event can take longer based on poll rate
             as it does not include evaluation time.
@@ -130,7 +130,7 @@ public class ScreenKeywords {
         Path p = Path.of(resultPath);
         CV_MONITOR.setResultsLocation(p);
     }
-    
+
     @RobotKeyword("""
             Set Capture Region
             Sets the capture region for the currently selected display.
