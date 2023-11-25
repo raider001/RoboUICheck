@@ -56,6 +56,28 @@ public class DisplayManager {
         });
     }
 
+    /**
+     * Sets the capture region for the currently selected display.
+     *
+     * @param screenRegion
+     */
+    public void setCaptureRegion(Rectangle screenRegion) {
+        Objects.requireNonNull(screenRegion);
+        if (screenRegion.width <= 0) throw new AssertionError("screenRegion width must be greater than 0");
+        if (screenRegion.height <= 0) throw new AssertionError("screenRegion height must be greater than 0");
+        DisplayAttributes selectedDisplay = getSelectedDisplay();
+        Rectangle adjustedToDisplay = new Rectangle(screenRegion.x + selectedDisplay.x(),
+                screenRegion.y + selectedDisplay.y(),
+                screenRegion.width,
+                screenRegion.height);
+        if (selectedDisplay.x() < screenRegion.x ||
+                selectedDisplay.y() < screenRegion.y ||
+                screenRegion.x + screenRegion.width > selectedDisplay.width() + selectedDisplay.x() ||
+                screenRegion.y + screenRegion.height > selectedDisplay.height() + selectedDisplay.y())
+            throw new AssertionError("Given parameters are not on the screen specified.");
+        getSelectedDisplayRegion().displayRegion().setBounds(adjustedToDisplay);
+    }
+
     public void setCores(int cores) {
         displayData.keySet().forEach(key -> {
             displayData.get(key).robots().clear();

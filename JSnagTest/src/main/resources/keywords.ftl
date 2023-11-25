@@ -21,23 +21,36 @@ class SnagTest:
     """
     remote: Remote = None
 
-    @keyword("Connect", types={"port": int})
-    def connect(self, port: int = 1338):
-        url: str = "127.0.0.1" + ":" + str(port) + "/"
-        print("Connecting to " + url)
-        self.remote = Remote(url)
+def __init__(self, address: str = "localhost", port: int = 1338, mode: str = "remote"):
+    """
+    Initialises snag test with the given address and port.
+    | variable | default  | unit                  |
+    | address  | localhost| string                |
+    | port     |   1338   | integer               |
+    | mode     |   remote | remote/local          |
+    """
+    if mode == "remote":
+        self._connect(address, port)
+    elif mode == "local":
+        self._start(port)
+    else:
+        raise Exception("Mode must be either 'remote' or 'local'")
 
-    @keyword("Start", types={"port": int})
-    def start(self, port: int = 1338):
-        args: [str] = ["-jar", _path() + "\\..\\..\\JSnagTest\\target\\SnagTest.jar", "--port", str(port)]
-        java = 'java'
-        process: Process = Process()
+def _connect(self, address: str, port: int = 1338):
+    url: str = address + ":" + str(port) + "/"
+    print("Connecting to " + url)
+    self.remote = Remote(url)
 
-        process.start_process(java, *args, shell=True)
-        time.sleep(2)
-        if not process.is_process_running():
-            Failure("Service failed to start")
-            self.remote = Remote("127.0.0.1:" + str(port) + "/")
+def _start(self, port: int = 1338):
+    args: [str] = ["-jar", _path() + "\\..\\..\\JSnagTest\\target\\SnagTest.jar", "--port", str(port)]
+    java = 'java'
+    process: Process = Process()
+
+    process.start_process(java, *args, shell=True)
+    time.sleep(2)
+    if not process.is_process_running():
+        Failure("Service failed to start")
+    self.remote = Remote("127.0.0.1:" + str(port) + "/")
 
 <#list methods as method>
     @keyword("${method.robotName}")

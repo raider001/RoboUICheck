@@ -37,7 +37,13 @@ public class OcrKeywords {
 
     @RobotKeyword("""
             """)
-    public void getText() throws TesseractException {
-        OCR.getText();
+    public String getText() throws TesseractException {
+        return OCR.getText();
+    }
+
+    @RobotKeyword("""
+            """)
+    public String getTextFromImage(String imageName) throws Exception {
+        return OCR.getTextFromImage(imageName);
     }
 }

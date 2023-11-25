@@ -21,14 +21,27 @@ class SnagTest:
     """
     remote: Remote = None
 
-    @keyword("Connect", types={"port": int})
-    def connect(self, port: int = 1338):
-        url: str = "127.0.0.1" + ":" + str(port) + "/"
+    def __init__(self, address: str = "localhost", port: int = 1338, mode: str = "remote"):
+        """
+        Initialises snag test with the given address and port.
+        | variable | default  | unit                  |
+        | address  | localhost| string                |
+        | port     |   1338   | integer               |
+        | mode     |   remote | remote/local          |
+        """
+        if mode == "remote":
+            self._connect(address, port)
+        elif mode == "local":
+            self._start(port)
+        else:
+            raise Exception("Mode must be either 'remote' or 'local'")
+
+    def _connect(self, address: str, port: int = 1338):
+        url: str = address + ":" + str(port) + "/"
         print("Connecting to " + url)
         self.remote = Remote(url)
 
-    @keyword("Start", types={"port": int})
-    def start(self, port: int = 1338):
+    def _start(self, port: int = 1338):
         args: [str] = ["-jar", _path() + "\\..\\..\\JSnagTest\\target\\SnagTest.jar", "--port", str(port)]
         java = 'java'
         process: Process = Process()
@@ -72,8 +85,8 @@ class SnagTest:
         """
         Set Result Path
         
-        | variable       | default  | unit                  |
-        | resultPath     |   ./    | File Path location    |
+        | variable       | default  | unit                                        |
+        | resultPath     |   ./     | File Path location from jSnagTest server    |
         
         The result path should be defined as a relative path
         based on where log files are written to.
@@ -86,14 +99,14 @@ class SnagTest:
         """
         Verify Image Exists
         
-        | variable | default  | unit            |
-        | image |   0.95   | percent decimal    |
+        | variable | default  | unit                                         |
+        | image    |   N/A    | relative path to image added image locations |
         
         Looks for the given image on the screen.
         The time, tolerance and poll time for finding the image can be updated to address timing and other needs.
         See:
         - Set Timeout Time
-        - Set Minimum Simularity
+        - Set Minimum Similarity
         - Set Poll Rate
         
         for more information
@@ -107,7 +120,7 @@ class SnagTest:
         Set Min Similarity
         
         | variable | default  | unit            |
-        | pollRate |   0.95   | percent decimal |
+        | similarity |   0.95   | percent decimal |
         
         Sets the minimum accepted similarity as a percentage. When attempting to find image matching, if the image
         score is below the given similarity, it wil lbe considered a failure
@@ -171,7 +184,8 @@ class SnagTest:
     @keyword("Ping")
     def ping(self):
         """
-        Ping
+        Hello
+        Provides a simple Utility to check the system is actively responding.
         
         """
         return self.remote.run_keyword("ping", [], None)
@@ -191,6 +205,13 @@ class SnagTest:
         
         """
         return self.remote.run_keyword("getText", [], None)
+
+    @keyword("Get Text From Image")
+    def get_text_from_image(self, arg0):
+        """
+        
+        """
+        return self.remote.run_keyword("getTextFromImage", [arg0], None)
 
     @keyword("Set Psm")
     def set_psm(self, psm):
@@ -488,6 +509,7 @@ class SnagTest:
         | x         |   N/A   | pixel        |
         | y         |   N/A   | pixel        |
         
+        If the mouse x and y is outside of the display bounds, an exception will be fired.
         
         """
         return self.remote.run_keyword("moveMouseToDisplay", [display, x, y], None)
@@ -497,15 +519,11 @@ class SnagTest:
         """
         Move Mouse To
         
+        If the mouse x and y is outside of the monitor bounds it is on, an exception will be fired.
+        If wanting to change the mouse to another display, use the 'Move Mouse To Display' keyword.
+        
         """
         return self.remote.run_keyword("moveMouseTo", [x, y], None)
-
-    @keyword("Set Mouse Move Speed")
-    def set_mouse_move_speed(self, speed):
-        """
-        Set Mouse Move Speed
-        """
-        return self.remote.run_keyword("setMouseMoveSpeed", [speed], None)
 
     @keyword("Move Mouse To Image")
     def move_mouse_to_image(self, image):
@@ -515,6 +533,13 @@ class SnagTest:
         
         """
         return self.remote.run_keyword("moveMouseToImage", [image], None)
+
+    @keyword("Set Mouse Move Speed")
+    def set_mouse_move_speed(self, speed):
+        """
+        Set Mouse Move Speed
+        """
+        return self.remote.run_keyword("setMouseMoveSpeed", [speed], None)
 
     @keyword("Move Mouse")
     def move_mouse(self, x_relative, y_relative):
@@ -538,6 +563,13 @@ class SnagTest:
          - LEFT
          - MIDDLE
          - RIGHT
+        
+        | variable  | default | unit         |
+        | display   |   N/A   | monitorId    |
+        | button    |   N/A   | option       |
+        | count     |    1    | Clicks       |
+        
+        The number of clicks can also be defined.
         
         """
         return self.remote.run_keyword("click", [button, count], None)
@@ -590,4 +622,3 @@ class SnagTest:
         
         """
         return self.remote.run_keyword("setPrimaryDisplayReference", [reference_name], None)
-

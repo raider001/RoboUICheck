@@ -145,6 +145,6 @@ public class ScreenKeywords {
             """)
     @ArgumentNames({"x", "y", "width", "height"})
     public void setCaptureRegion(int x, int y, int width, int height) {
-        CV_MONITOR.setCaptureRegion(new Rectangle(x, y, width, height));
+        DISPLAY_MANAGER.setCaptureRegion(new Rectangle(x, y, width, height));
     }
 }

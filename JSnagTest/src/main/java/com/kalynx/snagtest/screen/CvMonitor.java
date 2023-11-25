@@ -119,27 +119,6 @@ public class CvMonitor {
         return imageLibrary.getLibraryPaths();
     }
 
-    /**
-     * Sets the capture region for the currently selected display.
-     *
-     * @param screenRegion
-     */
-    public void setCaptureRegion(Rectangle screenRegion) {
-        Objects.requireNonNull(screenRegion);
-        if (screenRegion.width <= 0) throw new AssertionError("screenRegion width must be greater than 0");
-        if (screenRegion.height <= 0) throw new AssertionError("screenRegion height must be greater than 0");
-        DisplayAttributes selectedDisplay = displayManager.getSelectedDisplay();
-        Rectangle adjustedToDisplay = new Rectangle(screenRegion.x + selectedDisplay.x(),
-                screenRegion.y + selectedDisplay.y(),
-                screenRegion.width,
-                screenRegion.height);
-        if (selectedDisplay.x() < screenRegion.x ||
-                selectedDisplay.y() < screenRegion.y ||
-                screenRegion.x + screenRegion.width > selectedDisplay.width() + selectedDisplay.x() ||
-                screenRegion.y + screenRegion.height > selectedDisplay.height() + selectedDisplay.y())
-            throw new AssertionError("Given parameters are not on the screen specified.");
-        displayManager.getSelectedDisplayRegion().displayRegion().setBounds(adjustedToDisplay);
-    }
 
     public double getMatchScore() {
         return matchScore;
@@ -186,6 +165,18 @@ public class CvMonitor {
 
     public Result<ScreenshotData> monitorForImage(String imageLocation) throws Exception {
         return monitorForImage(timeoutTime, imageLocation, matchScore);
+    }
+
+    public Result<ScreenshotData> monitorForLackOfImage(Duration duration, String imageLocation) throws Exception {
+        return monitorForLackOfImage(duration, imageLocation, matchScore);
+    }
+
+    public Result<ScreenshotData> monitorForLackOfImage(String imageLocation, double matchScore) throws Exception {
+        return monitorForLackOfImage(timeoutTime, imageLocation, matchScore);
+    }
+
+    public Result<ScreenshotData> monitorForLackOfImage(String imageLocation) throws Exception {
+        return monitorForLackOfImage(timeoutTime, imageLocation, matchScore);
     }
 
     public Result<ScreenshotData> monitorForLackOfImage(Duration duration, String imageLocation, double matchScore) throws IOException {
