@@ -8,8 +8,6 @@ Test Robot Setup
     Log    Set up correctly!
 
 Test dynamic Test
-    Connect    1338
-    # Start    1338
     Get Text
     Set Display    1
     Add Image Path    ${CURDIR}/images

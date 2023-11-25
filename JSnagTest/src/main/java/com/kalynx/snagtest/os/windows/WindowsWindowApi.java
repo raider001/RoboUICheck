@@ -1,5 +1,6 @@
 package com.kalynx.snagtest.os.windows;
 
+import com.kalynx.snagtest.manager.DisplayManager;
 import com.kalynx.snagtest.os.Window;
 import com.sun.jna.Native;
 
@@ -10,7 +11,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class WindowsWindowApi implements Window {
 
-    public User32 windowApi = User32.INSTANCE;
+    private static final User32 WINDOW_API = User32.INSTANCE;
+    private final DisplayManager displayManager;
+
+    public WindowsWindowApi(DisplayManager displayManager) {
+        this.displayManager = displayManager;
+    }
 
     @Override
     public List<String> getAllWindows() {
@@ -18,14 +24,14 @@ public class WindowsWindowApi implements Window {
         List<String> windowTitles = new ArrayList<>();
         User32.WNDENUMPROC enumCallback = (hWnd, arg) -> {
             char[] buffer = new char[1024];
-            windowApi.GetWindowTextW(hWnd, buffer, buffer.length);
+            WINDOW_API.GetWindowTextW(hWnd, buffer, buffer.length);
             String windowTitle = Native.toString(buffer);
             if (!windowTitle.isEmpty() && !windowTitles.contains(windowTitle)) {
                 windowTitles.add(windowTitle);
             }
             return true;
         };
-        windowApi.EnumWindows(enumCallback, null);
+        WINDOW_API.EnumWindows(enumCallback, null);
         return windowTitles;
     }
 
@@ -34,29 +40,106 @@ public class WindowsWindowApi implements Window {
         AtomicReference<Rectangle> rectangle = new AtomicReference<>();
         User32.WNDENUMPROC enumCallback = (hWnd, arg) -> {
             char[] buffer = new char[1024];
-            windowApi.GetWindowTextW(hWnd, buffer, buffer.length);
+            WINDOW_API.GetWindowTextW(hWnd, buffer, buffer.length);
             String windowTitle = Native.toString(buffer);
-            if (!windowTitle.isEmpty() && windowTitle.equals(windowName)) {
+            if (!windowTitle.isEmpty() && windowTitle.contains(windowName)) {
                 User32.RECT rect = new User32.RECT();
-                windowApi.GetWindowRect(hWnd, rect);
+                WINDOW_API.GetWindowRect(hWnd, rect);
                 rectangle.set(new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top));
                 return false;
             }
             return true;
         };
-        windowApi.EnumWindows(enumCallback, null);
+        WINDOW_API.EnumWindows(enumCallback, null);
         return rectangle.get();
     }
 
     @Override
-    public void setWindowPosition(String windowName, int x, int y) {
-        Rectangle windowDimensions = getWindowDimensions(windowName);
+    public boolean setWindowPosition(String windowName, int x, int y) {
+        // set the Window Position for the given window with the window name to the given x and y position.
+        User32.WNDENUMPROC enumCallback = (hWnd, arg) -> {
+            char[] buffer = new char[1024];
+            WINDOW_API.GetWindowTextW(hWnd, buffer, buffer.length);
+            String windowTitle = Native.toString(buffer);
+            if (!windowTitle.isEmpty() && windowTitle.contains(windowName)) {
+                User32.RECT rect = new User32.RECT();
+                WINDOW_API.GetWindowRect(hWnd, rect);
+                Rectangle rectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+
+                WINDOW_API.MoveWindow(hWnd, x + rect.left, y + rect.top, x + rectangle.width, y + rectangle.height, true);
+                return false;
+            }
+            return true;
+        };
+        return WINDOW_API.EnumWindows(enumCallback, null);
     }
+
 
     @Override
-    public void setWindowPosition(String windowName, int display, int x, int y) {
-        
+    public boolean setWindowPosition(String windowName, String displayReference, int x, int y) {
+        User32.WNDENUMPROC enumCallback = (hWnd, arg) -> {
+            char[] buffer = new char[1024];
+            WINDOW_API.GetWindowTextW(hWnd, buffer, buffer.length);
+            String windowTitle = Native.toString(buffer);
+            if (!windowTitle.isEmpty() && windowTitle.contains(windowName)) {
+                User32.RECT rect = new User32.RECT();
+                WINDOW_API.GetWindowRect(hWnd, rect);
+                int dispX = displayManager.getDisplay(displayReference).x();
+                int dispY = displayManager.getDisplay(displayReference).y();
+                Rectangle rectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+                WINDOW_API.MoveWindow(hWnd, x + dispX, y + dispY, rectangle.width, rectangle.height, true);
+                return false;
+            }
+            return true;
+        };
+        return WINDOW_API.EnumWindows(enumCallback, null);
     }
 
+    /**
+     * Sets the window size
+     *
+     * @param windowName
+     * @param width
+     * @param height
+     * @return
+     */
+    @Override
+    public boolean setWindowSize(String windowName, int width, int height) {
+        if (width < 0 || height < 0) throw new IllegalArgumentException("Width and Height must be greater than 0");
+        User32.WNDENUMPROC enumCallback = (hWnd, arg) -> {
+            char[] buffer = new char[1024];
+            WINDOW_API.GetWindowTextW(hWnd, buffer, buffer.length);
+            String windowTitle = Native.toString(buffer);
+            if (!windowTitle.isEmpty() && windowTitle.contains(windowName)) {
+                User32.RECT rect = new User32.RECT();
+                WINDOW_API.GetWindowRect(hWnd, rect);
+                WINDOW_API.MoveWindow(hWnd, rect.left, rect.top, rect.left + width, rect.top + height, true);
+                return false;
+            }
+            return true;
+        };
+        return WINDOW_API.EnumWindows(enumCallback, null);
+    }
 
+    /**
+     * Bring the window to the front.
+     *
+     * @param windowName
+     * @return
+     */
+    @Override
+    public boolean bringToFront(String windowName) {
+        User32.WNDENUMPROC enumCallback = (hWnd, arg) -> {
+            char[] buffer = new char[1024];
+            WINDOW_API.GetWindowTextW(hWnd, buffer, buffer.length);
+            String windowTitle = Native.toString(buffer);
+            if (!windowTitle.isEmpty() && windowTitle.contains(windowName)) {
+                User32.RECT rect = new User32.RECT();
+                WINDOW_API.SetForegroundWindow(hWnd);
+                return false;
+            }
+            return true;
+        };
+        return WINDOW_API.EnumWindows(enumCallback, null);
+    }
 }
