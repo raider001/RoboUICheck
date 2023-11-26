@@ -1,18 +1,43 @@
 package com.kalynx.snagtest.os.linux;
 
+import com.sun.jna.Structure;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
+import com.sun.jna.platform.unix.X11;
 import com.sun.jna.ptr.PointerByReference;
 
 public interface XLib extends Library {
     XLib INSTANCE = Native.load("X11", XLib.class);
 
-    int XGetWindowProperty(Pointer display, Pointer window, Pointer property, long longOffset, long longLength, boolean delete, long reqType, PointerByReference actualTypeReturn, PointerByReference actualFormatReturn, PointerByReference nItemsReturn, PointerByReference bytesAfterReturn, PointerByReference propReturn);
+    void XMoveWindow(Pointer display, int w, int x, int y);
 
-    Pointer XOpenDisplay(String display_name);
+    // Define XMapWindow function
+    void XMapWindow(Pointer display, int w);
 
-    Pointer XDefaultRootWindow(Pointer display);
+    // Define XFlush function
+    void XFlush(Pointer display);
 
-    int XQueryTree(Pointer display, Pointer w, PointerByReference root_return, PointerByReference parent_return, PointerByReference children_return, PointerByReference nchildren_return);
+    // Define XCloseDisplay function
+    void XCloseDisplay(Pointer display);
+
+    // Define XSetWindowAttributes structure
+    @Structure.FieldOrder({"override_redirect"})
+    public static class XSetWindowAttributes extends Structure {
+        public int override_redirect;
+
+        public XSetWindowAttributes() {
+            super();
+        }
+
+        public XSetWindowAttributes(Pointer p) {
+            super(p);
+        }
+    }
+
+    // Define XGetWindowAttributes function
+    int XGetWindowAttributes(Pointer display, int w, XSetWindowAttributes attributes);
+
+    // Define XChangeWindowAttributes function
+    int XChangeWindowAttributes(Pointer display, int w, long valuemask, XSetWindowAttributes attributes);
 }
