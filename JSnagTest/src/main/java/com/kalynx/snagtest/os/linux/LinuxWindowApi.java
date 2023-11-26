@@ -2,7 +2,6 @@ package com.kalynx.snagtest.os.linux;
 
 import com.kalynx.snagtest.os.Window;
 import com.sun.jna.Native;
-import com.sun.jna.NativeLong;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -10,10 +9,6 @@ import com.sun.jna.ptr.PointerByReference;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 import com.sun.jna.platform.unix.X11;
 public class LinuxWindowApi implements Window {
@@ -72,13 +67,6 @@ public class LinuxWindowApi implements Window {
         return false;
     }
 
-    private List<String> getWindowName(X11.Display display, X11.Window window) {
-        return null;
-    }
-
-    private void findWindowByName(String windowName) {
-
-    }
     private void rescurseWindows(Map<String, Long> names, X11.Display display, X11.Window root) {
         X11.WindowByReference windowRef = new X11.WindowByReference();
         X11.WindowByReference parentRef = new X11.WindowByReference();
