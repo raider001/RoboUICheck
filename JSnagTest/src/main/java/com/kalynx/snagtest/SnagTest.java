@@ -5,6 +5,7 @@ import com.kalynx.lwdi.DependencyInjector;
 import com.kalynx.snagtest.arg.ArgParser;
 import com.kalynx.snagtest.control.KeyboardController;
 import com.kalynx.snagtest.control.MouseController;
+import com.kalynx.snagtest.control.WindowController;
 import com.kalynx.snagtest.data.DisplayList;
 import com.kalynx.snagtest.data.MethodModelGenerator;
 import com.kalynx.snagtest.manager.DisplayManager;
@@ -48,10 +49,11 @@ public class SnagTest implements KeywordDocumentationRepository, RobotFrameworkD
             displays.add(rectangle);
         }
         DI.add(new Tesseract());
-        DI.add(new DisplayManager());
+        DI.add(DisplayManager.class);
         DI.add(RobotControl.class, new RobotWrapper(new Robot()));
         DI.add(MouseInfoControl.class, new MouseInfoWrapper());
         DI.add(displays);
+        DI.add(WindowController.class);
         DI.add(new TimeSettings());
         DI.inject(MouseController.class);
         DI.add(new CvMonitor(0.95, DI.getDependency(DisplayManager.class)));
