@@ -31,22 +31,16 @@ public class LinuxWindowApi implements Window {
 
     @Override
     public boolean setWindowPosition(String windowName, int x, int y) {
-        Map<String, Long> windows = new HashMap<>();
-        X11.Display display = x11.XOpenDisplay(null);
-        X11.Window root = x11.XDefaultRootWindow(display);
-        rescurseWindows(windows,display,root);
-        Optional<String> fullName = windows.keySet().stream().filter(key -> key.contains(windowName)).findFirst();
-        if(fullName.isEmpty()) return false;
-        Long selectedWindow = windows.get(fullName.get());
 
-        if(selectedWindow != null) {
+        X11.Display display = x11.XOpenDisplay(null);
+        int selectedWindow = getWindowId(display, windowName);
+
+        if(selectedWindow != -1) {
             XLib.XSetWindowAttributes attributes = new XLib.XSetWindowAttributes();
             attributes.override_redirect = 1;
-            X_LIB.XChangeWindowAttributes(display.getPointer(), selectedWindow.intValue(), X11.CWOverrideRedirect, attributes);
-            X_LIB.XMoveWindow(display.getPointer(), selectedWindow.intValue(), x, y);
-            X_LIB.INSTANCE.XMapWindow(display.getPointer(), selectedWindow.intValue());
-
-            // Flush the display to ensure changes take effect
+            X_LIB.XChangeWindowAttributes(display.getPointer(), selectedWindow, X11.CWOverrideRedirect, attributes);
+            X_LIB.XMoveWindow(display.getPointer(), selectedWindow, x, y);
+            X_LIB.INSTANCE.XMapWindow(display.getPointer(), selectedWindow);
             X_LIB.INSTANCE.XFlush(display.getPointer());
         }
         return true;
@@ -59,14 +53,41 @@ public class LinuxWindowApi implements Window {
 
     @Override
     public boolean setWindowSize(String windowName, int width, int height) {
-        return false;
+        X11.Display display = x11.XOpenDisplay(null);
+        int selectedWindow = getWindowId(display, windowName);
+        if(selectedWindow != -1) {
+            XLib.XSetWindowAttributes attributes = new XLib.XSetWindowAttributes();
+            attributes.override_redirect = 1;
+            X_LIB.XChangeWindowAttributes(display.getPointer(), selectedWindow, X11.CWOverrideRedirect, attributes);
+            X_LIB.XResizeWindow(display.getPointer(), selectedWindow, width, height);
+            X_LIB.INSTANCE.XMapWindow(display.getPointer(), selectedWindow);
+            X_LIB.INSTANCE.XFlush(display.getPointer());
+        }
+        return true;
     }
 
     @Override
     public boolean bringToFront(String windowName) {
-        return false;
+        X11.Display display = x11.XOpenDisplay(null);
+        int selectedWindow = getWindowId(display, windowName);
+        if(selectedWindow != -1) {
+            XLib.XSetWindowAttributes attributes = new XLib.XSetWindowAttributes();
+            attributes.override_redirect = 1;
+            X_LIB.XChangeWindowAttributes(display.getPointer(), selectedWindow, X11.CWOverrideRedirect, attributes);
+            X_LIB.XRaiseWindow(display.getPointer(), selectedWindow);
+            X_LIB.INSTANCE.XMapWindow(display.getPointer(), selectedWindow);
+            X_LIB.INSTANCE.XFlush(display.getPointer());
+        }
+        return true;
     }
 
+    private int getWindowId(X11.Display display, String name) {
+        Map<String, Long> windows = new HashMap<>();
+        X11.Window root = x11.XDefaultRootWindow(display);
+        rescurseWindows(windows,display,root);
+        Optional<String> fullName = windows.keySet().stream().filter(key -> key.contains(name)).findFirst();
+        return fullName.map(s -> windows.get(s).intValue()).orElse(-1);
+    }
     private void rescurseWindows(Map<String, Long> names, X11.Display display, X11.Window root) {
         X11.WindowByReference windowRef = new X11.WindowByReference();
         X11.WindowByReference parentRef = new X11.WindowByReference();
