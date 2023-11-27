@@ -4,8 +4,6 @@ import com.sun.jna.Structure;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
-import com.sun.jna.platform.unix.X11;
-import com.sun.jna.ptr.PointerByReference;
 
 public interface XLib extends Library {
     XLib INSTANCE = Native.load("X11", XLib.class);
@@ -21,9 +19,11 @@ public interface XLib extends Library {
     // Define XCloseDisplay function
     void XCloseDisplay(Pointer display);
 
+    void XResizeWindow(Pointer display, int window, int x, int y);
+
     // Define XSetWindowAttributes structure
     @Structure.FieldOrder({"override_redirect"})
-    public static class XSetWindowAttributes extends Structure {
+    class XSetWindowAttributes extends Structure {
         public int override_redirect;
 
         public XSetWindowAttributes() {
