@@ -68,7 +68,17 @@ public class LinuxWindowApi implements Window {
 
     @Override
     public boolean bringToFront(String windowName) {
-        return false;
+        X11.Display display = x11.XOpenDisplay(null);
+        int selectedWindow = getWindowId(display, windowName);
+        if(selectedWindow != -1) {
+            XLib.XSetWindowAttributes attributes = new XLib.XSetWindowAttributes();
+            attributes.override_redirect = 1;
+            X_LIB.XChangeWindowAttributes(display.getPointer(), selectedWindow, X11.CWOverrideRedirect, attributes);
+            X_LIB.XRaiseWindow(display.getPointer(), selectedWindow);
+            X_LIB.INSTANCE.XMapWindow(display.getPointer(), selectedWindow);
+            X_LIB.INSTANCE.XFlush(display.getPointer());
+        }
+        return true;
     }
 
     private int getWindowId(X11.Display display, String name) {

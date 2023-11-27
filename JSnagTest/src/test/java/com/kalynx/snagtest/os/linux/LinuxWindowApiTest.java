@@ -31,6 +31,11 @@ public class LinuxWindowApiTest {
     }
 
     @Test
+    public void bringWindowToFront() {
+        sut.bringToFront("Mozilla Firefox");
+    }
+
+    @Test
     public void testGetAllWindows() {
         List<String> results = sut.getAllWindows();
         Assertions.assertTrue(results.contains("jetbrains-idea"));

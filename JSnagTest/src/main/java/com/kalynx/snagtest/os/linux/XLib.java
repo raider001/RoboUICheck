@@ -10,14 +10,16 @@ public interface XLib extends Library {
 
     void XMoveWindow(Pointer display, int w, int x, int y);
 
-    // Define XMapWindow function
     void XMapWindow(Pointer display, int w);
 
-    // Define XFlush function
+    void XRaiseWindow(Pointer display, int window);
+
     void XFlush(Pointer display);
 
-    // Define XCloseDisplay function
-    void XCloseDisplay(Pointer display);
+    int XGetWindowAttributes(Pointer display, int w, XSetWindowAttributes attributes);
+
+    // Define XChangeWindowAttributes function
+    int XChangeWindowAttributes(Pointer display, int w, long valuemask, XSetWindowAttributes attributes);
 
     void XResizeWindow(Pointer display, int window, int x, int y);
 
@@ -34,10 +36,4 @@ public interface XLib extends Library {
             super(p);
         }
     }
-
-    // Define XGetWindowAttributes function
-    int XGetWindowAttributes(Pointer display, int w, XSetWindowAttributes attributes);
-
-    // Define XChangeWindowAttributes function
-    int XChangeWindowAttributes(Pointer display, int w, long valuemask, XSetWindowAttributes attributes);
 }
