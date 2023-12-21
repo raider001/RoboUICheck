@@ -12,6 +12,12 @@ public interface Window {
      */
     List<String> getAllWindows();
 
+    /**
+     * Gets the window dimensions for the specified window
+     *
+     * @param windowName
+     * @return Window dimensions, or Null if window not found.
+     */
     Rectangle getWindowDimensions(String windowName);
 
     /**

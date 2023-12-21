@@ -1,6 +1,6 @@
-package com.kalynx.snagtest.keywords;
+package com.kalynx.snagtest.keywordsold;
 
-import com.kalynx.snagtest.SnagTest;
+import com.kalynx.snagtest.SnagTestOld;
 import com.kalynx.snagtest.control.KeyboardController;
 import com.kalynx.snagtest.data.KeyboardSpecialKeys;
 import org.robotframework.javalib.annotation.ArgumentNames;
@@ -11,7 +11,7 @@ import org.robotframework.javalib.annotation.RobotKeywords;
 @RobotKeywords
 public class KeyboardKeywords {
 
-    private static final KeyboardController KEYBOARD_CONTROLLER = SnagTest.DI.getDependency(KeyboardController.class);
+    private static final KeyboardController KEYBOARD_CONTROLLER = SnagTestOld.DI.getDependency(KeyboardController.class);
 
     @RobotKeyword("""
             Types the given message

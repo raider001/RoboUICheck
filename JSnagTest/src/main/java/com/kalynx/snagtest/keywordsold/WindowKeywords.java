@@ -1,14 +1,13 @@
-package com.kalynx.snagtest.keywords;
+package com.kalynx.snagtest.keywordsold;
 
-import com.kalynx.snagtest.SnagTest;
+import com.kalynx.snagtest.SnagTestOld;
 import com.kalynx.snagtest.control.WindowController;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
 @RobotKeywords
 public class WindowKeywords {
-    private static final WindowController WINDOW_CONTROLLER = SnagTest.DI.getDependency(WindowController.class);
-
+    private static final WindowController WINDOW_CONTROLLER = SnagTestOld.DI.getDependency(WindowController.class);
 
     @RobotKeyword()
     public void moveWindowTo(String windowName, int x, int y) {

@@ -1,7 +1,7 @@
-package com.kalynx.snagtest.keywords;
+package com.kalynx.snagtest.keywordsold;
 
 import com.kalynx.snagtest.MouseEvent.MouseButtonDown;
-import com.kalynx.snagtest.SnagTest;
+import com.kalynx.snagtest.SnagTestOld;
 import com.kalynx.snagtest.control.MouseController;
 import com.kalynx.snagtest.data.Result;
 import com.kalynx.snagtest.screen.CvMonitor;
@@ -18,8 +18,8 @@ import java.awt.Rectangle;
 @RobotKeywords
 public class MouseKeywords {
     private static final Logger LOGGER = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
-    private static final MouseController MOUSE_CONTROLLER = SnagTest.DI.getDependency(MouseController.class);
-    private static final CvMonitor CV_MONITOR = SnagTest.DI.getDependency(CvMonitor.class);
+    private static final MouseController MOUSE_CONTROLLER = SnagTestOld.DI.getDependency(MouseController.class);
+    private static final CvMonitor CV_MONITOR = SnagTestOld.DI.getDependency(CvMonitor.class);
 
     @RobotKeyword("""
             Move Mouse

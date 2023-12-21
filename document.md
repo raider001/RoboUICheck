@@ -7,27 +7,32 @@ into the following categories.
 
 ## Display Keywords
 
-| Keyword                          | Attributes                         | Default | Return Value | DescriptionUsage                                                  |
-|----------------------------------|------------------------------------|---------|--------------|-------------------------------------------------------------------|
-| Set Primary Display Reference    | referenceName                      |         |              | Sets a Reference name for a display                               |
-| Set Relative Reference           | referenceName, inRelationTo        |         |              | Sets a Reference based on an existing reference display           |
-| Set Monitored Display            | referenceName                      |         |              | Sets the Display being monitors                                   |
-| Set Monitored Area               | x,y,width,height                   |         |              | Sets the monitored area for the selected display                  |
-| Reset Monitored Area             |                                    |         |              | Resets the monitored area to the original display size            |
-| Set Monitored Area For Display   | referenceName, x, y, width, height |         |              | Sets the monitored area for a given display reference             |
-| Reset Monitored Area For Display | referenceName                      |         |              | Resets the given monitored display area for the specified monitor |
+| Keyword                             | Attributes                         | Default | Return Value | DescriptionUsage                                                  |
+|-------------------------------------|------------------------------------|---------|--------------|-------------------------------------------------------------------|
+| Set Primary Display Reference       | referenceName                      |         |              | Sets a Reference name for a display                               |
+| Set Display By Id                   | displayId                          |         |              |                                                                   |
+| Set Display Reference               | referenceName, inRelationTo        |         |              | Sets a Reference based on an existing reference display           |
+| Set Monitored Display               | referenceName                      |         |              | Sets the Display being monitors                                   |
+| Set Monitored Area                  | x,y,width,height                   |         |              | Sets the monitored area for the selected display                  |
+| Reset Monitored Area                |                                    |         |              | Resets the monitored area to the original display size            |
+| Reset Monitored Area For Display Id | displayId                          |         |              |                                                                   |
+| Set Monitored Area For Display      | referenceName, x, y, width, height |         |              | Sets the monitored area for a given display reference             |
+| Reset Monitored Area For Display    | referenceName                      |         |              | Resets the given monitored display area for the specified monitor |
 
 ## Settings Keywords
 
 | Keyword                   | Attributes           | Default | Return Value | Description                                      |
 |---------------------------|----------------------|---------|--------------|--------------------------------------------------|
-| Set Image Search Time     | waitTime             |         |              | How long a match will try to find an image.      |
+| Set Timeout Time          | waitTime             |         |              | How long a match will try to find an image.      |
+| Set Poll Rate             | pollrate             |         |              |                                                  |
+| Get Image Paths           |                      |         | List[String] |                                                  |
+| Set Result Path           | path                 |         |              | The location for the image results/              |
 | Set Match Percentage      | matchPercentage      |         |              | The percentage the image must match as a minimum |
 | Add Image Location        | path                 |         |              | Adds a path to search for images.                |
 | Set Command Delay Speed   | delayTime            |         |              | Delay Time after each command                    |
 | Set Keystroke Speed       | timeBetweenKeystroke | 20ms    |              | Time between keystrokes                          |
 | Set OCR Segmentation Mode | mode                 |         |              | Sets the OCR Segmentation Mode                   |
-| Set Language              | language             |         |              | Sets the language for OCR                        |
+| Set OCR Language          | language             |         |              | Sets the language for OCR                        |
 | Set OCR Engine            | engine               |         |              | Sets the OCR Engine                              |
 
 ## Window Keywords

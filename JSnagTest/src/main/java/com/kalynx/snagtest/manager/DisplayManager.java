@@ -91,6 +91,20 @@ public class DisplayManager {
         });
     }
 
+    public String getDisplayReference(Rectangle bounds) {
+        // Determine the display given it is within the constrains of specific bounds.
+        return displayNameToDimensionMap.entrySet().stream()
+                .filter(entry -> {
+                    DisplayAttributes attr = entry.getValue();
+                    return attr.x() <= bounds.x && attr.x() + attr.width() >= bounds.x + bounds.width
+                            && attr.y() <= bounds.y && attr.y() + attr.height() >= bounds.y + bounds.height;
+                })
+                .findFirst()
+                .map(Map.Entry::getKey)
+                .orElseThrow(() -> new IllegalArgumentException("No display found for given bounds"));
+
+    }
+
     public DisplayAttributes getDisplay(String reference) {
         return displayNameToDimensionMap.get(reference);
     }
