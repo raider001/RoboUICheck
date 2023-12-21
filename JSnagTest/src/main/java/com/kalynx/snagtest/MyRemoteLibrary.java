@@ -1,15 +1,18 @@
-package com.kalynx.snagtest.test;
+package com.kalynx.snagtest;
 
-import com.kalynx.lwdi.DependencyInjector;
+import org.apache.commons.io.IOUtils;
 import org.robotframework.javalib.library.AnnotationLibrary;
 import org.robotframework.remoteserver.RemoteServer;
 
-public class Test extends AnnotationLibrary {
-    public static final DependencyInjector DI = new DependencyInjector();
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
 
-    public Test() {
+public class MyRemoteLibrary extends AnnotationLibrary {
+    public MyRemoteLibrary() {
         // tell AnnotationLibrary where to find the keywords
-        super("com/kalynx/snagtest/test/*.class");
+//        super("com/kalynx/snagtest/test/*.class");
     }
 
     /* Starts jrobotremoteserver with an example library and returns. The application will shutdown when all of the
@@ -17,13 +20,14 @@ public class Test extends AnnotationLibrary {
      */
     public static void main(String[] args) throws Exception {
         RemoteServer.configureLogging();
-        RemoteServer server = new RemoteServer(8270);
-        server.putLibrary("/", new Test());
+        RemoteServer server = new RemoteServer(1338);
+        server.putLibrary("/", new MyRemoteLibrary());
         server.start();
     }
 
     @Override
     public String getKeywordDocumentation(String keywordName) {
+        System.out.println(keywordName);
         if (keywordName.equals("__intro__"))
             return getIntro();
         return super.getKeywordDocumentation(keywordName);
@@ -31,9 +35,13 @@ public class Test extends AnnotationLibrary {
 
     // The introduction is stored in a text file resource because it is easier to edit than String constants.
     private String getIntro() {
-        return """
-                JSnagTest is a Robot Framework library for testing Java Swing applications.
-                                It uses OpenCV to find and click on components and Tesseract to read text from the screen.
-                                """;
+        try {
+            InputStream introStream = MyRemoteLibrary.class.getResourceAsStream("__intro__.txt");
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(introStream, writer, Charset.defaultCharset());
+            return writer.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

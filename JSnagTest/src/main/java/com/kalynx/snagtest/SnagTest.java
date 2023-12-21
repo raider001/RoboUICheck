@@ -18,7 +18,7 @@ public class SnagTest extends AnnotationLibrary {
 
     public static void main(String[] args) throws Exception {
         RemoteServer.configureLogging();
-        RemoteServer server = new RemoteServer(8275);
+        RemoteServer server = new RemoteServer(8276);
         server.putLibrary("/", new SnagTest());
         server.start();
     }
@@ -26,6 +26,10 @@ public class SnagTest extends AnnotationLibrary {
     @Override
     public String getKeywordDocumentation(String keywordName) {
         System.out.println(keywordName);
+        // There is a known issue with robot framework remote where it can be difficult to regenrate the documentation.
+        // To regenerate it for new robot files, you will need to:
+        // Navigate to <drive>/Users/<username>/.robotframework-ls/specs/v2/<dev-id>/user/
+        // Delete the files related top Remote
         if (keywordName.equals("__intro__"))
             return getIntro();
         return super.getKeywordDocumentation(keywordName);
