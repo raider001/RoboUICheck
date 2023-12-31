@@ -1,4 +1,0 @@
-JSnagTest is a library that allows you to test user interfaces in an automated way.
-
-It exposes common java interfaces from JavaRobot, as well as interfaces with Tesseract OCR and OpenCV.
-
