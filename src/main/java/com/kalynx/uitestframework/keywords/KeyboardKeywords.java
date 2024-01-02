@@ -8,6 +8,9 @@ import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywordOverload;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RobotKeywords
 public class KeyboardKeywords {
 
@@ -287,16 +290,23 @@ public class KeyboardKeywords {
             """)
     @ArgumentNames({"key1", "key2=None", "key3=None", "key4=None", "key5=None"})
     public void pressKeys(String key1, String key2, String key3, String key4, String key5) throws Exception {
-        pressKey(key1);
-        pressKey(key2);
-        pressKey(key3);
-        pressKey(key4);
-        pressKey(key5);
-        releaseKey(key1);
-        releaseKey(key2);
-        releaseKey(key3);
-        releaseKey(key4);
-        releaseKey(key5);
+        List<String> pressedKeys = new ArrayList<>();
+        testKeyPress(key1, pressedKeys);
+        testKeyPress(key2, pressedKeys);
+        testKeyPress(key3, pressedKeys);
+        testKeyPress(key4, pressedKeys);
+        testKeyPress(key5, pressedKeys);
+        releaseKeys(pressedKeys);
+    }
+
+    public void testKeyPress(String key, List<String> pressedKeys) throws Exception {
+        try{
+            pressKey(key);
+            pressedKeys.add(key);
+        } catch(IllegalArgumentException err) {
+            releaseKeys(pressedKeys);
+            throw err;
+        }
     }
 
     @RobotKeywordOverload
@@ -319,14 +329,9 @@ public class KeyboardKeywords {
         pressKeys(key1, null, null, null, null);
     }
 
-    private void rKey(String key) throws InterruptedException {
-        if (key != null && !key.isEmpty()) {
-            try {
-                KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key.toUpperCase());
-                KEYBOARD_CONTROLLER.keyRelease(specialKey);
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Key %s is not a valid key".formatted(key));
-            }
+    private void releaseKeys(List<String> pressedKeys) throws Exception {
+        for(String key: pressedKeys){
+            releaseKey(key);
         }
     }
 
