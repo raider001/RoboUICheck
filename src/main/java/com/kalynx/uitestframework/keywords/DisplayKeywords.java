@@ -116,7 +116,7 @@ public class DisplayKeywords {
             """
     )
     @ArgumentNames({"display"})
-    public void setDisplayReference(String display) {
+    public void setMonitoredDisplay(String display) {
         DISPLAY_MANAGER.setDisplay(display);
     }
 }

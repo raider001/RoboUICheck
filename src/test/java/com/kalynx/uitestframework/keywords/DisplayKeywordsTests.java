@@ -23,10 +23,10 @@ public class DisplayKeywordsTests {
     }
 
     @Test
-    public void setPrimaryDisplayReference_verification() {
+    public void setMonitoredDisplay_verification() {
         sut.setDisplayById(3);
         sut.setPrimaryDisplayReference("PRIMARY");
-        sut.setDisplayReference("PRIMARY");
+        sut.setMonitoredDisplay("PRIMARY");
         Assertions.assertEquals(1,displayManager.getSelectedDisplay().displayId());
     }
 
@@ -35,7 +35,7 @@ public class DisplayKeywordsTests {
         sut.setDisplayById(3);
         sut.setPrimaryDisplayReference("PRIMARY");
         sut.setDisplayReference("PRIMARY","RIGHT", "LEFT_MONITOR");
-        sut.setDisplayReference("LEFT_MONITOR");
+        sut.setMonitoredDisplay("LEFT_MONITOR");
         Assertions.assertEquals(4, displayManager.getSelectedDisplay().displayId());
     }
 
@@ -86,9 +86,9 @@ public class DisplayKeywordsTests {
         sut.setDisplayById(3);
         sut.setPrimaryDisplayReference("PRIMARY");
         sut.setDisplayReference("PRIMARY","RIGHT", "LEFT_MONITOR");
-        sut.setDisplayReference("LEFT_MONITOR");
+        sut.setMonitoredDisplay("LEFT_MONITOR");
         sut.setMonitoredAreaForDisplay("LEFT_MONITOR", 50,50,300,300);
-        sut.setDisplayReference("LEFT_MONITOR");
+        sut.setMonitoredDisplay("LEFT_MONITOR");
         Rectangle result = displayManager.getSelectedDisplayRegion().displayRegion();
         Assertions.assertEquals(new Rectangle(1970, 50,300,300), result);
     }
@@ -98,10 +98,10 @@ public class DisplayKeywordsTests {
         sut.setDisplayById(3);
         sut.setPrimaryDisplayReference("PRIMARY");
         sut.setDisplayReference("PRIMARY","RIGHT", "LEFT_MONITOR");
-        sut.setDisplayReference("LEFT_MONITOR");
+        sut.setMonitoredDisplay("LEFT_MONITOR");
         sut.setMonitoredAreaForDisplay("LEFT_MONITOR", 50,50,300,300);
         sut.resetMonitoredAreaForDisplay("LEFT_MONITOR");
-        sut.setDisplayReference("LEFT_MONITOR");
+        sut.setMonitoredDisplay("LEFT_MONITOR");
         Rectangle result = displayManager.getSelectedDisplayRegion().displayRegion();
         Assertions.assertEquals(new Rectangle(1920,0,1920,1080), result);
     }
