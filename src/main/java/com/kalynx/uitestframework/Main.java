@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Main extends AnnotationLibrary {
 
-    public Main() throws DependencyInjectionException, AWTException {
+    public Main() {
         super("com/kalynx/uitestframework/keywords/*.class");
 
     }
