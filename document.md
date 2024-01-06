@@ -12,7 +12,7 @@ into the following categories.
 | Set Primary Display Reference       | referenceName                      |         |              | Sets a Reference name for a display                               | [x]         |
 | Set Display By Id                   | displayId                          |         |              |                                                                   | [x]         |
 | Set Display Reference               | referenceName, inRelationTo        |         |              | Sets a Reference based on an existing reference display           | [x]         |
-| Set Monitored Display               | referenceName                      |         |              | Sets the Display being monitors                                   | [ ]         |
+| Set Monitored Display               | referenceName                      |         |              | Sets the Display being monitors                                   | [x]         |
 | Set Monitored Area                  | x,y,width,height                   |         |              | Sets the monitored area for the selected display                  | [x]         |
 | Reset Monitored Area                |                                    |         |              | Resets the monitored area to the original display size            | [x]         |
 | Reset Monitored Area For Display Id | displayId                          |         |              |                                                                   | [x]         |
