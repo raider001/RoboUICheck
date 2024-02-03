@@ -105,7 +105,7 @@ class KeyboardKeywordTests {
     }
 
     @Test
-    void pressKeys_badKey_verification() throws InterruptedException {
+    void pressKeys_badKey_verification1() throws InterruptedException {
         Throwable e = Assertions.assertThrows(IllegalArgumentException.class, () -> sut.pressKeys("ENTER","A","B", "C", "BAD"));
         Assertions.assertEquals("Key BAD is not a valid key", e.getMessage());
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.ENTER);
@@ -135,6 +135,13 @@ class KeyboardKeywordTests {
         Mockito.clearInvocations(controller);
 
         e = Assertions.assertThrows(IllegalArgumentException.class, () -> sut.pressKeys("ENTER","A","GLAD", "C", "D"));
+
+
+    }
+
+    @Test
+    void pressKeys_badKey_verification2() throws InterruptedException {
+        Throwable e = Assertions.assertThrows(IllegalArgumentException.class, () -> sut.pressKeys("ENTER","A","B", "C", "BAD"));
         Assertions.assertEquals("Key GLAD is not a valid key", e.getMessage());
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.ENTER);
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.A);
@@ -163,6 +170,13 @@ class KeyboardKeywordTests {
         Mockito.clearInvocations(controller);
 
         e = Assertions.assertThrows(IllegalArgumentException.class, () -> sut.pressKeys("SAND","A","B", "C", "D"));
+
+    }
+
+    @Test
+    void pressKeys_badKey_verification3() throws InterruptedException {
+        Throwable e = Assertions.assertThrows(IllegalArgumentException.class, () -> sut.pressKeys("ENTER","A","B", "C", "BAD"));
+        e = Assertions.assertThrows(IllegalArgumentException.class, () -> sut.pressKeys("SAND","A","B", "C", "D"));
         Assertions.assertEquals("Key SAND is not a valid key", e.getMessage());
         Mockito.verify(controller,Mockito.times(0)).keyPress(KeyboardSpecialKeys.ENTER);
         Mockito.verify(controller,Mockito.times(0)).keyPress(KeyboardSpecialKeys.A);
@@ -174,6 +188,5 @@ class KeyboardKeywordTests {
         Mockito.verify(controller,Mockito.times(0)).keyRelease(KeyboardSpecialKeys.B);
         Mockito.verify(controller,Mockito.times(0)).keyRelease(KeyboardSpecialKeys.C);
         Mockito.verify(controller,Mockito.times(0)).keyRelease(KeyboardSpecialKeys.D);
-
     }
 }
