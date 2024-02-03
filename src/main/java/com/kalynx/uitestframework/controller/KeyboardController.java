@@ -1,9 +1,9 @@
 package com.kalynx.uitestframework.controller;
 import com.kalynx.uitestframework.data.KeyboardMap;
 import com.kalynx.uitestframework.data.KeyboardSpecialKeys;
-import com.kalynx.uitestframework.settings.TimeSettings;
 
 import java.awt.*;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 public class KeyboardController {
@@ -12,9 +12,8 @@ public class KeyboardController {
     private final KeyboardMap keyboardMap = new KeyboardMap();
     private int TYPE_DELAY_MS = 20;
 
-    public KeyboardController(TimeSettings timeSettings, RobotControl robot) {
+    public KeyboardController( RobotControl robot) {
         this.robot = robot.getRobot();
-        timeSettings.addTypeDelayListener(typeDelay -> TYPE_DELAY_MS = typeDelay);
     }
 
     public void keyPress(KeyboardSpecialKeys... specialKeys) throws InterruptedException {
@@ -31,6 +30,11 @@ public class KeyboardController {
             robot.keyRelease(specialKey.id);
             TimeUnit.MILLISECONDS.sleep(TYPE_DELAY_MS);
         }
+    }
+
+    public void setTypeDelay(Duration delay) {
+        if(delay.toMillis() < 0)  throw new IllegalArgumentException("Delay cannot be negative");
+        TYPE_DELAY_MS = (int) delay.toMillis();
     }
 
     public void keyClick(KeyboardSpecialKeys... modifiers) throws InterruptedException {

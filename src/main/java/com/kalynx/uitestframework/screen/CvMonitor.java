@@ -21,7 +21,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -34,20 +33,10 @@ public class CvMonitor {
     private Duration timeoutTime = Duration.ofMillis(2000);
     private Path resultLocation = Path.of(".", imageResultRelativeLocation.toString());
 
-    public CvMonitor(double matchScore, DisplayManager displayManager) throws AWTException {
+    public CvMonitor(double matchScore, DisplayManager displayManager) {
         if (matchScore <= 0 || matchScore >= 1) throw new AssertionError("matchScore can only be between 0 and 1");
         this.matchScore = matchScore;
         this.displayManager = displayManager;
-        // This really isn't accurate anymore, used to ensure one robot per thread, but now double the robots are made.
-        // Leaving because worst case scenario is more memory usage(which is already quite small)
-        int cores = Runtime.getRuntime().availableProcessors();
-
-        for (int i = 0; i < displayManager.getDisplays().size(); i++) {
-            DisplayAttributes r = displayManager.getDisplay(i);
-            Rectangle rectangle = new Rectangle(0, 0, r.width(), r.height());
-            ConcurrentLinkedQueue<Robot> robots = new ConcurrentLinkedQueue<>();
-
-        }
     }
 
     private static Mat imageToMat(BufferedImage sourceImg) {
@@ -72,7 +61,7 @@ public class CvMonitor {
         BufferedImage buffImage = (BufferedImage) HighGui.toBufferedImage(successfulResult.getData().screenshot());
         Path resultLoc = Path.of(resultLocation.toString(), successfulResult.getData().takenTime() + ".jpg");
         ImageIO.write(buffImage, "jpg", resultLoc.toFile());
-        String htmlResult = generateHTMLResult(true, locRes.maxVal,
+        String htmlResult = generateHTMLResult(locRes.maxVal,
                 successfulResult.getData().takenTime(), matchImage,
                 buffImage);
         Data data = successfulResult.getData();
@@ -89,8 +78,9 @@ public class CvMonitor {
         Imgproc.rectangle(res.getData().screenshot(), locRes.maxLoc, new Point(locRes.maxLoc.x + match.cols(), locRes.maxLoc.y + match.rows()),
                 new Scalar(0, 0, 255), 2, 8, 0);
         BufferedImage buffImage = (BufferedImage) HighGui.toBufferedImage(res.getData().screenshot());
-        double actualScore = locRes.maxVal == Double.NEGATIVE_INFINITY ? 0 : locRes.minVal == Double.POSITIVE_INFINITY ? 1 : 1 - locRes.maxVal;
-        return new FailedResult<>(generateHTMLResult(true,
+        double el =  locRes.minVal == Double.POSITIVE_INFINITY ? 1 : 1 - locRes.maxVal;
+        double actualScore = locRes.maxVal == Double.NEGATIVE_INFINITY ? 0 : el;
+        return new FailedResult<>(generateHTMLResult(
                 actualScore,
                 res.getData().takenTime(),
                 match,
@@ -146,7 +136,7 @@ public class CvMonitor {
 
     public void setTimeoutTime(Duration timeoutTime) {
         if (timeoutTime.isNegative() || timeoutTime.isZero())
-            throw new AssertionError("timeout time must be greater than 0.");
+            throw new AssertionError("Timeout time must be greater than 0.");
         if (timeoutTime.toMillis() < pollRate.toMillis())
             throw new AssertionError("timeoutTime must be greater than pollRate: " + timeoutTime + "<" + pollRate);
         this.timeoutTime = timeoutTime;
@@ -181,13 +171,14 @@ public class CvMonitor {
         Objects.requireNonNull(imageLocation);
         Result<Mat> imageToFind = imageLibrary.findImage(Path.of(imageLocation));
         if (imageToFind.isFailure()) return new FailedResult<>(imageToFind.getInfo());
-
+        double originalMatchScore = this.matchScore;
+        this.matchScore = matchScore;
         List<Result<Data>> results = Collections.synchronizedList(new ArrayList<>());
         Supplier<Result<Data>> action = buildMatchResults(imageToFind.getData(), results);
         Predicate<Result<Data>> condition = Result::isFailure;
         ThreadService.schedule(action).forEvery(pollRate).over(timeoutTime).orUntil(condition).andWaitForCompletion();
         Optional<Result<Data>> finalResult = results.stream().filter(Result::isFailure).findFirst();
-
+        this.matchScore = originalMatchScore;
         if (finalResult.isPresent()) return generateSuccessfulResult(imageToFind.getData(), finalResult.get());
 
         return generateFailedResult(imageToFind.getData(), results);
@@ -199,6 +190,8 @@ public class CvMonitor {
         Result<Mat> imageToFind = imageLibrary.findImage(Path.of(imageLocation));
 
         if (imageToFind.isFailure()) return new FailedResult<>(imageToFind.getInfo());
+        double originalMatchScore = this.matchScore;
+        this.matchScore = matchScore;
 
         List<Result<Data>> results = Collections.synchronizedList(new ArrayList<>());
 
@@ -207,7 +200,7 @@ public class CvMonitor {
 
         ThreadService.schedule(action).forEvery(pollRate).over(timeoutTime).orUntil(condition).andWaitForCompletion();
         Optional<Result<Data>> finalResult = results.stream().filter(Result::isSuccess).findFirst();
-
+        this.matchScore = originalMatchScore;
         if (finalResult.isPresent()) return generateSuccessfulResult(imageToFind.getData(), finalResult.get());
 
         return generateFailedResult(imageToFind.getData(), results);
@@ -222,7 +215,6 @@ public class CvMonitor {
                 results.add(res);
                 return res;
             } catch (Exception e) {
-                e.printStackTrace();
                 throw new RuntimeException(e.toString());
             }
         };
@@ -235,7 +227,7 @@ public class CvMonitor {
         return mask;
     }
 
-    private String generateHTMLResult(boolean isSuccessful, double similarity, long time, Mat template, BufferedImage screenshot) throws IOException {
+    private String generateHTMLResult(double similarity, long time, Mat template, BufferedImage screenshot) throws IOException {
         String screenshotFileName = time + "_screenshot.jpg";
         String expectedFileName = time + "_expected.jpg";
         // Path to write
@@ -290,7 +282,8 @@ public class CvMonitor {
 
         Imgproc.matchTemplate(screenshot, template, result, Imgproc.TM_CCORR_NORMED, mask);
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-        double actualScore = mmr.maxVal == Double.NEGATIVE_INFINITY ? 1 : mmr.maxVal == Double.POSITIVE_INFINITY ? 0 : mmr.maxVal;
+        double el = mmr.maxVal == Double.POSITIVE_INFINITY ? 0 : mmr.maxVal;
+        double actualScore = mmr.maxVal == Double.NEGATIVE_INFINITY ? 1 : el;
         if (actualScore > matchScore) {
             return new SuccessfulResult<>(Optional.of(new Data(takenTime, screenshot, mmr)));
         }
@@ -299,8 +292,4 @@ public class CvMonitor {
 
     private record Data(long takenTime, Mat screenshot, Core.MinMaxLocResult res) {
     }
-
-    private record DisplayData(Rectangle displayRegion, ConcurrentLinkedQueue<Robot> robots) {
-    }
-
 }

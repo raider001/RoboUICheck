@@ -8,32 +8,32 @@ import org.mockito.Mockito;
 
 import java.awt.*;
 
-public class KeyboardControllerTests {
+class KeyboardControllerTests {
     private static KeyboardController sut;
     Robot r = Mockito.mock(Robot.class);
     @BeforeEach
     public void beforeEach() {
         r = Mockito.mock(Robot.class);
         RobotControl control = new RobotWrapper(r);
-        sut = new KeyboardController(new TimeSettings(),control);
+        sut = new KeyboardController(control);
     }
 
     @Test
-    public void keyPress_validation() throws InterruptedException {
+    void keyPress_validation() throws InterruptedException {
         sut.keyPress(KeyboardSpecialKeys.A, KeyboardSpecialKeys.ALT);
         Mockito.verify(r,Mockito.times(1)).keyPress(KeyboardSpecialKeys.A.id);
         Mockito.verify(r,Mockito.times(1)).keyPress(KeyboardSpecialKeys.ALT.id);
     }
 
     @Test
-    public void keyRelease_validation() throws InterruptedException {
+    void keyRelease_validation() throws InterruptedException {
         sut.keyRelease(KeyboardSpecialKeys.A, KeyboardSpecialKeys.ALT);
         Mockito.verify(r,Mockito.times(1)).keyRelease(KeyboardSpecialKeys.A.id);
         Mockito.verify(r,Mockito.times(1)).keyRelease(KeyboardSpecialKeys.ALT.id);
     }
 
     @Test
-    public void keyClick_validation() throws InterruptedException {
+    void keyClick_validation() throws InterruptedException {
         sut.keyClick(KeyboardSpecialKeys.A, KeyboardSpecialKeys.ALT);
         Mockito.verify(r,Mockito.times(1)).keyPress(KeyboardSpecialKeys.A.id);
         Mockito.verify(r,Mockito.times(1)).keyPress(KeyboardSpecialKeys.ALT.id);
@@ -42,7 +42,7 @@ public class KeyboardControllerTests {
     }
 
     @Test
-    public void type_validation() throws InterruptedException {
+    void type_validation() throws InterruptedException {
         sut.type("Hi world");
         verifyKeyIdPresses(16,72,73,32,87,79,82,76,68);
 
