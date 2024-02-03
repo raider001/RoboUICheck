@@ -95,6 +95,21 @@ class MouseKeywordTests {
     }
 
     @Test
+    void clickLocation_verification() throws Exception {
+
+        Exception e = Assertions.assertThrows(Exception.class, () -> sut.clickLocation("LEFT", 1, 2,-1));
+        Assertions.assertEquals("Must click at least once.", e.getMessage());
+
+        sut.clickLocation("LEFT", 1, 2);
+        Mockito.verify(mouseController).moveMouseTo(1, 2);
+        Mockito.verify(mouseController).mouseClick(MouseButtonDown.LEFT, 1);
+
+        sut.clickLocation("LEFT", 3, 4,2);
+        Mockito.verify(mouseController).moveMouseTo(3, 4);
+        Mockito.verify(mouseController).mouseClick(MouseButtonDown.LEFT, 2);
+    }
+
+    @Test
     void pressMouseButton_verification() throws Exception {
         sut.pressMouseButton("LEFT");
         Mockito.verify(mouseController).mousePress(MouseButtonDown.LEFT);

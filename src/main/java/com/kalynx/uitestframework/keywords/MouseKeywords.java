@@ -20,6 +20,7 @@ public class MouseKeywords {
     private static final Logger LOGGER = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
     private static final MouseController MOUSE_CONTROLLER = DI.getInstance().getDependency(MouseController.class);
     private static final CvMonitor CV_MONITOR = DI.getInstance().getDependency(CvMonitor.class);
+    public static final String INVALID_CLICK_OPTION_S_GIVEN = "Invalid Click option %s given.";
 
     @RobotKeyword("""
             Move Mouse
@@ -94,8 +95,10 @@ public class MouseKeywords {
         try {
             MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
             MOUSE_CONTROLLER.mouseClick(mask, count);
-        } catch (InterruptedException e) {
-            throw new InterruptedException("Invalid Click option %s given.".formatted(button));
+        } catch (InterruptedException a) {
+            throw a;
+        } catch (Exception e) {
+            throw new Exception(INVALID_CLICK_OPTION_S_GIVEN.formatted(button));
         }
 
     }
@@ -106,7 +109,36 @@ public class MouseKeywords {
             MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
             MOUSE_CONTROLLER.mouseClick(mask, 1);
         } catch (InterruptedException e) {
-            throw new InterruptedException("Invalid Click option %s given.".formatted(button));
+            throw e;
+        } catch (Exception e) {
+            throw new Exception(INVALID_CLICK_OPTION_S_GIVEN.formatted(button));
+        }
+    }
+
+    @RobotKeyword("""
+            Click Location
+            """)
+    public void clickLocation(String button, int x, int y) throws Exception {
+        try {
+            MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
+            MOUSE_CONTROLLER.moveMouseTo(x, y);
+            MOUSE_CONTROLLER.mouseClick(mask, 1);
+        } catch (InterruptedException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new Exception(INVALID_CLICK_OPTION_S_GIVEN.formatted(button));
+        }
+    }
+
+    @RobotKeywordOverload
+    public void clickLocation(String button, int x, int y, int times) throws Exception {
+        if(times <= 0) throw new IllegalArgumentException("Must click at least once.");
+        try {
+            MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
+            MOUSE_CONTROLLER.moveMouseTo(x, y);
+            MOUSE_CONTROLLER.mouseClick(mask, times);
+        } catch (InterruptedException e) {
+            throw new InterruptedException(INVALID_CLICK_OPTION_S_GIVEN.formatted(button));
         }
     }
 
@@ -130,7 +162,7 @@ public class MouseKeywords {
             MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
             MOUSE_CONTROLLER.mouseRelease(mask);
         } catch (Exception e) {
-            throw new Exception("Invalid Press option %s given.".formatted(button));
+            throw new Exception("Invalid Release option %s given.".formatted(button));
         }
     }
 

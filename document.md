@@ -96,22 +96,22 @@ into the following categories.
 ## Controls
 
 
-| Keyword               | Attributes          | Default | Returns | Description | Implemented                    | Verified On Windows               | Verified on Linux                 |
-|-----------------------| ------------------- | ------- | ------- | ----------- |--------------------------------|-----------------------------------|-----------------------------------|
-| Move Mouse To         | x, y                |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Move Mouse To Display | referenceName, x, y |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Move Mouse To Image   | imageName           |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Move Mouse            | x,y                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Click Location        | x,y                 |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Type                  | text                |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Copy Selected Text    |                     |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Paste Selected Text   |                     |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Get Selected Text     |                     |         | text    |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Paste Text            | text                |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Press Keys            | keys                |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Hold Keys             | keys                |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Release Keys          | keys                |         |         |             | ![ok.svg](assets/ok.svg)  ![ok.svg](assets/ok.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Release Mouse Button  | button              |         |         |             | ![ok.svg](assets/ok.svg)  | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Click Mouse Button    | button,_times_      |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Mouse Scroll Up       | ticks               |         |         |             | ![ok.svg](assets/ok.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Mouse Scroll Down     | ticks               |         |         |             | ![ok.svg](assets/ok.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Keyword               | Attributes           | Default | Returns | Description | Implemented                    | Verified On Windows               | Verified on Linux                 |
+|-----------------------|----------------------| ------- | ------- | ----------- |--------------------------------|-----------------------------------|-----------------------------------|
+| Move Mouse To         | x, y                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Move Mouse To Display | referenceName, x, y  |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Move Mouse To Image   | imageName            |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Move Mouse            | x,y                  |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Click Location        | button, x,y, _times_ |         |         |             | ![ok.svg](assets/ok.svg)  | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Type                  | text                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Copy Selected Text    |                      |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Paste Selected Text   |                      |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Get Selected Text     |                      |         | text    |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Paste Text            | text                 |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Press Keys            | keys                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Hold Keys             | keys                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Release Keys          | keys                 |         |         |             | ![ok.svg](assets/ok.svg)  ![ok.svg](assets/ok.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Release Mouse Button  | button               |         |         |             | ![ok.svg](assets/ok.svg)  | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Click Mouse Button    | button,_times_       |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Mouse Scroll Up       | ticks                |         |         |             | ![ok.svg](assets/ok.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Mouse Scroll Down     | ticks                |         |         |             | ![ok.svg](assets/ok.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
