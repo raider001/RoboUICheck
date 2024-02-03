@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.nio.file.Path;
 import java.time.Duration;
 
 class SettingsKeywordsTests {
@@ -20,8 +21,10 @@ class SettingsKeywordsTests {
     static void beforeAll() throws AlreadyAddedException {
         cvMonitor = Mockito.mock(CvMonitor.class);
         keyboardController = Mockito.mock(KeyboardController.class);
+        DI.reset();
         DI.getInstance().add(keyboardController);
         DI.getInstance().add(cvMonitor);
+
 
         sut = new SettingsKeywords();
     }
@@ -45,13 +48,14 @@ class SettingsKeywordsTests {
 
     @Test
     void getImagePaths_verification() {
+        cvMonitor.getImagePaths();
         Mockito.verify(cvMonitor,Mockito.times(1)).getImagePaths();
     }
 
     @Test
     void setResultPath_verification() throws Exception {
         sut.setResultPath("path");
-        Mockito.verify(cvMonitor, Mockito.times(1)).setResultsLocation(java.nio.file.Path.of("path"));
+        Mockito.verify(cvMonitor, Mockito.times(1)).setResultsLocation(Path.of("path"));
     }
 
     @Test

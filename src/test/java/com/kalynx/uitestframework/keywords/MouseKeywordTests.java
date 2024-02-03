@@ -18,7 +18,7 @@ import org.opencv.core.Mat;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 
-public class MouseKeywordTests {
+class MouseKeywordTests {
     private static MouseKeywords sut;
     private static MouseController mouseController;
     private static CvMonitor cvMonitor;
@@ -26,6 +26,7 @@ public class MouseKeywordTests {
     public static void beforeAll() throws AlreadyAddedException {
         mouseController = Mockito.mock(MouseController.class);
         cvMonitor = Mockito.mock(CvMonitor.class);
+        DI.reset();
         DI.getInstance().add(mouseController);
         DI.getInstance().add(cvMonitor);
         sut = new MouseKeywords();
@@ -37,25 +38,25 @@ public class MouseKeywordTests {
         Mockito.reset(cvMonitor);
     }
     @Test
-    public void mouseMove_verification() {
+    void mouseMove_verification() {
         sut.moveMouse(1, 2);
         Mockito.verify(mouseController).moveMouse(1, 2);
     }
 
     @Test
-    public void mouseMoveToDisplay_verification() throws Exception {
+    void mouseMoveToDisplay_verification() throws Exception {
         sut.moveMouseToDisplay("display", 1, 2);
         Mockito.verify(mouseController).moveMouseTo("display", 1, 2);
     }
 
     @Test
-    public void mouseMoveTo_verification() throws Exception {
+    void mouseMoveTo_verification() throws Exception {
         sut.moveMouseTo(1, 2);
         Mockito.verify(mouseController).moveMouseTo(1, 2);
     }
 
     @Test
-    public void mouseMoveToImage_verification() throws Exception {
+    void mouseMoveToImage_verification() throws Exception {
         Result<ScreenshotData> data = Mockito.mock(SuccessfulResult.class);
         Mockito.when(data.getData()).thenReturn(new ScreenshotData(100L, null, new Rectangle(100,100,50,100)));
         Mockito.when(cvMonitor.monitorForImage("image")).thenReturn(data);
@@ -64,7 +65,7 @@ public class MouseKeywordTests {
     }
 
     @Test
-    public void click_extension_verification() throws Exception {
+    void click_extension_verification() throws Exception {
         sut.click("LEFT", 1);
         Mockito.verify(mouseController).mouseClick(MouseButtonDown.LEFT, 1);
 
@@ -79,7 +80,7 @@ public class MouseKeywordTests {
     }
 
     @Test
-    public void click_verification() throws Exception {
+    void click_verification() throws Exception {
         sut.click("LEFT");
         Mockito.verify(mouseController).mouseClick(MouseButtonDown.LEFT, 1);
 
@@ -94,8 +95,50 @@ public class MouseKeywordTests {
     }
 
     @Test
-    public void setMouseMoveSpeed_verification() {
+    void pressMouseButton_verification() throws Exception {
+        sut.pressMouseButton("LEFT");
+        Mockito.verify(mouseController).mousePress(MouseButtonDown.LEFT);
+
+        sut.pressMouseButton("RIGHT");
+        Mockito.verify(mouseController).mousePress(MouseButtonDown.RIGHT);
+
+        sut.pressMouseButton("MIDDLE");
+        Mockito.verify(mouseController).mousePress(MouseButtonDown.MIDDLE);
+
+        Exception e = Assertions.assertThrows(Exception.class, () -> sut.pressMouseButton("INVALID"));
+        Assertions.assertEquals("Invalid Press option INVALID given.", e.getMessage());
+    }
+
+    @Test
+    void releaseMouseButton_verification() throws Exception {
+        sut.releaseMouseButton("LEFT");
+        Mockito.verify(mouseController).mouseRelease(MouseButtonDown.LEFT);
+
+        sut.releaseMouseButton("RIGHT");
+        Mockito.verify(mouseController).mouseRelease(MouseButtonDown.RIGHT);
+
+        sut.releaseMouseButton("MIDDLE");
+        Mockito.verify(mouseController).mouseRelease(MouseButtonDown.MIDDLE);
+
+        Exception e = Assertions.assertThrows(Exception.class, () -> sut.releaseMouseButton("INVALID"));
+        Assertions.assertEquals("Invalid Release option INVALID given.", e.getMessage());
+    }
+
+    @Test
+    void setMouseMoveSpeed_verification() {
         sut.setMouseMoveSpeed(100L);
         Mockito.verify(mouseController).setMouseMoveSpeed(100L);
+    }
+
+    @Test
+    void mouseScrollUp_verification() {
+        sut.mouseScrollUp(100);
+        Mockito.verify(mouseController).mouseScroll(100);
+    }
+
+    @Test
+    void mouseScrollDown_verification() {
+        sut.mouseScrollDown(100);
+        Mockito.verify(mouseController).mouseScroll(-100);
     }
 }

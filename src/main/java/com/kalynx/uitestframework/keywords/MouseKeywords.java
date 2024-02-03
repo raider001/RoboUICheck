@@ -94,8 +94,8 @@ public class MouseKeywords {
         try {
             MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
             MOUSE_CONTROLLER.mouseClick(mask, count);
-        } catch (Exception e) {
-            throw new Exception("Invalid Click option %s given.".formatted(button));
+        } catch (InterruptedException e) {
+            throw new InterruptedException("Invalid Click option %s given.".formatted(button));
         }
 
     }
@@ -105,10 +105,41 @@ public class MouseKeywords {
         try {
             MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
             MOUSE_CONTROLLER.mouseClick(mask, 1);
-        } catch (Exception e) {
-            throw new Exception("Invalid Click option %s given.".formatted(button));
+        } catch (InterruptedException e) {
+            throw new InterruptedException("Invalid Click option %s given.".formatted(button));
         }
+    }
 
+    @RobotKeyword("""
+            Press Mouse Button
+            """)
+    public void pressMouseButton(String button) throws Exception {
+        try {
+            MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
+            MOUSE_CONTROLLER.mousePress(mask);
+        } catch (Exception e) {
+            throw new Exception("Invalid Press option %s given.".formatted(button));
+        }
+    }
+
+    @RobotKeyword("""
+            Press Mouse Button
+            """)
+    public void releaseMouseButton(String button) throws Exception {
+        try {
+            MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
+            MOUSE_CONTROLLER.mouseRelease(mask);
+        } catch (Exception e) {
+            throw new Exception("Invalid Press option %s given.".formatted(button));
+        }
+    }
+
+    public void mouseScrollUp(int scrollAmount) {
+        MOUSE_CONTROLLER.mouseScroll(scrollAmount);
+    }
+
+    public void mouseScrollDown(int scrollAmount) {
+        MOUSE_CONTROLLER.mouseScroll(-scrollAmount);
     }
 
     // Mouse Movement Settings

@@ -20,6 +20,7 @@ class WindowKeywordsTests {
     @BeforeAll
     static void beforeAll() throws AlreadyAddedException {
         windowController = Mockito.mock(WindowController.class);
+        DI.reset();
         DI.getInstance().add(windowController);
         Mockito.when(windowController.getAllWindows()).thenReturn(WINDOWS);
         sut = new WindowKeywords();

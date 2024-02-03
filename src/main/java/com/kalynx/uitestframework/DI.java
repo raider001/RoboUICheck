@@ -3,13 +3,20 @@ package com.kalynx.uitestframework;
 import com.kalynx.lwdi.DependencyInjector;
 
 public class DI {
-    private static DependencyInjector di = new DependencyInjector();
+    private static DependencyInjector dependencyInjector = new DependencyInjector();
 
+    private DI() {
+
+    }
     public synchronized static final DependencyInjector getInstance() {
-        if(di == null) {
-            di = new DependencyInjector();
+        if(dependencyInjector == null) {
+            dependencyInjector = new DependencyInjector();
         }
-        return di;
+        return dependencyInjector;
+    }
+
+    public static void reset() {
+        dependencyInjector = null;
     }
 
 }

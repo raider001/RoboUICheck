@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class KeyboardKeywordTests {
+class KeyboardKeywordTests {
 
     private KeyboardKeywords sut;
     private static KeyboardController controller;
@@ -18,6 +18,7 @@ public class KeyboardKeywordTests {
     @BeforeAll
     public static void before() throws AlreadyAddedException {
         controller = Mockito.mock(KeyboardController.class);
+        DI.reset();
         DI.getInstance().add(controller);
     }
     @BeforeEach
@@ -27,13 +28,13 @@ public class KeyboardKeywordTests {
     }
 
     @Test
-    public void type_verification() throws Exception {
+    void type_verification() throws Exception {
         sut.type("Hello World");
         Mockito.verify(controller, Mockito.times(1)).type("Hello World");
     }
 
     @Test
-    public void holdKey_verification() throws Exception {
+    void holdKey_verification() throws Exception {
         sut.holdKey("ENTER");
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.ENTER);
         Throwable t = Assertions.assertThrows(IllegalArgumentException.class, () -> sut.holdKey("blarg"));
@@ -41,7 +42,7 @@ public class KeyboardKeywordTests {
     }
 
     @Test
-    public void releaseKey_verification() throws Exception {
+    void releaseKey_verification() throws Exception {
         sut.releaseKey("ENTER");
         Mockito.verify(controller,Mockito.times(1)).keyRelease(KeyboardSpecialKeys.ENTER);
         Throwable t = Assertions.assertThrows(IllegalArgumentException.class, () -> sut.releaseKey("blarg"));
@@ -49,7 +50,7 @@ public class KeyboardKeywordTests {
     }
 
     @Test
-    public void pressKeys5_verification() throws Exception {
+    void pressKeys5_verification() throws Exception {
         sut.pressKeys("ENTER","A","B","C","D");
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.ENTER);
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.A);
@@ -64,7 +65,7 @@ public class KeyboardKeywordTests {
     }
 
     @Test
-    public void pressKeys4_verification() throws Exception {
+    void pressKeys4_verification() throws Exception {
         sut.pressKeys("ENTER","A","B","C");
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.ENTER);
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.A);
@@ -78,7 +79,7 @@ public class KeyboardKeywordTests {
     }
 
     @Test
-    public void pressKeys3_verification() throws Exception {
+    void pressKeys3_verification() throws Exception {
         sut.pressKeys("ENTER","A","B");
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.ENTER);
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.A);
@@ -88,7 +89,7 @@ public class KeyboardKeywordTests {
         Mockito.verify(controller,Mockito.times(1)).keyRelease(KeyboardSpecialKeys.B);
     }
     @Test
-    public void pressKeys2_verification() throws Exception {
+    void pressKeys2_verification() throws Exception {
         sut.pressKeys("ENTER","A");
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.ENTER);
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.A);
@@ -97,14 +98,14 @@ public class KeyboardKeywordTests {
     }
 
     @Test
-    public void pressKeys1_verification() throws Exception {
+    void pressKeys1_verification() throws Exception {
         sut.pressKeys("ENTER");
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.ENTER);
         Mockito.verify(controller,Mockito.times(1)).keyRelease(KeyboardSpecialKeys.ENTER);
     }
 
     @Test
-    public void pressKeys_badKey_verification() throws InterruptedException {
+    void pressKeys_badKey_verification() throws InterruptedException {
         Throwable e = Assertions.assertThrows(IllegalArgumentException.class, () -> sut.pressKeys("ENTER","A","B", "C", "BAD"));
         Assertions.assertEquals("Key BAD is not a valid key", e.getMessage());
         Mockito.verify(controller,Mockito.times(1)).keyPress(KeyboardSpecialKeys.ENTER);

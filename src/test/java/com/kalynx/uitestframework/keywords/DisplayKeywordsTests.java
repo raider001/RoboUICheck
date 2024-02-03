@@ -10,20 +10,20 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 
-public class DisplayKeywordsTests {
+class DisplayKeywordsTests {
 
     private static DisplayKeywords sut;
     static DisplayManager displayManager = TestData.createDisplayManager();
 
     @BeforeAll
     static void beforeAll() throws AlreadyAddedException {
-
+        DI.reset();
         DI.getInstance().add(displayManager);
         sut = new DisplayKeywords();
     }
 
     @Test
-    public void setMonitoredDisplay_verification() {
+    void setMonitoredDisplay_verification() {
         sut.setDisplayById(3);
         sut.setPrimaryDisplayReference("PRIMARY");
         sut.setMonitoredDisplay("PRIMARY");
@@ -31,7 +31,7 @@ public class DisplayKeywordsTests {
     }
 
     @Test
-    public void setDisplayReference_verification() {
+    void setDisplayReference_verification() {
         sut.setDisplayById(3);
         sut.setPrimaryDisplayReference("PRIMARY");
         sut.setDisplayReference("PRIMARY","RIGHT", "LEFT_MONITOR");
@@ -40,7 +40,7 @@ public class DisplayKeywordsTests {
     }
 
     @Test
-    public void setMonitoredArea_verification() {
+    void setMonitoredArea_verification() {
         sut.setDisplayById(3);
         sut.setMonitoredArea(100,100,200, 200);
         Rectangle result = displayManager.getSelectedDisplayRegion().displayRegion();
@@ -49,7 +49,7 @@ public class DisplayKeywordsTests {
     }
 
     @Test
-    public void resetMonitoredArea_verification() {
+    void resetMonitoredArea_verification() {
         sut.setDisplayById(3);
         sut.setMonitoredArea(100,100,200, 200);
         sut.resetMonitoredArea();
@@ -58,7 +58,7 @@ public class DisplayKeywordsTests {
     }
 
     @Test
-    public void setMonitoredAreaForDisplayId_verification() {
+    void setMonitoredAreaForDisplayId_verification() {
         sut.setDisplayById(1);
         sut.setMonitoredAreaForDisplayId(3,300,300,400,400);
         Rectangle r = displayManager.getSelectedDisplayRegion().displayRegion();
@@ -69,7 +69,7 @@ public class DisplayKeywordsTests {
     }
 
     @Test
-    public void resetMonitoredAreaForId_verification() {
+    void resetMonitoredAreaForId_verification() {
         sut.setDisplayById(1);
         sut.setMonitoredAreaForDisplayId(3,300,300,400,400);
         Rectangle r = displayManager.getSelectedDisplayRegion().displayRegion();
@@ -82,7 +82,7 @@ public class DisplayKeywordsTests {
     }
 
     @Test
-    public void setMonitoredAreaForDisplay_verification() {
+    void setMonitoredAreaForDisplay_verification() {
         sut.setDisplayById(3);
         sut.setPrimaryDisplayReference("PRIMARY");
         sut.setDisplayReference("PRIMARY","RIGHT", "LEFT_MONITOR");
@@ -94,7 +94,7 @@ public class DisplayKeywordsTests {
     }
 
     @Test
-    public void resetMonitoredAreaForDisplay_verification() {
+    void resetMonitoredAreaForDisplay_verification() {
         sut.setDisplayById(3);
         sut.setPrimaryDisplayReference("PRIMARY");
         sut.setDisplayReference("PRIMARY","RIGHT", "LEFT_MONITOR");
