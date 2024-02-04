@@ -35,7 +35,7 @@ public class ScreenKeywords {
             See:
             - Set Timeout Time
             - Set Minimum Similarity
-            - Set Poll Rate            
+            - Set Poll Rate
                         
             for more information
             """)
@@ -59,26 +59,26 @@ public class ScreenKeywords {
             See:
             - Set Timeout Time
             - Set Minimum Similarity
-            - Set Poll Rate            
+            - Set Poll Rate
                         
             for more information
             """)
     @ArgumentNames({"imageName", "minMatchScore"})
-    public void verifyImageExistsWithMinMatch(String imageName, int minMatchScore) throws Exception {
+    public void verifyImageExists(String imageName, double minMatchScore) throws Exception {
         Result<?> r = CV_MONITOR.monitorForImage(imageName, minMatchScore);
         if(r.isFailure()) throw new Exception(HTML + r.getInfo());
         LOGGER.info(r.getInfo());
     }
 
     @RobotKeywordOverload
-    public void verifyImageExists(String imageName, int minMatchScore, int waitTime) throws Exception {
+    public void verifyImageExists(String imageName, double minMatchScore, int waitTime) throws Exception {
         Result<?> r = CV_MONITOR.monitorForImage(Duration.ofMillis(waitTime), imageName, minMatchScore);
         if(r.isFailure()) throw new Exception(HTML + r.getInfo());
         LOGGER.info(r.getInfo());
     }
 
     @RobotKeywordOverload
-    public void verifyImageExistsOverDuration(String imageName, int waitTime) throws Exception {
+    public void verifyImageExists(String imageName, int waitTime) throws Exception {
         Result<?> r = CV_MONITOR.monitorForImage(Duration.ofMillis(waitTime), imageName);
         if(r.isFailure()) throw new Exception(HTML + r.getInfo());
         LOGGER.info(r.getInfo());
@@ -97,7 +97,7 @@ public class ScreenKeywords {
             See:
             - Set Timeout Time
             - Set Minimum Similarity
-            - Set Poll Rate            
+            - Set Poll Rate
                         
             for more information
             """)
@@ -140,7 +140,7 @@ public class ScreenKeywords {
             See:
             - Set Timeout Time
             - Set Minimum Similarity
-            - Set Poll Rate            
+            - Set Poll Rate
                         
             for more information
             """)
@@ -170,7 +170,7 @@ public class ScreenKeywords {
             See:
             - Set Timeout Time
             - Set Minimum Similarity
-            - Set Poll Rate            
+            - Set Poll Rate
                         
             for more information
             """)

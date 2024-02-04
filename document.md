@@ -6,8 +6,6 @@ into the following categories.
 *Note Italics indicates optional*
 
 ## Display Keywords
-
-
 | Keyword                             | Attributes                         | Default | Return Value | DescriptionUsage                                                  | Implemented                | Verified On Windows | Verified on linux |
 | ----------------------------------- | ---------------------------------- | ------- | ------------ | ----------------------------------------------------------------- |----------------------------|---------------------|-------------------|
 | Set Primary Display Reference       | referenceName                      |         |              | Sets a Reference name for a display                               | ![ok.svg](assets/ok.svg)   |![cross.svg](assets/cross.svg) |![cross.svg](assets/cross.svg) |
@@ -20,9 +18,7 @@ into the following categories.
 | Set Monitored Area For Display      | referenceName, x, y, width, height |         |              | Sets the monitored area for a given display reference             | ![ok.svg](assets/ok.svg)   |![cross.svg](assets/cross.svg) |![cross.svg](assets/cross.svg) |
 | Reset Monitored Area For Display    | referenceName                      |         |              | Resets the given monitored display area for the specified monitor | ![ok.svg](assets/ok.svg)   |![cross.svg](assets/cross.svg) |![cross.svg](assets/cross.svg) |
 
-## Settings Keywords 
-
-
+## Settings Keywords
 | Keyword                   | Attributes           | Default | Return Value | Description                                      | Implemented                    | Verified On Windows              | Verified on Linux               |
 | ------------------------- | -------------------- | ------- | ------------ | ------------------------------------------------ |--------------------------------|----------------------------------|---------------------------------|
 | Set Timeout Time          | waitTime             |         |              | How long a match will try to find an image.      | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
@@ -50,31 +46,28 @@ into the following categories.
 | Move Window               | windowName, x, y          |         |                              | Moves the window to the given coordinates.   | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
 
 ## Image Match Keywords
-
-
-| Keyword                                | Attributes                                                           | Default | Return       | Description                                             | Implemented                        | Verified On Windows              | Verified on Linux               |
-| -------------------------------------- | -------------------------------------------------------------------- | ------- | ------------ | ------------------------------------------------------- |------------------------------------|----------------------------------|---------------------------------|
-| Verify Image Exists                    | imageName,*minMatchScore*, *waitTime*                                |         | actualScore  | Finds an Image in a the defined display area.           | ![ok.svg](assets/ok.svg)           | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Verify Image Exists On Display         | imageName, referenceName,*minMatchScore, waitTime*                   |         | actualScore  | Searches a specific display for the image defined       | ![ok.svg](assets/ok.svg)           | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Verify Image Exits On Window           | imageName, windowName,*minMatchScore, waitTime*                      |         | actualScore  | Searches a specific form for the defined image.         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Verify Image Does Not Exist            | imageName,*minMatchScore*, *waitTime*                                |         | closestMatch | Verifies a image is not visible on the default display. | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Verify Image Does Not Exist On Display | imageName, referenceName,*minMatchScore, waitTime*                   |         | closestMatch |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Verify Image Does Not Exist On Window  | imageName, windowName,*minMatchScore, waitTime*                      |         | closestMatch |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Get Image Bounds                       | imageName                                                            |         | Dictionary   | Returns the bounds of the image on the default display. | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Get Image Bounds On Display            | imageName, referenceName                                             |         | Dictionary   |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Get Image bounds On Window             | imageName, windowName                                                |         | Dictionary   |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Move Mouse To Image                    | imageName                                                            |         |              |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Click Image                            | imageName                                                            |         |              |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Click Image On Display                 | imageName, referenceName                                             |         |              |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Click Image On Window                  | imageName, windowName                                                |         |              |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Drag Image To Image                    | sourceImage, targetImage                                             |         |              |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Drag Image To Relative Location        | sourceImage, x, y                                                    |         |              |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Drag Image To Fixed                    | sourceImage, x, y                                                    |         |              |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Drag Image From Display To Display     | sourceImage, sourceDisplay,x1,y1, targetImage, targetDisplay, x2, y2 |         |              |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
+| Keyword                                | Attributes                                                           | Default | Return          | Description                                             | Implemented                        | Verified On Windows             | Verified on Linux               |
+|----------------------------------------|----------------------------------------------------------------------| ------- |-----------------| ------------------------------------------------------- |------------------------------------|---------------------------------|---------------------------------|
+| Verify Image Exists                    | imageName,*minMatchScore*, *waitTime*                                |         | actualScore     | Finds an Image in a the defined display area.           | ![ok.svg](assets/ok.svg)           | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Verify Image Exists On Display         | imageName, referenceName,*minMatchScore, waitTime*                   |         | actualScore     | Searches a specific display for the image defined       | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Verify Image Exits On Window           | imageName, windowName,*minMatchScore, waitTime*                      |         | actualScore     | Searches a specific form for the defined image.         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Verify Image Does Not Exist            | imageName,*minMatchScore*, *waitTime*                                |         | closestMatch    | Verifies a image is not visible on the default display. | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Verify Image Does Not Exist On Display | imageName, referenceName,*minMatchScore, waitTime*                   |         | closestMatch    |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Verify Image Does Not Exist On Window  | imageName, windowName,*minMatchScore, waitTime*                      |         | closestMatch    |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Get Image Bounds                       | imageName                                                            |         | Dictionary      | Returns the bounds of the image on the default display. | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Get Image Bounds On Display            | imageName, referenceName                                             |         | Dictionary      |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Get Image bounds On Window             | imageName, windowName                                                |         | Dictionary      |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Move Mouse To Image                    | imageName                                                            |         |                 |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Click Image                            | imageName                                                            |         |                 |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Click Image On Display                 | imageName, referenceName                                             |         |                 |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Click Image On Window                  | imageName, windowName                                                |         |                 |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Drag Image To Image                    | sourceImage, targetImage                                             |         |                 |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Drag Image To Relative Location        | sourceImage, x, y                                                    |         |                 |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Drag Image To Fixed                    | sourceImage, x, y                                                    |         |                 |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
+| Drag Image From Display To Display     | sourceImage, sourceDisplay,x1,y1, targetImage, targetDisplay, x2, y2 |         |                 |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |  
+| Get Match Locations                    | imageName                                                            |         | List[Dictionary |                                                         | ![cross.svg](assets/cross.svg)     | ![cross.svg](assets/cross.svg)  | ![cross.svg](assets/cross.svg)  |
 
 ## Text Recognition
-
-
 | Keyword                       | Attributes             | Returns                                    | Description             | Implemented                      | Verified On Windows               | Verified on Linux                 |
 | ----------------------------- | ---------------------- | ------------------------------------------ | ----------------------- |----------------------------------|-----------------------------------|-----------------------------------|
 | Get Text                      |                        | All Interpreted Text                       | All Text on set display | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
@@ -94,8 +87,6 @@ into the following categories.
 | Get Text Bounds Matched Image | text, imageName        | Dictionary                                 | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
 
 ## Controls
-
-
 | Keyword               | Attributes           | Default | Returns | Description | Implemented                    | Verified On Windows               | Verified on Linux                 |
 |-----------------------|----------------------| ------- | ------- | ----------- |--------------------------------|-----------------------------------|-----------------------------------|
 | Move Mouse To         | x, y                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
