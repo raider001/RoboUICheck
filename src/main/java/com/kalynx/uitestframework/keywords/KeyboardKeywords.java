@@ -15,6 +15,7 @@ import java.util.List;
 public class KeyboardKeywords {
 
     private static final KeyboardController KEYBOARD_CONTROLLER = DI.getInstance().getDependency(KeyboardController.class);
+    public static final String KEY_S_IS_NOT_A_VALID_KEY = "Key %s is not a valid key";
 
     @RobotKeyword("""
             Types the given message
@@ -111,7 +112,7 @@ public class KeyboardKeywords {
                 KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
                 KEYBOARD_CONTROLLER.keyPress(specialKey);
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Key %s is not a valid key".formatted(key));
+                throw new IllegalArgumentException(KEY_S_IS_NOT_A_VALID_KEY.formatted(key));
             }
         }
     }
@@ -203,7 +204,7 @@ public class KeyboardKeywords {
                 KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key);
                 KEYBOARD_CONTROLLER.keyRelease(specialKey);
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Key %s is not a valid key".formatted(key));
+                throw new IllegalArgumentException(KEY_S_IS_NOT_A_VALID_KEY.formatted(key));
             }
         }
     }
@@ -341,7 +342,7 @@ public class KeyboardKeywords {
                 KeyboardSpecialKeys specialKey = KeyboardSpecialKeys.valueOf(key.toUpperCase());
                 KEYBOARD_CONTROLLER.keyPress(specialKey);
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Key %s is not a valid key".formatted(key));
+                throw new IllegalArgumentException(KEY_S_IS_NOT_A_VALID_KEY.formatted(key));
             }
         }
     }
