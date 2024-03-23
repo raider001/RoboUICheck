@@ -33,10 +33,16 @@ public class Main extends AnnotationLibrary {
                 .setDefault(1337)
                 .setHelp("Sets the port number for the service.");
 
+        argParser.addArg("log-location", String.class).setShortKey('l')
+                .setHelp("Sets the location for the log file.")
+                .setDefault("./log")
+                .setCommand(val -> {
+                    DI.getInstance().getDependency(CvMonitor.class).setLogLocation(Path.of(val));
+                });
         argParser.addArg("image-loc", String.class)
                 .setShortKey('i')
                 .setHelp("Defines the directory name for image results.")
-                .setDefault("./")
+                .setDefault("image_results")
                 .setCommand(val -> {
                     try {
                         DI.getInstance().getDependency(CvMonitor.class).setResultsLocation(Path.of(val));

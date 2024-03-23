@@ -39,20 +39,19 @@ public class ScreenKeywords {
                         
             for more information
             """)
-    @ArgumentNames({"imagePath"})
-    public void verifyImageExists(String imagePath) throws Exception {
-        Result<?> r = CV_MONITOR.monitorForImage(imagePath);
-        if (r.isFailure()) throw new Exception(HTML + r.getInfo());
+    @ArgumentNames({"image_name", "minMatchScore=-1", "waitTime=200"})
+    public void verifyImageExists(String imageName, double minMatchScore, int waitTime) throws Exception {
+        Result<?> r = CV_MONITOR.monitorForImage(Duration.ofMillis(waitTime), imageName, minMatchScore);
+        if(r.isFailure()) throw new Exception(HTML + r.getInfo());
         LOGGER.info(r.getInfo());
     }
 
     @RobotKeyword("""
-            Verify Image Exists With Min Match Score
+            Verify Image Does Not Exist
                         
-            | variable      | default  | unit                                         |
-            |---------------|----------|----------------------------------------------|
-            | image         |   N/A    | relative path to image added image locations |
-            | minMatchScore | 0.95 | percent decimal |
+            | variable | default  | unit                                         |
+            |----------|----------|----------------------------------------------|
+            | image    |   N/A    | relative path to image added image locations |
                         
             Looks for the given image on the screen.
             The time, tolerance and poll time for finding the image can be updated to address timing and other needs.
@@ -63,23 +62,9 @@ public class ScreenKeywords {
                         
             for more information
             """)
-    @ArgumentNames({"imageName", "minMatchScore"})
-    public void verifyImageExists(String imageName, double minMatchScore) throws Exception {
-        Result<?> r = CV_MONITOR.monitorForImage(imageName, minMatchScore);
-        if(r.isFailure()) throw new Exception(HTML + r.getInfo());
-        LOGGER.info(r.getInfo());
-    }
-
-    @RobotKeywordOverload
-    public void verifyImageExists(String imageName, double minMatchScore, int waitTime) throws Exception {
-        Result<?> r = CV_MONITOR.monitorForImage(Duration.ofMillis(waitTime), imageName, minMatchScore);
-        if(r.isFailure()) throw new Exception(HTML + r.getInfo());
-        LOGGER.info(r.getInfo());
-    }
-
-    @RobotKeywordOverload
-    public void verifyImageExists(String imageName, int waitTime) throws Exception {
-        Result<?> r = CV_MONITOR.monitorForImage(Duration.ofMillis(waitTime), imageName);
+    @ArgumentNames({"image_name", "minMatchScore=-1", "waitTime=200"})
+    public void verifyImageDoesNotExist(String imageName, double minMatchScore, int waitTime) throws Exception {
+        Result<?> r = CV_MONITOR.monitorForLackOfImage(Duration.ofMillis(waitTime), imageName, minMatchScore);
         if(r.isFailure()) throw new Exception(HTML + r.getInfo());
         LOGGER.info(r.getInfo());
     }
@@ -101,88 +86,48 @@ public class ScreenKeywords {
                         
             for more information
             """)
-    @ArgumentNames({"imagePath", "displayId", "minMatchScore", "waitTime"})
-    public void verifyImageExistsOnDisplay(String imageName, int displayId) throws Exception {
+    @ArgumentNames({"imagePath", "displayName", "minMatchScore", "waitTime"})
+    public void verifyImageExistsOnDisplay(String imageName, String displayName) throws Exception {
         int originalDisplay = DISPLAY_MANAGER.getSelectedDisplay().displayId();
-        DISPLAY_MANAGER.setDisplay(displayId);
+        DISPLAY_MANAGER.setDisplay(displayName);
         Result<?> r = CV_MONITOR.monitorForImage(imageName);
-        if (r.isFailure()) {
-            DISPLAY_MANAGER.setDisplay(originalDisplay);
-            throw new Exception(HTML + r.getInfo());
-        }
-        LOGGER.info(r.getInfo());
-    }
-
-    @RobotKeywordOverload
-    public void verifyImageOnDisplay(String imageName, int displayId, int minMatchScore, int waitTime) throws Exception {
-        int originalDisplay = DISPLAY_MANAGER.getSelectedDisplay().displayId();
-        DISPLAY_MANAGER.setDisplay(displayId);
-        Result<?> r = CV_MONITOR.monitorForImage(Duration.ofMillis(waitTime), imageName, minMatchScore);
-        if(r.isFailure()) {
-            DISPLAY_MANAGER.setDisplay(originalDisplay);
-            throw new Exception(HTML + r.getInfo());
-        }
-        LOGGER.info(r.getInfo());
-    }
-
-    @RobotKeyword("""
-            Verify Image Exists On Display With Min Match Score
-                        
-            | variable      | default  | unit                                         |
-            |---------------|----------|----------------------------------------------|
-            | display       |   N/A    | display id                                   |
-            | image         |   N/A    | relative path to image added image locations |
-            | minMatchScore | 0.95 | percent decimal |
-
-                        
-            Looks for the given image on the screen.
-            The time, tolerance and poll time for finding the image can be updated to address timing and other needs.
-            See:
-            - Set Timeout Time
-            - Set Minimum Similarity
-            - Set Poll Rate
-                        
-            for more information
-            """)
-    public void verifyImageOnDisplayWithMinMatch(String imageName, int displayId, int minMatchScore) throws Exception {
-        int originalDisplay = DISPLAY_MANAGER.getSelectedDisplay().displayId();
-        DISPLAY_MANAGER.setDisplay(displayId);
-        Result<?> r = CV_MONITOR.monitorForImage(imageName, minMatchScore);
         DISPLAY_MANAGER.setDisplay(originalDisplay);
-        if(r.isFailure()) {
-
+        if (r.isFailure()) {
             throw new Exception(HTML + r.getInfo());
         }
         LOGGER.info(r.getInfo());
     }
 
-    @RobotKeyword("""
-            Verify Image Exists On Display Over Duration
-                        
-            | variable | default  | unit                                         |
-            |----------|----------|----------------------------------------------|
-            | image    |   N/A    | relative path to image added image locations |
-            | display  |   N/A    | display id                                   |
-            | waitTime |   N/A    | milliseconds                                 |
-                        
-            Looks for the given image on the screen.
-            The time, tolerance and poll time for finding the image can be updated to address timing and other needs.
-            See:
-            - Set Timeout Time
-            - Set Minimum Similarity
-            - Set Poll Rate
-                        
-            for more information
-            """)
-    public void verifyImageOnDisplayOverDuration(String imageName, int displayId, int waitTime) throws Exception {
+    public void verifyImageExistsOnDisplay(String imageName, String displayName, double matchScore) throws Exception {
         int originalDisplay = DISPLAY_MANAGER.getSelectedDisplay().displayId();
-        DISPLAY_MANAGER.setDisplay(displayId);
+        DISPLAY_MANAGER.setDisplay(displayName);
+        Result<?> r = CV_MONITOR.monitorForImage(imageName, matchScore);
+        DISPLAY_MANAGER.setDisplay(originalDisplay);
+        if (r.isFailure()) {
+            throw new Exception(HTML + r.getInfo());
+        }
+        LOGGER.info(r.getInfo());
+    }
+
+    public void verifyImageExistsOnDisplay(String imageName, String displayName, int waitTime) throws Exception {
+        int originalDisplay = DISPLAY_MANAGER.getSelectedDisplay().displayId();
+        DISPLAY_MANAGER.setDisplay(displayName);
         Result<?> r = CV_MONITOR.monitorForImage(Duration.ofMillis(waitTime), imageName);
         DISPLAY_MANAGER.setDisplay(originalDisplay);
-        if(r.isFailure()) {
+        if (r.isFailure()) {
             throw new Exception(HTML + r.getInfo());
         }
         LOGGER.info(r.getInfo());
     }
 
+    public void verifyImageExistsOnDisplay(String imageName, String displayName, double matchScore, int waitTime) throws Exception {
+        int originalDisplay = DISPLAY_MANAGER.getSelectedDisplay().displayId();
+        DISPLAY_MANAGER.setDisplay(displayName);
+        Result<?> r = CV_MONITOR.monitorForImage(Duration.ofMillis(waitTime), imageName, matchScore);
+        DISPLAY_MANAGER.setDisplay(originalDisplay);
+        if (r.isFailure()) {
+            throw new Exception(HTML + r.getInfo());
+        }
+        LOGGER.info(r.getInfo());
+    }
 }

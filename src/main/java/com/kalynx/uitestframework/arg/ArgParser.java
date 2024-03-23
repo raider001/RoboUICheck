@@ -1,6 +1,8 @@
 package com.kalynx.uitestframework.arg;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,10 +13,11 @@ import java.util.regex.Pattern;
 
 public class ArgParser {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(ArgParser.class);
     private static final int DESCRIPTION_LENGTH = 60;
     private static final Pattern mainKey = Pattern.compile("^(--[A-Za-z0-9]+)");
     private static final Pattern shortKey = Pattern.compile("^(-[A-Za-z0-9]+)");
-    private final List<Arg<?>> argList = new ArrayList<Arg<?>>();
+    private final List<Arg<?>> argList = new ArrayList<>();
     public ArgParser() {
         addArg("help", String[].class)
             .setShortKey('h')
@@ -22,22 +25,21 @@ public class ArgParser {
             .setHelp("Displays the help for arguments")
             .setCommand(params -> {
                 if(params.length == 0) {
-                    System.out.println("|" + "-".repeat(102) + "|");
-                    System.out.println(String.format("| %-24s | %-9s | %-60s |", "Argument", "Short Hand", "Description"));
-                    System.out.println("|" + "-".repeat(102) + "|");
-                    argList.stream().forEach(arg -> {
+                    LOGGER.info("|%s|".formatted("-".repeat(102)));
+                    LOGGER.info(String.format("| %-24s | %-9s | %-60s |", "Argument", "Short Hand", "Description"));
+                    LOGGER.info("|%s|".formatted("-".repeat(102)));
+                    argList.forEach(arg -> {
                         List<String> lines = getStrings(arg);
-
-                        System.out.printf("| %-24s | %-9s | %-60s |%n","--"+arg.key, StringUtils.center("-"+arg.shortKey, 10), lines.get(0));
+                        LOGGER.info(String.format("| %-24s | %-9s | %-60s |%n","--"+arg.key, StringUtils.center("-"+arg.shortKey, 10), lines.get(0)));
                         lines.remove(0);
                         for(String line: lines) {
-                            System.out.printf("| %-37s | %-60s |%n", "", line);
+                            LOGGER.info(String.format("| %-37s | %-60s |%n", "", line));
                         }
                         if(arg.defaultVal != null) {
-                            System.out.printf("| %-37s | %-60s |%n", "", "Default: " + (arg.defaultVal.getClass().isArray() ? Arrays.toString((Object[]) arg.defaultVal) : arg.defaultVal));
+                            LOGGER.info(String.format("| %-37s | %-60s |%n", "", "Default: " + (arg.defaultVal.getClass().isArray() ? Arrays.toString((Object[]) arg.defaultVal) : arg.defaultVal)));
                         }
                     });
-                    System.out.println("|" + "-".repeat(102) + "|");
+                    LOGGER.info("|%s|".formatted("-".repeat(102)));
                 }
                 System.exit(0);
             }).ignoreWhenNotProvided();
@@ -57,17 +59,16 @@ public class ArgParser {
     }
 
     public void parse(String... args) {
-        System.out.println(Arrays.toString(args));
         List<String> appliedArgs = new ArrayList<>();
         for(int i = 0; i < args.length; i++) {
             if (mainKey.matcher(args[i]).find()) {
-                String mainKey = args[i].substring(2);
-                Optional<Arg<?>> arg = argList.stream().filter(item -> item.key.equals(mainKey)).findFirst();
+                String foundKey = args[i].substring(2);
+                Optional<Arg<?>> arg = argList.stream().filter(item -> item.key.equals(foundKey)).findFirst();
                 if (arg.isEmpty()) {
-                    throw new IllegalArgumentException("No parameter named " + mainKey + " found");
+                    throw new IllegalArgumentException("No parameter named " + foundKey + " found");
                 }
-                handle(arg.get(), collectVals(i + 1, args));
-                appliedArgs.add(mainKey);
+                handle(arg.get(), collectVal(i + 1, args));
+                appliedArgs.add(foundKey);
             } else if (shortKey.matcher(args[i]).find()) {
                 if (args[i].length() > 2) {
                     throw new IllegalArgumentException("Invalid short key given. Only one character expected. Was given " + args[i].charAt(1));
@@ -75,18 +76,21 @@ public class ArgParser {
                 char k = args[i].charAt(1);
                 Optional<Arg<?>> arg = argList.stream().filter(item -> item.shortKey == k).findFirst();
                 if(arg.isPresent()) {
-                    handle(arg.get(), collectVals(i + 1, args));
+                    handle(arg.get(), collectVal(i + 1, args));
                     appliedArgs.add(arg.get().key);
                 }
             }
         }
-        argList.stream().filter(arg -> !appliedArgs.contains(arg.key) && !arg.ignoreÍfNotGiven).forEach(arg -> {
-            ((Consumer<Object>) arg.cmd).accept(arg.defaultVal);
-        });
+        argList.stream().filter(arg -> !appliedArgs.contains(arg.key) && !arg.ignoreÍfNotGiven).forEach(arg ->
+            ((Consumer<Object>) arg.cmd).accept(arg.defaultVal)
+        );
     }
 
     private <T> void handle(Arg<T> arg, String... vals) {
-        if(arg.argType.equals(String[].class)) {
+        if(arg.argType.equals(Integer[].class)) {
+            List<Integer> res = Arrays.stream(vals).map(Integer::valueOf).toList();
+            arg.cmd.accept((T) res);
+        } else if(arg.argType.equals(String[].class)) {
             if(arg.argType.componentType().equals(String.class)) {
                 arg.cmd.accept((T) vals);
             }
@@ -124,11 +128,15 @@ public class ArgParser {
         }
     }
 
-    private String[] collectVals(int startIndex, String... args) {
+    private String[] collectVal(int startIndex, String... args) {
         List<String> vals = new ArrayList<>();
         for(int i = startIndex; i < args.length; i++) {
+            final int iterator = i;
             if(args[i].startsWith("-")) {
-                return vals.toArray(new String[0]);
+                Optional<?> o = argList.stream().filter(arg -> args[iterator].substring(1).equals(arg.key) || args[iterator].substring(1).equals(String.valueOf(arg.shortKey))).findFirst();
+                if(o.isPresent()) {
+                    return vals.toArray(new String[0]);
+                }
             }
             vals.add(args[i]);
         }
@@ -157,7 +165,7 @@ public class ArgParser {
         private String help = "";
 
         private boolean ignoreÍfNotGiven = false;
-        private Consumer<T> cmd = (val) -> { throw new IllegalArgumentException("Command not defined"); };
+        private Consumer<T> cmd = val -> { throw new IllegalArgumentException("Command not defined"); };
         public Arg(String key, Class<T> argType) {
             throwIllegalArgumentIfKeyUsed(key);
             throwUnsupportedExceptionIfUnsupportedType(argType);

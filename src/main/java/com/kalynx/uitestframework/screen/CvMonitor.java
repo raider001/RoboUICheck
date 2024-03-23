@@ -21,18 +21,28 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
 import java.util.*;
-import java.util.function.Predicate;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class CvMonitor {
     private final ImageLibrary imageLibrary = new ImageLibrary();
-    private final Path imageResultRelativeLocation = Path.of(".", "image_results");
     DisplayManager displayManager;
-    private double matchScore = 0.95;
+    private double matchScore;
     private Duration pollRate = Duration.ofMillis(100);
     private Duration timeoutTime = Duration.ofMillis(2000);
-    private Path resultLocation = Path.of(".", imageResultRelativeLocation.toString());
+    private Path logLocation = Path.of(".", "log");
+    private Path imageLocation = Path.of(".", "images");
+    private Path resultLocation = Path.of(".","log", "image_results");
 
+    private static Map<Integer, Function<Core.MinMaxLocResult,Double>> matchAlgorithm = new HashMap<>();
+    {
+        matchAlgorithm.put(Imgproc.TM_SQDIFF, (r) -> 1 - r.minVal);
+        matchAlgorithm.put(Imgproc.TM_SQDIFF_NORMED, (r) -> 1 - r.minVal);
+        matchAlgorithm.put(Imgproc.TM_CCOEFF, (r) -> r.maxVal / 100);
+        matchAlgorithm.put(Imgproc.TM_CCOEFF_NORMED, (r) -> r.maxVal);
+        matchAlgorithm.put(Imgproc.TM_CCORR, (r) -> r.maxVal);
+        matchAlgorithm.put(Imgproc.TM_CCORR_NORMED, (r) -> r.maxVal);
+    }
     public CvMonitor(double matchScore, DisplayManager displayManager) {
         if (matchScore <= 0 || matchScore >= 1) throw new AssertionError("matchScore can only be between 0 and 1");
         this.matchScore = matchScore;
@@ -50,7 +60,7 @@ public class CvMonitor {
         return Imgcodecs.imdecode(new MatOfByte(byteArrayOutputStream.toByteArray()), Imgcodecs.IMREAD_COLOR);
     }
 
-    private Result<ScreenshotData> generateSuccessfulResult(Mat matchImage, Result<Data> successfulResult) throws IOException {
+    private Result<ScreenshotData> generateSuccessfulResult(Mat matchImage, double expectedSimilarity, Result<Data> successfulResult) throws IOException {
         Core.MinMaxLocResult locRes = successfulResult.getData().res();
         Point xy1 = locRes.maxLoc;
         Point xy2 = new Point(locRes.maxLoc.x + matchImage.cols(), locRes.maxLoc.y + matchImage.rows());
@@ -61,7 +71,7 @@ public class CvMonitor {
         BufferedImage buffImage = (BufferedImage) HighGui.toBufferedImage(successfulResult.getData().screenshot());
         Path resultLoc = Path.of(resultLocation.toString(), successfulResult.getData().takenTime() + ".jpg");
         ImageIO.write(buffImage, "jpg", resultLoc.toFile());
-        String htmlResult = generateHTMLResult(locRes.maxVal,
+        String htmlResult = generateHTMLResult(locRes.maxVal, expectedSimilarity,
                 successfulResult.getData().takenTime(), matchImage,
                 buffImage);
         Data data = successfulResult.getData();
@@ -69,32 +79,36 @@ public class CvMonitor {
         return new SuccessfulResult<>(Optional.of(new ScreenshotData(data.takenTime(), data.screenshot(), rect)), htmlResult);
     }
 
-    private Result<ScreenshotData> generateFailedResult(Mat match, List<Result<Data>> results) throws IOException {
+    private Result<ScreenshotData> generateFailedResult(Mat match, double expectedSimilarity, List<Result<Data>> results) throws IOException {
         Comparator<Result<Data>> comp = Comparator.comparingDouble(data -> data.getData().res().maxVal);
         results.sort(comp);
         Result<Data> res = results.get(0);
 
         Core.MinMaxLocResult locRes = res.getData().res();
-        Imgproc.rectangle(res.getData().screenshot(), locRes.maxLoc, new Point(locRes.maxLoc.x + match.cols(), locRes.maxLoc.y + match.rows()),
+        int width = match.cols();
+        int height = match.rows();
+        Imgproc.rectangle(res.getData().screenshot(), locRes.maxLoc, new Point(locRes.maxLoc.x + width, locRes.maxLoc.y + height),
                 new Scalar(0, 0, 255), 2, 8, 0);
         BufferedImage buffImage = (BufferedImage) HighGui.toBufferedImage(res.getData().screenshot());
         double el =  locRes.minVal == Double.POSITIVE_INFINITY ? 1 : 1 - locRes.maxVal;
         double actualScore = locRes.maxVal == Double.NEGATIVE_INFINITY ? 0 : el;
         return new FailedResult<>(generateHTMLResult(
                 actualScore,
+                expectedSimilarity,
                 res.getData().takenTime(),
                 match,
                 buffImage));
     }
 
-    public void setResultsLocation(Path resultLocation) throws Exception {
-        resultLocation = resultLocation.resolve(imageResultRelativeLocation);
-        if (resultLocation.toFile().exists() && !resultLocation.toFile().isDirectory())
-            throw new Exception(resultLocation + " is not a directory.");
-        this.resultLocation = resultLocation;
+    public void setLogLocation(Path logLocation) {
+        this.logLocation = logLocation;
+        resultLocation = Path.of(logLocation.toString(), imageLocation.toString());
 
-        if (!resultLocation.toFile().exists())
-            Files.createDirectories(resultLocation);
+    }
+
+    public void setResultsLocation(Path imageLocation) {
+        this.imageLocation = imageLocation;
+        resultLocation = Path.of(logLocation.toString(), imageLocation.toString());
     }
 
     public void addImagePath(String imagePath) {
@@ -154,64 +168,66 @@ public class CvMonitor {
         return monitorForImage(timeoutTime, imageLocation, matchScore);
     }
 
-    public Result<ScreenshotData> monitorForLackOfImage(Duration duration, String imageLocation) throws Exception {
-        return monitorForLackOfImage(duration, imageLocation, matchScore);
-    }
-
-    public Result<ScreenshotData> monitorForLackOfImage(String imageLocation, double matchScore) throws Exception {
-        return monitorForLackOfImage(timeoutTime, imageLocation, matchScore);
-    }
-
-    public Result<ScreenshotData> monitorForLackOfImage(String imageLocation) throws Exception {
-        return monitorForLackOfImage(timeoutTime, imageLocation, matchScore);
-    }
 
     public Result<ScreenshotData> monitorForLackOfImage(Duration duration, String imageLocation, double matchScore) throws IOException {
-        Objects.requireNonNull(duration);
-        Objects.requireNonNull(imageLocation);
-        Result<Mat> imageToFind = imageLibrary.findImage(Path.of(imageLocation));
-        if (imageToFind.isFailure()) return new FailedResult<>(imageToFind.getInfo());
-        double originalMatchScore = this.matchScore;
-        this.matchScore = matchScore;
-        List<Result<Data>> results = Collections.synchronizedList(new ArrayList<>());
-        Supplier<Result<Data>> action = buildMatchResults(imageToFind.getData(), results);
-        Predicate<Result<Data>> condition = Result::isFailure;
-        ThreadService.schedule(action).forEvery(pollRate).over(timeoutTime).orUntil(condition).andWaitForCompletion();
-        Optional<Result<Data>> finalResult = results.stream().filter(Result::isFailure).findFirst();
-        this.matchScore = originalMatchScore;
-        if (finalResult.isPresent()) return generateSuccessfulResult(imageToFind.getData(), finalResult.get());
+        Result<MonitorData> data = setupMonitoring(duration, imageLocation, matchScore);
 
-        return generateFailedResult(imageToFind.getData(), results);
+        if (data.isFailure()) return new FailedResult<>(data.getInfo());
+        MonitorData monitorData = data.getData();
+
+        Supplier<Result<Data>> action = buildMatchResults(monitorData.templateContainer, monitorData.results, monitorData.requiredMatchScore);
+        ThreadService.schedule(action).forEvery(pollRate).over(duration).orUntil(Result::isFailure).andWaitForCompletion();
+        Optional<Result<Data>> finalResult = monitorData.results.stream().filter(Result::isFailure).findFirst();
+
+        if (finalResult.isPresent()) return generateSuccessfulResult(monitorData.templateContainer.template, monitorData.requiredMatchScore, finalResult.get());
+
+        return generateFailedResult(monitorData.templateContainer.template, monitorData.requiredMatchScore, monitorData.results);
     }
 
     public Result<ScreenshotData> monitorForImage(Duration duration, String imageLocation, double matchScore) throws Exception {
-        Objects.requireNonNull(duration);
-        Objects.requireNonNull(imageLocation);
-        Result<Mat> imageToFind = imageLibrary.findImage(Path.of(imageLocation));
+        Result<MonitorData> data = setupMonitoring(duration, imageLocation, matchScore);
 
-        if (imageToFind.isFailure()) return new FailedResult<>(imageToFind.getInfo());
-        double originalMatchScore = this.matchScore;
-        this.matchScore = matchScore;
+        if (data.isFailure()) return new FailedResult<>(data.getInfo());
 
-        List<Result<Data>> results = Collections.synchronizedList(new ArrayList<>());
+        MonitorData monitorData = data.getData();
+        Supplier<Result<Data>> action = buildMatchResults(data.getData().templateContainer, monitorData.results, monitorData.requiredMatchScore);
+        ThreadService.schedule(action).forEvery(pollRate).over(duration).orUntil(Result::isSuccess).andWaitForCompletion();
+        Optional<Result<Data>> finalResult = monitorData.results.stream().filter(Result::isSuccess).findFirst();
+        if (finalResult.isPresent()) return generateSuccessfulResult(monitorData.templateContainer.template, matchScore, finalResult.get());
 
-        Supplier<Result<Data>> action = buildMatchResults(imageToFind.getData(), results);
-        Predicate<Result<Data>> condition = Result::isSuccess;
-
-        ThreadService.schedule(action).forEvery(pollRate).over(timeoutTime).orUntil(condition).andWaitForCompletion();
-        Optional<Result<Data>> finalResult = results.stream().filter(Result::isSuccess).findFirst();
-        this.matchScore = originalMatchScore;
-        if (finalResult.isPresent()) return generateSuccessfulResult(imageToFind.getData(), finalResult.get());
-
-        return generateFailedResult(imageToFind.getData(), results);
+        return generateFailedResult(monitorData.templateContainer.template, monitorData.requiredMatchScore, monitorData.results);
     }
 
-    private Supplier<Result<Data>> buildMatchResults(Mat template, List<Result<Data>> results) {
-        final Mat mask = createMask(template);
+    private Result<MonitorData> setupMonitoring(Duration duration, String imageLocation, double matchScore) {
+        Objects.requireNonNull(duration);
+        Objects.requireNonNull(imageLocation);
 
+        if(matchScore == -1) matchScore = this.matchScore;
+
+        Result<ImageLibrary.TemplateContainer> imageToFind = imageLibrary.findImage(Path.of(imageLocation));
+
+        if (imageToFind.isFailure()) return new FailedResult<>(imageToFind.getInfo());
+
+
+        MonitorData monitorData = new MonitorData(matchScore, imageToFind.getData());
+        return new SuccessfulResult<>(Optional.of(monitorData));
+    }
+
+    private class MonitorData {
+        final double requiredMatchScore;
+        final ImageLibrary.TemplateContainer templateContainer;
+        final List<Result<Data>> results = Collections.synchronizedList(new ArrayList<>());
+
+        private MonitorData(double requiredMatchScore, ImageLibrary.TemplateContainer templateContainer) {
+            this.requiredMatchScore = requiredMatchScore;
+            this.templateContainer = templateContainer;
+        }
+    }
+
+    private Supplier<Result<Data>> buildMatchResults(ImageLibrary.TemplateContainer template, List<Result<Data>> results, double requiredMatchScore) {
         return () -> {
             try {
-                Result<Data> res = match(template, mask, matchScore);
+                Result<Data> res = match(template.template, template.mask, requiredMatchScore);
                 results.add(res);
                 return res;
             } catch (Exception e) {
@@ -220,24 +236,23 @@ public class CvMonitor {
         };
     }
 
-    private Mat createMask(Mat template) {
-        final Mat mask = new Mat(template.rows(), template.cols(), Imgcodecs.IMREAD_GRAYSCALE);
-        Imgproc.cvtColor(template, mask, Imgproc.COLOR_BGR2GRAY);
-        Imgproc.threshold(mask, mask, 0, 255, Imgproc.THRESH_BINARY);
-        return mask;
-    }
-
-    private String generateHTMLResult(double similarity, long time, Mat template, BufferedImage screenshot) throws IOException {
+    private String generateHTMLResult(double similarity, double expectedSimularity, long time, Mat template, BufferedImage screenshot) throws IOException {
         String screenshotFileName = time + "_screenshot.jpg";
         String expectedFileName = time + "_expected.jpg";
         // Path to write
         Path screenshotPath = Path.of(resultLocation.toString(), screenshotFileName);
         Path expectedResultPath = Path.of(resultLocation.toString(), expectedFileName);
-        Imgcodecs.imwrite(expectedResultPath.toString(), template);
+
+        Path abs = resultLocation.toAbsolutePath();
+        if(Files.notExists(resultLocation.toAbsolutePath()))
+            Files.createDirectories(resultLocation.toAbsolutePath());
+
         ImageIO.write(screenshot, "jpg", screenshotPath.toFile());
+        Imgcodecs.imwrite(expectedResultPath.toString(), template);
+
         // logLocation
-        Path relativeToLogScreenshot = Path.of(imageResultRelativeLocation.toString(), screenshotFileName);
-        Path relativeToLogExpected = Path.of(imageResultRelativeLocation.toString(), expectedFileName);
+        Path relativeToLogScreenshot = Path.of(imageLocation.toString(), screenshotFileName);
+        Path relativeToLogExpected = Path.of(imageLocation.toString(), expectedFileName);
         BigDecimal bd = BigDecimal.valueOf(Double.isInfinite(similarity) ? 1 : similarity);
         bd = bd.setScale(5, RoundingMode.HALF_UP);
         return """
@@ -254,7 +269,7 @@ public class CvMonitor {
                      </tr>
                  </table>
                 """.formatted(bd.toString(),
-                matchScore,
+                expectedSimularity,
                 relativeToLogScreenshot.toString(),
                 relativeToLogScreenshot.toString(),
                 relativeToLogExpected.toString());
@@ -271,19 +286,22 @@ public class CvMonitor {
     }
 
     private Result<Data> match(Mat template, Mat mask, double matchScore) {
-
+        mask.convertTo(mask, CvType.CV_8U);
+        template.convertTo(template, CvType.CV_8U);
         long takenTime = System.currentTimeMillis();
         BufferedImage image = capture();
 
         Mat screenshot = imageToMat(image);
+        screenshot.convertTo(screenshot, CvType.CV_8U);
         int result_cols = screenshot.cols() - template.cols() + 1;
         int result_rows = screenshot.rows() - template.rows() + 1;
-        Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-
-        Imgproc.matchTemplate(screenshot, template, result, Imgproc.TM_CCORR_NORMED, mask);
+        Mat result = new Mat(result_rows, result_cols, CvType.CV_8U);
+        int algorithm = Imgproc.TM_CCORR_NORMED;
+        Imgproc.matchTemplate(screenshot, template, result, algorithm, mask);
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-        double el = mmr.maxVal == Double.POSITIVE_INFINITY ? 0 : mmr.maxVal;
-        double actualScore = mmr.maxVal == Double.NEGATIVE_INFINITY ? 1 : el;
+        double res = matchAlgorithm.get(algorithm).apply(mmr);
+        double el = res == Double.POSITIVE_INFINITY ? 0 :res;
+        double actualScore = res == Double.NEGATIVE_INFINITY ? 1 : el;
         if (actualScore > matchScore) {
             return new SuccessfulResult<>(Optional.of(new Data(takenTime, screenshot, mmr)));
         }

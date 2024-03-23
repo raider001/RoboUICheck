@@ -39,24 +39,6 @@ class ScreenKeywordsTests {
 
     @Test
     void verifyImageExists_verification() throws Exception {
-
-        // Case 1
-        Mockito.when(cvMonitor.monitorForImage(FOUND_IMAGE)).thenReturn(new SuccessfulResult<>(Optional.empty() , ""));
-        Mockito.when(cvMonitor.monitorForImage(LOST_IMAGE)).thenReturn(new FailedResult<>(""));
-
-        sut.verifyImageExists(FOUND_IMAGE);
-        Mockito.verify(cvMonitor).monitorForImage(FOUND_IMAGE);
-        Assertions.assertThrows(Exception.class, () -> sut.verifyImageExists(LOST_IMAGE));
-
-        // Case 2
-        Mockito.when(cvMonitor.monitorForImage(FOUND_IMAGE,0.95)).thenReturn(new SuccessfulResult<>(""));
-        Mockito.when(cvMonitor.monitorForImage(LOST_IMAGE,0.95)).thenReturn(new FailedResult<>(""));
-
-        sut.verifyImageExists(FOUND_IMAGE, 0.95);
-        Mockito.verify(cvMonitor).monitorForImage(FOUND_IMAGE, 0.95);
-        Assertions.assertThrows(Exception.class, () -> sut.verifyImageExists(LOST_IMAGE, 0.95));
-
-        // Case 3
         Mockito.when(cvMonitor.monitorForImage(Duration.ofMillis(2000), FOUND_IMAGE, 0.95)).thenReturn(new SuccessfulResult<>(Optional.empty() , ""));
         Mockito.when(cvMonitor.monitorForImage(Duration.ofMillis(2000), LOST_IMAGE, 0.95)).thenReturn(new FailedResult<>(""));
 
@@ -64,12 +46,5 @@ class ScreenKeywordsTests {
         Mockito.verify(cvMonitor).monitorForImage(Duration.ofMillis(2000), FOUND_IMAGE, 0.95);
         Assertions.assertThrows(Exception.class, () -> sut.verifyImageExists(LOST_IMAGE, 0.95, 2000));
 
-        // case 4
-        Mockito.when(cvMonitor.monitorForImage(Duration.ofMillis(2000), FOUND_IMAGE)).thenReturn(new SuccessfulResult<>(Optional.empty() , ""));
-        Mockito.when(cvMonitor.monitorForImage(Duration.ofMillis(2000), LOST_IMAGE)).thenReturn(new FailedResult<>(""));
-
-        sut.verifyImageExists(FOUND_IMAGE, 2000);
-        Mockito.verify(cvMonitor).monitorForImage(Duration.ofMillis(2000), FOUND_IMAGE);
-        Assertions.assertThrows(Exception.class, () -> sut.verifyImageExists(LOST_IMAGE,2000));
-    }
+        }
 }
