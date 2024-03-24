@@ -156,6 +156,10 @@ public class DisplayManager {
         return displayData.get(selectedDisplay);
     }
 
+    public DisplayData getDisplayDisplayRegion(DisplayAttributes dispAttr) {
+        return displayData.get(dispAttr);
+    }
+
     public Relative setReference(String referenceName) {
         return new Relative(referenceName);
     }
