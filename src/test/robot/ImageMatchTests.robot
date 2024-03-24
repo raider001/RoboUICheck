@@ -36,3 +36,8 @@ Test Image Verification On Display
     [Documentation]    Basic test to demosntrate display ID referencing and Display Image Verification
     Verify Image Does Not Exist On Display    test1.png   SECONDARY
     Verify Image Exists On Display    test1.png      PRIMARY
+
+Test Image Verification On Form
+    [Documentation]  Test form verification
+    Verify Image Exists On Window    test1.png    Test Form
+    Verify Image Does Not Exist On Window    fail.png    Test Form
