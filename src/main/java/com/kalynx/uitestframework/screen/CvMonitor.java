@@ -60,9 +60,9 @@ public class CvMonitor {
     }
 
     private Result<ScreenshotData> generateSuccessfulResult(Mat matchImage, double expectedSimilarity, Result<Data> successfulResult) throws IOException {
-        Core.MinMaxLocResult locRes = successfulResult.getData().res();
-        Point xy1 = locRes.maxLoc;
-        Point xy2 = new Point(locRes.maxLoc.x + matchImage.cols(), locRes.maxLoc.y + matchImage.rows());
+        Data data = successfulResult.getData();
+        Point xy1 = data.loc;
+        Point xy2 = new Point(data.loc.x + matchImage.cols(), data.loc.y + matchImage.rows());
 
         Imgproc.rectangle(successfulResult.getData().screenshot(), xy1, xy2,
                 new Scalar(0, 0, 255), 2, 8, 0);
@@ -70,29 +70,27 @@ public class CvMonitor {
         BufferedImage buffImage = (BufferedImage) HighGui.toBufferedImage(successfulResult.getData().screenshot());
         Path resultLoc = Path.of(resultLocation.toString(), successfulResult.getData().takenTime() + ".jpg");
         ImageIO.write(buffImage, "jpg", resultLoc.toFile());
-        String htmlResult = generateHTMLResult(locRes.maxVal, expectedSimilarity,
+        String htmlResult = generateHTMLResult(data.score, expectedSimilarity,
                 successfulResult.getData().takenTime(), matchImage,
                 buffImage);
-        Data data = successfulResult.getData();
         Rectangle rect = new Rectangle((int) xy1.x, (int) xy1.y, matchImage.cols(), matchImage.rows());
         return new SuccessfulResult<>(Optional.of(new ScreenshotData(data.takenTime(), data.screenshot(), rect)), htmlResult);
     }
 
     private Result<ScreenshotData> generateFailedResult(Mat match, double expectedSimilarity, List<Result<Data>> results) throws IOException {
-        Comparator<Result<Data>> comp = Comparator.comparingDouble(data -> data.getData().res().maxVal);
+        Comparator<Result<Data>> comp = Comparator.comparingDouble(data -> data.getData().score);
         results.sort(comp);
         Result<Data> res = results.get(0);
-
-        Core.MinMaxLocResult locRes = res.getData().res();
+        Data data = res.getData();
+        Point locRes = data.loc;
         int width = match.cols();
         int height = match.rows();
-        Imgproc.rectangle(res.getData().screenshot(), locRes.maxLoc, new Point(locRes.maxLoc.x + width, locRes.maxLoc.y + height),
+        Imgproc.rectangle(res.getData().screenshot(), data.loc, new Point(data.loc.x + width, data.loc.y + height),
                 new Scalar(0, 0, 255), 2, 8, 0);
         BufferedImage buffImage = (BufferedImage) HighGui.toBufferedImage(res.getData().screenshot());
-        double el =  locRes.minVal == Double.POSITIVE_INFINITY ? 1 : 1 - locRes.maxVal;
-        double actualScore = locRes.maxVal == Double.NEGATIVE_INFINITY ? 0 : el;
+
         return new FailedResult<>(generateHTMLResult(
-                actualScore,
+                data.score,
                 expectedSimilarity,
                 res.getData().takenTime(),
                 match,
@@ -192,7 +190,7 @@ public class CvMonitor {
         Supplier<Result<Data>> action = buildMatchResults(data.getData().templateContainer, monitorData.results, monitorData.requiredMatchScore);
         ThreadService.schedule(action).forEvery(pollRate).over(duration).orUntil(Result::isSuccess).andWaitForCompletion();
         Optional<Result<Data>> finalResult = monitorData.results.stream().filter(Result::isSuccess).findFirst();
-        if (finalResult.isPresent()) return generateSuccessfulResult(monitorData.templateContainer.template, matchScore, finalResult.get());
+        if (finalResult.isPresent()) return generateSuccessfulResult(monitorData.templateContainer.template, monitorData.requiredMatchScore, finalResult.get());
 
         return generateFailedResult(monitorData.templateContainer.template, monitorData.requiredMatchScore, monitorData.results);
     }
@@ -300,12 +298,13 @@ public class CvMonitor {
         double res = matchAlgorithm.get(algorithm).apply(mmr);
         double el = res == Double.POSITIVE_INFINITY ? 0 :res;
         double actualScore = res == Double.NEGATIVE_INFINITY ? 1 : el;
+        Point p = algorithm == Imgproc.TM_SQDIFF || algorithm == Imgproc.TM_SQDIFF_NORMED ? mmr.minLoc : mmr.maxLoc;
         if (actualScore > matchScore) {
-            return new SuccessfulResult<>(Optional.of(new Data(takenTime, screenshot, mmr)));
+            return new SuccessfulResult<>(Optional.of(new Data(takenTime, screenshot, actualScore, p)));
         }
-        return new FailedResult<>("", Optional.of(new Data(takenTime, screenshot, mmr)));
+        return new FailedResult<>("", Optional.of(new Data(takenTime, screenshot, actualScore, p)));
     }
 
-    private record Data(long takenTime, Mat screenshot, Core.MinMaxLocResult res) {
+    private record Data(long takenTime, Mat screenshot, double score, Point loc) {
     }
 }

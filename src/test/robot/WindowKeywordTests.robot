@@ -40,3 +40,11 @@ Test Get All Windows
     [Documentation]  Tests that windows are returned
     @{windows}=  Get All Available Windows
     List Should Contain Value    ${windows}    Test Form
+
+Test Bring Window To Front
+    [Documentation]  Tests that a window can be brought to the front
+    Bring Window To Front  Blocking Form
+    Verify Image Does Not Exist  test1.png
+    Bring Window To Front  Test Form
+    Verify Image Exists  test1.png
+

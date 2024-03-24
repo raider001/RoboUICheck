@@ -1,7 +1,7 @@
 *** Settings ***
 Library  Remote         http://127.0.0.1:7442/
 Library  BuiltIn
-Suite Setup    Add Image Location  ${CURDIR}/
+Suite Setup   Run Keywords  Add Image Location  ${CURDIR}/  AND  Bring Window To Front  Test Form
 
 
 *** Test Cases ***
