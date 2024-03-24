@@ -66,12 +66,12 @@ public class WindowsWindowApi implements Window {
                 WINDOW_API.GetWindowRect(hWnd, rect);
                 Rectangle rectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
 
-                WINDOW_API.MoveWindow(hWnd, x + rect.left, y + rect.top, x + rectangle.width, y + rectangle.height, true);
+                WINDOW_API.MoveWindow(hWnd, x + rect.left, y + rect.top, rectangle.width, rectangle.height, true);
                 return false;
             }
             return true;
         };
-        return WINDOW_API.EnumWindows(enumCallback, null);
+        return !WINDOW_API.EnumWindows(enumCallback, null);
     }
 
 
@@ -113,7 +113,7 @@ public class WindowsWindowApi implements Window {
             if (!windowTitle.isEmpty() && windowTitle.contains(windowName)) {
                 User32.RECT rect = new User32.RECT();
                 WINDOW_API.GetWindowRect(hWnd, rect);
-                WINDOW_API.MoveWindow(hWnd, rect.left, rect.top, rect.left + width, rect.top + height, true);
+                WINDOW_API.MoveWindow(hWnd, rect.left, rect.top,  width, height, true);
                 return false;
             }
             return true;

@@ -26,6 +26,7 @@ public class TestForm {
         GraphicsPanel graphicsPanel = new GraphicsPanel();
 
         panel.add(graphicsPanel);
+        jDialog.setTitle("Test Form");
         jDialog.setContentPane(panel);
         jDialog.setVisible(true);
         jDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -34,6 +35,7 @@ public class TestForm {
     private static class GraphicsPanel extends JPanel {
 
         public GraphicsPanel() {
+
             setPreferredSize(new Dimension(200,200));
             setSize(200,200);
             setMinimumSize(new Dimension(200,200));

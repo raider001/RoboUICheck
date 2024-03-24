@@ -34,17 +34,16 @@ public class CvMonitor {
     private Path imageLocation = Path.of(".", "images");
     private Path resultLocation = Path.of(".","log", "image_results");
 
-    private static Map<Integer, Function<Core.MinMaxLocResult,Double>> matchAlgorithm = new HashMap<>();
-    {
+    private final static Map<Integer, Function<Core.MinMaxLocResult,Double>> matchAlgorithm = new HashMap<>();
+
+    public CvMonitor(double matchScore, DisplayManager displayManager) {
+        if (matchScore <= 0 || matchScore >= 1) throw new AssertionError("matchScore can only be between 0 and 1");
         matchAlgorithm.put(Imgproc.TM_SQDIFF, (r) -> 1 - r.minVal);
         matchAlgorithm.put(Imgproc.TM_SQDIFF_NORMED, (r) -> 1 - r.minVal);
         matchAlgorithm.put(Imgproc.TM_CCOEFF, (r) -> r.maxVal / 100);
         matchAlgorithm.put(Imgproc.TM_CCOEFF_NORMED, (r) -> r.maxVal);
         matchAlgorithm.put(Imgproc.TM_CCORR, (r) -> r.maxVal);
         matchAlgorithm.put(Imgproc.TM_CCORR_NORMED, (r) -> r.maxVal);
-    }
-    public CvMonitor(double matchScore, DisplayManager displayManager) {
-        if (matchScore <= 0 || matchScore >= 1) throw new AssertionError("matchScore can only be between 0 and 1");
         this.matchScore = matchScore;
         this.displayManager = displayManager;
     }
@@ -243,7 +242,6 @@ public class CvMonitor {
         Path screenshotPath = Path.of(resultLocation.toString(), screenshotFileName);
         Path expectedResultPath = Path.of(resultLocation.toString(), expectedFileName);
 
-        Path abs = resultLocation.toAbsolutePath();
         if(Files.notExists(resultLocation.toAbsolutePath()))
             Files.createDirectories(resultLocation.toAbsolutePath());
 

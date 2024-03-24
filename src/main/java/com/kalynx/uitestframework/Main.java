@@ -3,6 +3,7 @@ package com.kalynx.uitestframework;
 import com.kalynx.lwdi.DependencyInjectionException;
 import com.kalynx.uitestframework.arg.ArgParser;
 import com.kalynx.uitestframework.controller.DisplayManager;
+import com.kalynx.uitestframework.controller.WindowController;
 import com.kalynx.uitestframework.screen.CvMonitor;
 import nu.pattern.OpenCV;
 import org.robotframework.javalib.library.AnnotationLibrary;
@@ -65,6 +66,7 @@ public class Main extends AnnotationLibrary {
     private static void injectDependencies() throws AWTException, DependencyInjectionException {
         OpenCV.loadShared();
         DI.getInstance().inject(DisplayManager.class);
+        DI.getInstance().inject (WindowController.class);
         DI.getInstance().add(new CvMonitor(0.95, DI.getInstance().getDependency(DisplayManager.class)));
     }
     public static void main(String... args ) throws Exception {
