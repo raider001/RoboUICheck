@@ -1,7 +1,11 @@
 *** Settings ***
 Library  Remote         http://127.0.0.1:7442/
 Library  BuiltIn
-Suite Setup   Run Keywords  Add Image Location  ${CURDIR}/  AND  Bring Window To Front  Test Form
+Suite Setup   Run Keywords  Add Image Location  ${CURDIR}/  AND
+...    Bring Window To Front  Test Form    AND
+...    Set Primary Display Reference    PRIMARY    AND
+...    Set Display Reference    PRIMARY    SMALLER_THAN    SECONDARY
+
 
 
 *** Test Cases ***
@@ -27,3 +31,8 @@ Test Match Percentage
 Test Image Mask Verification
     [Documentation]  Tests that the image mask verification works as expected
     Verify Image Exists    transparencyTest.png
+
+Test Image Verification On Display
+    [Documentation]    Basic test to demosntrate display ID referencing and Display Image Verification
+    Verify Image Does Not Exist On Display    test1.png   SECONDARY
+    Verify Image Exists On Display    test1.png      PRIMARY
