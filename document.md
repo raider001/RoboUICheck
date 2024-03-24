@@ -36,14 +36,14 @@ into the following categories.
 ## Window Keywords
 
 
-| Keyword                   | Attributes                | Default | Return Value                 | Description                                  | Implemented                    | Verified On Windows               | Verified on Linux                   |
-| ------------------------- | ------------------------- | ------- |------------------------------| -------------------------------------------- |--------------------------------|-----------------------------------|-------------------------------------|
-| Get All Available Windows |                           |         | Array[windowName]            |                                              | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)    | ![cross.svg](assets/cross.svg)      |
-| Get Window Dimensions     | windowName                |         | Dictionary(x,y,width,height) | returns the dimensions of a window.          | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)      |
-| Bring Window To Front     | windowName                |         | N/A                          | Bring the window to the front of visibility. | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)      |
-| Send Window To Back       | windowName                |         | N/A                          | Sends the window behind all other windows.   | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)      |
-| Resize Window             | windowName, width, height |         |                              | Resizes the window to the given dimensions.  | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)    | ![cross.svg](assets/cross.svg)      |
-| Move Window               | windowName, x, y          |         |                              | Moves the window to the given coordinates.   | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)   | ![cross.svg](assets/cross.svg)      |
+| Keyword                   | Attributes                | Default | Return Value                 | Description                                  | Implemented                    | Verified On Windows            | Verified on Linux                   |
+| ------------------------- | ------------------------- | ------- |------------------------------| -------------------------------------------- |--------------------------------|--------------------------------|-------------------------------------|
+| Get All Available Windows |                           |         | Array[windowName]            |                                              | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)      |
+| Get Window Dimensions     | windowName                |         | Dictionary(x,y,width,height) | returns the dimensions of a window.          | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)      |
+| Bring Window To Front     | windowName                |         | N/A                          | Bring the window to the front of visibility. | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)      |
+| Send Window To Back       | windowName                |         | N/A                          | Sends the window behind all other windows.   | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)      |
+| Resize Window             | windowName, width, height |         |                              | Resizes the window to the given dimensions.  | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)      |
+| Move Window               | windowName, x, y          |         |                              | Moves the window to the given coordinates.   | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)      |
 
 ## Image Match Keywords
 | Keyword                                | Attributes                                                           | Default | Return          | Description                                             | Implemented                        | Verified On Windows             | Verified on Linux               |
