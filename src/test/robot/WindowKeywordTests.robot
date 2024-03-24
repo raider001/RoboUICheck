@@ -47,4 +47,5 @@ Test Bring Window To Front
     Verify Image Does Not Exist  test1.png
     Bring Window To Front  Test Form
     Verify Image Exists  test1.png
+    [Teardown]  Bring Window To Front  Test Form
 

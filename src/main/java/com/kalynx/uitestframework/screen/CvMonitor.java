@@ -292,7 +292,7 @@ public class CvMonitor {
         int result_cols = screenshot.cols() - template.cols() + 1;
         int result_rows = screenshot.rows() - template.rows() + 1;
         Mat result = new Mat(result_rows, result_cols, CvType.CV_8U);
-        int algorithm = Imgproc.TM_CCORR_NORMED;
+        int algorithm = Imgproc.TM_SQDIFF_NORMED;
         Imgproc.matchTemplate(screenshot, template, result, algorithm, mask);
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
         double res = matchAlgorithm.get(algorithm).apply(mmr);
