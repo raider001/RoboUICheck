@@ -110,3 +110,9 @@ into the following categories.
 | Drag Image To Relative Location    | sourceImage, x, y                                                    |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
 | Drag Image To Fixed                | sourceImage, x, y                                                    |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
 | Drag Image From Display To Display | sourceImage, sourceDisplay,x1,y1, targetImage, targetDisplay, x2, y2 |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |  
+
+Expected Keywords:    75
+Mini-Milestones:      225
+Milestones Completed: 66
+% completed:          29.33%
+```
