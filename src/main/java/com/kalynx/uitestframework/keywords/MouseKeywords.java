@@ -2,7 +2,10 @@ package com.kalynx.uitestframework.keywords;
 
 import com.kalynx.uitestframework.DI;
 import com.kalynx.uitestframework.MouseEvent.MouseButtonDown;
+import com.kalynx.uitestframework.controller.DisplayManager;
 import com.kalynx.uitestframework.controller.MouseController;
+import com.kalynx.uitestframework.controller.WindowController;
+import com.kalynx.uitestframework.data.DisplayAttributes;
 import com.kalynx.uitestframework.data.Result;
 import com.kalynx.uitestframework.data.ScreenshotData;
 import com.kalynx.uitestframework.screen.CvMonitor;
@@ -14,13 +17,17 @@ import org.robotframework.javalib.annotation.RobotKeywordOverload;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
 import java.awt.*;
+import java.util.Optional;
 
 @RobotKeywords
 public class MouseKeywords {
     private static final Logger LOGGER = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
     private static final MouseController MOUSE_CONTROLLER = DI.getInstance().getDependency(MouseController.class);
+    private static final WindowController WINDOW_CONTROLLER = DI.getInstance().getDependency(WindowController.class);
+    private static final DisplayManager DISPLAY_MANAGER = DI.getInstance().getDependency(DisplayManager.class);
     private static final CvMonitor CV_MONITOR = DI.getInstance().getDependency(CvMonitor.class);
     public static final String INVALID_CLICK_OPTION_S_GIVEN = "Invalid Click option %s given.";
+    public static final String HTML = "*HTML*";
 
     @RobotKeyword("""
             Move Mouse
@@ -118,11 +125,12 @@ public class MouseKeywords {
     @RobotKeyword("""
             Click Location
             """)
-    public void clickLocation(String button, int x, int y) throws Exception {
+    @ArgumentNames({"button", "x", "y", "times=1"})
+    public void clickLocation(String button, int x, int y, int times) throws Exception {
         try {
             MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
             MOUSE_CONTROLLER.moveMouseTo(x, y);
-            MOUSE_CONTROLLER.mouseClick(mask, 1);
+            MOUSE_CONTROLLER.mouseClick(mask, times);
         } catch (InterruptedException e) {
             throw e;
         } catch (Exception e) {
@@ -130,16 +138,50 @@ public class MouseKeywords {
         }
     }
 
-    @RobotKeywordOverload
-    public void clickLocation(String button, int x, int y, int times) throws Exception {
-        if(times <= 0) throw new IllegalArgumentException("Must click at least once.");
-        try {
-            MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
-            MOUSE_CONTROLLER.moveMouseTo(x, y);
-            MOUSE_CONTROLLER.mouseClick(mask, times);
-        } catch (InterruptedException e) {
-            throw new InterruptedException(INVALID_CLICK_OPTION_S_GIVEN.formatted(button));
+    @RobotKeyword("""
+            Click Image
+            Clicks the center of the matched image on the screen.
+            """)
+    @ArgumentNames({"button", "image", "times=1"})
+    public void clickImage(String button, String image, int times) throws Exception {
+        Result<ScreenshotData> res = CV_MONITOR.monitorForImage(image);
+        if (res.isFailure()) throw new Exception("*HTML*" + res.getInfo());
+        LOGGER.info(res.getInfo());
+        Rectangle p = res.getData().foundLocation();
+        clickLocation(button, p.x + p.width / 2, p.y + +p.height / 2, times);
+    }
+
+    @RobotKeyword("""
+            Click Image On Window
+            Clicks the center of the matched image on the window.
+            """)
+    @ArgumentNames({"button", "image", "windowName", "times=1"})
+    public void clickImageOnWindow(String button, String image, String windowName, int times) throws Exception {
+        Rectangle formRegion = WINDOW_CONTROLLER.getWindowDimensions(windowName);
+        if(formRegion == null) throw new Exception("Window: " + windowName + " not found. Available windows:" + WINDOW_CONTROLLER.getAllWindows().toString());
+
+        // get the currently selected display
+        int originalDisplay = DISPLAY_MANAGER.getSelectedDisplay().displayId();
+
+        Optional<DisplayAttributes> attr = DISPLAY_MANAGER.getDisplays().stream().filter(display -> formRegion.x >= display.x()
+                && formRegion.x < display.x() + display.width()
+                && formRegion.y >= display.y()
+                && formRegion.y < display.y() + display.height()).findFirst();
+        if(attr.isEmpty()) throw new Exception("Window not found on any display. Is the form currently hidden or partially off a screen?");
+        DISPLAY_MANAGER.setDisplay(attr.get().displayId());
+        DisplayManager.DisplayData displayData =DISPLAY_MANAGER.getSelectedDisplayRegion();
+        Rectangle originalRegion = displayData.displayRegion();
+        DISPLAY_MANAGER.setCaptureRegion(formRegion);
+        Result<ScreenshotData> r = CV_MONITOR.monitorForImage(image);
+        DISPLAY_MANAGER.setCaptureRegion(originalRegion);
+        DISPLAY_MANAGER.setDisplay(originalDisplay);
+        if (r.isFailure()) {
+            throw new Exception(HTML + r.getInfo());
         }
+
+        LOGGER.info(r.getInfo());
+        Rectangle p = r.getData().foundLocation();
+        clickLocation(button, p.x + p.width / 2, p.y + +p.height / 2, times);
     }
 
     @RobotKeyword("""

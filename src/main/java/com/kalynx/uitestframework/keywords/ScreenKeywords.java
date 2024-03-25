@@ -210,7 +210,7 @@ public class ScreenKeywords {
         if(attr.isEmpty()) throw new Exception("Window not found on any display. Is the form currently hidden or partially off a screen?");
         DISPLAY_MANAGER.setDisplay(attr.get().displayId());
         DisplayManager.DisplayData displayData =DISPLAY_MANAGER.getSelectedDisplayRegion();
-        Rectangle originalRegion = displayData.displayRegion();
+        Rectangle originalRegion = new Rectangle(displayData.displayRegion());
         DISPLAY_MANAGER.setCaptureRegion(formRegion);
         Result<?> r = CV_MONITOR.monitorForImage(Duration.ofMillis(waitTime), imageName, minMatchScore);
         DISPLAY_MANAGER.setCaptureRegion(originalRegion);

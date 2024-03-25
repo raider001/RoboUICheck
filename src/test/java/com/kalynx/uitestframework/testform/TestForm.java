@@ -1,9 +1,6 @@
 package com.kalynx.uitestframework.testform;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -13,11 +10,16 @@ public class TestForm {
     public static void main(String[] args) {
         JDialog jDialog = new JDialog();
         jDialog.setSize(400,400);
-
+        JLabel label = new JLabel();
         JPanel panel = new JPanel();
         JTextField textField = new JTextField();
         textField.setColumns(25);
         JButton testButton = new JButton("Test");
+        testButton.addActionListener((e) -> {
+            if(label.getText().isEmpty()) {
+                label.setText("Test Button Clicked");
+            } else { label.setText("");}
+        });
         JButton test2Button = new JButton("Test2");
         panel.add(textField);
         panel.add(testButton);
@@ -26,6 +28,7 @@ public class TestForm {
         GraphicsPanel graphicsPanel = new GraphicsPanel();
 
         panel.add(graphicsPanel);
+        panel.add(label);
         jDialog.setTitle("Test Form");
         jDialog.setContentPane(panel);
         jDialog.setVisible(true);

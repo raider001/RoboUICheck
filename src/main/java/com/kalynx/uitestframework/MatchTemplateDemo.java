@@ -193,7 +193,7 @@ public class MatchTemplateDemo {
 
 
         String[] d = new String[2];
-        d[0] = "G:/Projects/Fuckaround/robotuitestframework/src/test/robot/img.png";
+        d[0] = "G:/Projects/Fuckaround/robotuitestframework/src/test/robot/labelconfirmation.png";
         d[1] = "G:/Projects/Fuckaround/robotuitestframework/src/test/robot/fail_transparent.png";
         // run code
         new MatchTemplateDemoRun().run(d);
