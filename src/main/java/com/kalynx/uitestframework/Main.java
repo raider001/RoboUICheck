@@ -36,9 +36,8 @@ public class Main extends AnnotationLibrary {
         argParser.addArg("log-location", String.class).setShortKey('l')
                 .setHelp("Sets the location for the log file.")
                 .setDefault("./log")
-                .setCommand(val -> {
-                    DI.getInstance().getDependency(CvMonitor.class).setLogLocation(Path.of(val));
-                });
+                .setCommand(val -> DI.getInstance().getDependency(CvMonitor.class).setLogLocation(Path.of(val)));
+
         argParser.addArg("image-loc", String.class)
                 .setShortKey('i')
                 .setHelp("Defines the directory name for image results.")
@@ -64,12 +63,13 @@ public class Main extends AnnotationLibrary {
 
     private static void injectDependencies() throws AWTException, DependencyInjectionException {
         OpenCV.loadShared();
+        DI.getInstance().inject(Settings.class);
         DI.getInstance().add(RobotControl.class, new RobotWrapper(new Robot()));
         DI.getInstance().add(MouseInfoControl.class, new MouseInfoWrapper());
         DI.getInstance().inject(DisplayManager.class);
         DI.getInstance().inject(WindowController.class);
         DI.getInstance().inject(MouseController.class);
-        DI.getInstance().add(new CvMonitor(0.95, DI.getInstance().getDependency(DisplayManager.class)));
+        DI.getInstance().add(new CvMonitor(0.95, DI.getInstance().getDependency(DisplayManager.class), DI.getInstance().getDependency(Settings.class)));
     }
     public static void main(String... args ) throws Exception {
         RemoteServer.configureLogging();

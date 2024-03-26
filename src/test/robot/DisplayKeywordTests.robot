@@ -31,3 +31,13 @@ Test Change Monitored Display Region
     IF  ${area}[x] == 50 and ${area}[y] == 50 and ${area}[width] == 100 and ${area}[height] == 100
         Fail  The selected area is not correct
     END
+
+Test Set Display By Id
+    [Documentation]   Test setting the display by id
+    Set Display By Id    0
+    @{display_one}  Get Monitored Display
+    Set Display By Id    1
+    @{display_two}  Get Monitored Display
+    IF  ${display_two} == ${display_one}
+        Fail  The display is meant to be different from the first one
+    END

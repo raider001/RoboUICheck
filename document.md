@@ -9,33 +9,30 @@ into the following categories.
 | Keyword                             | Attributes                         | Default | Return Value | DescriptionUsage                                                  | Implemented                | Verified On Windows | Verified on linux |
 | ----------------------------------- | ---------------------------------- | ------- | ------------ | ----------------------------------------------------------------- |----------------------------|---------------------|-------------------|
 | Set Primary Display Reference       | referenceName                      |         |              | Sets a Reference name for a display                               | ![ok.svg](assets/ok.svg)   | ![ok.svg](assets/ok.svg) |![cross.svg](assets/cross.svg) |
-| Set Display By Id                   | displayId                          |         |              |                                                                   | ![ok.svg](assets/ok.svg)   |![cross.svg](assets/cross.svg) |![cross.svg](assets/cross.svg) |
+| Set Display By Id                   | displayId                          |         |              |                                                                   | ![ok.svg](assets/ok.svg)   |![ok.svg](assets/ok.svg) |![cross.svg](assets/cross.svg) |
 | Set Display Reference               | referenceName, inRelationTo        |         |              | Sets a Reference based on an existing reference display           | ![ok.svg](assets/ok.svg)   |![ok.svg](assets/ok.svg) |![cross.svg](assets/cross.svg) |
 | Set Monitored Display               | referenceName                      |         |              | Sets the Display being monitors                                   | ![ok.svg](assets/ok.svg)   | ![ok.svg](assets/ok.svg) |![cross.svg](assets/cross.svg) |
 | Set Monitored Area                  | x,y,width,height                   |         |              | Sets the monitored area for the selected display                  | ![ok.svg](assets/ok.svg)   | ![ok.svg](assets/ok.svg) |![cross.svg](assets/cross.svg) |
 | Reset Monitored Area                |                                    |         |              | Resets the monitored area to the original display size            | ![ok.svg](assets/ok.svg)   | ![ok.svg](assets/ok.svg) |![cross.svg](assets/cross.svg) |
-| Reset Monitored Area For Display Id | displayId                          |         |              |                                                                   | ![ok.svg](assets/ok.svg)   |![cross.svg](assets/cross.svg) |![cross.svg](assets/cross.svg) |
 | Set Monitored Area For Display      | referenceName, x, y, width, height |         |              | Sets the monitored area for a given display reference             | ![ok.svg](assets/ok.svg)   | ![ok.svg](assets/ok.svg) |![cross.svg](assets/cross.svg) |
 | Reset Monitored Area For Display    | referenceName                      |         |              | Resets the given monitored display area for the specified monitor | ![ok.svg](assets/ok.svg)   | ![ok.svg](assets/ok.svg) |![cross.svg](assets/cross.svg) |
 
 ## Settings Keywords
-| Keyword                   | Attributes           | Default | Return Value | Description                                      | Implemented                    | Verified On Windows              | Verified on Linux               |
-| ------------------------- | -------------------- | ------- | ------------ | ------------------------------------------------ |--------------------------------|----------------------------------|---------------------------------|
-| Set Timeout Time          | waitTime             |         |              | How long a match will try to find an image.      | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Set Poll Rate             | pollrate             |         |              |                                                  | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |                                  |
-| Get Image Paths           |                      |         | List[String] |                                                  | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Set Result Path           | path                 |         |              | The location for the image results/              | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Set Match Percentage      | matchPercentage      |         |              | The percentage the image must match as a minimum | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Add Image Location        | path                 |         |              | Adds a path to search for images.                | ![ok.svg](assets/ok.svg)       |  ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Set Command Delay Speed   | delayTime            |         |              | Delay Time after each command                    | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Set Keystroke Speed       | timeBetweenKeystroke | 20ms    |              | Time between keystrokes                          | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Set OCR Segmentation Mode | mode                 |         |              | Sets the OCR Segmentation Mode                   | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Set OCR Language          | language             |         |              | Sets the language for OCR                        | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
-| Set OCR Engine            | engine               |         |              | Sets the OCR Engine                              | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)  |
+| Keyword                   | Attributes           | Default | Return Value | Description                                      | Implemented                    | Verified On Windows              | Verified on Linux                |
+| ------------------------- | -------------------- | ------- | ------------ | ------------------------------------------------ |--------------------------------|----------------------------------|----------------------------------|
+| Set Timeout Time          | waitTime             |         |              | How long a match will try to find an image.      | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
+| Set Poll Rate             | pollrate             |         |              |                                                  | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
+| Get Image Paths           |                      |         | List[String] |                                                  | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   | 
+| Set Result Path           | path                 |         |              | The location for the image results/              | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
+| Set Match Percentage      | matchPercentage      |         |              | The percentage the image must match as a minimum | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
+| Add Image Location        | path                 |         |              | Adds a path to search for images.                | ![ok.svg](assets/ok.svg)       |  ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
+| Set Command Delay Speed   | delayTime            |         |              | Delay Time after each command                    | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
+| Set Keystroke Speed       | timeBetweenKeystroke | 20ms    |              | Time between keystrokes                          | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
+| Set OCR Segmentation Mode | mode                 |         |              | Sets the OCR Segmentation Mode                   | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
+| Set OCR Language          | language             |         |              | Sets the language for OCR                        | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
+| Set OCR Engine            | engine               |         |              | Sets the OCR Engine                              | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
 
 ## Window Keywords
-
-
 | Keyword                   | Attributes                | Default | Return Value                 | Description                                  | Implemented                    | Verified On Windows            | Verified on Linux                   |
 | ------------------------- | ------------------------- | ------- |------------------------------| -------------------------------------------- |--------------------------------|--------------------------------|-------------------------------------|
 | Get All Available Windows |                           |         | Array[windowName]            |                                              | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)      |
@@ -50,13 +47,13 @@ into the following categories.
 |----------------------------------------|----------------------------------------------------------------------| ------- |-----------------| ------------------------------------------------------- |--------------------------------|--------------------------------|---------------------------------|
 | Verify Image Exists                    | imageName,*minMatchScore*, *waitTime*                                |         | actualScore     | Finds an Image in a the defined display area.           | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)  |
 | Verify Image Exists On Display         | imageName, referenceName,*minMatchScore, waitTime*                   |         | actualScore     | Searches a specific display for the image defined       | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)  |
-| Verify Image Exits On Window           | imageName, windowName,*minMatchScore, waitTime*                      |         | actualScore     | Searches a specific form for the defined image.         | ![ok.svg](assets/ok.svg) | ![ok.svg](assets/ok.svg) | ![cross.svg](assets/cross.svg)  |
+| Verify Image Exits On Window           | imageName, windowName,*minMatchScore, waitTime*                      |         | actualScore     | Searches a specific form for the defined image.         | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)  |
 | Verify Image Does Not Exist            | imageName,*minMatchScore*, *waitTime*                                |         | closestMatch    | Verifies a image is not visible on the default display. | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)  |
-| Verify Image Does Not Exist On Display | imageName, referenceName,*minMatchScore, waitTime*                   |         | closestMatch    |                                                         | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg) | ![cross.svg](assets/cross.svg)  |
-| Verify Image Does Not Exist On Window  | imageName, windowName,*minMatchScore, waitTime*                      |         | closestMatch    |                                                         | ![ok.svg](assets/ok.svg) | ![ok.svg](assets/ok.svg) | ![cross.svg](assets/cross.svg)  |
-| Get Image Bounds                       | imageName                                                            |         | Dictionary      | Returns the bounds of the image on the default display. | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)  |
-| Get Image Bounds On Display            | imageName, referenceName                                             |         | Dictionary      |                                                         | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)  |
-| Get Image bounds On Window             | imageName, windowName                                                |         | Dictionary      |                                                         | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)  |
+| Verify Image Does Not Exist On Display | imageName, referenceName,*minMatchScore, waitTime*                   |         | closestMatch    |                                                         | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)  |
+| Verify Image Does Not Exist On Window  | imageName, windowName,*minMatchScore, waitTime*                      |         | closestMatch    |                                                         | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)  |
+| Get Image Bounds                       | imageName                                                            |         | Dictionary      | Returns the bounds of the image on the default display. | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)  |
+| Get Image Bounds On Display            | imageName, referenceName                                             |         | Dictionary      |                                                         |  ![ok.svg](assets/ok.svg) |  ![ok.svg](assets/ok.svg) | ![cross.svg](assets/cross.svg)  |
+| Get Image bounds On Window             | imageName, windowName                                                |         | Dictionary      |                                                         |  ![ok.svg](assets/ok.svg) |  ![ok.svg](assets/ok.svg) | ![cross.svg](assets/cross.svg)  |
 | Get Match Locations                    | imageName                                                            |         | List[Dictionary |                                                         | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)  |
 
 ## Text Recognition
@@ -109,10 +106,9 @@ into the following categories.
 | Drag Image To Image                | sourceImage, targetImage                                             |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
 | Drag Image To Relative Location    | sourceImage, x, y                                                    |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
 | Drag Image To Fixed                | sourceImage, x, y                                                    |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
-| Drag Image From Display To Display | sourceImage, sourceDisplay,x1,y1, targetImage, targetDisplay, x2, y2 |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |  
-
-Expected Keywords:    75
-Mini-Milestones:      225
-Milestones Completed: 66
-% completed:          29.33%
+| Drag Image From Display To Display | sourceImage, sourceDisplay,x1,y1, targetImage, targetDisplay, x2, y2 |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
 ```
+Expected Keywords:    74
+Mini-Milestones:      222
+Milestones Completed: 73
+% completed:          32.88%

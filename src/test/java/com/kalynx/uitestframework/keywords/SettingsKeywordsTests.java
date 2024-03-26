@@ -3,23 +3,22 @@ package com.kalynx.uitestframework.keywords;
 import com.kalynx.lwdi.AlreadyAddedException;
 import com.kalynx.uitestframework.DI;
 import com.kalynx.uitestframework.controller.KeyboardController;
-import com.kalynx.uitestframework.screen.CvMonitor;
+import com.kalynx.uitestframework.controller.Settings;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.nio.file.Path;
 import java.time.Duration;
 
 class SettingsKeywordsTests {
 
     private static SettingsKeywords sut;
-    private static CvMonitor cvMonitor;
+    private static Settings cvMonitor;
     private static KeyboardController keyboardController;
     @BeforeAll
     static void beforeAll() throws AlreadyAddedException {
-        cvMonitor = Mockito.mock(CvMonitor.class);
+        cvMonitor = Mockito.mock(Settings.class);
         keyboardController = Mockito.mock(KeyboardController.class);
         DI.reset();
         DI.getInstance().add(keyboardController);
@@ -37,37 +36,19 @@ class SettingsKeywordsTests {
     @Test
     void setTimeoutTime_verification() {
         sut.setTimeoutTime(100);
-        Mockito.verify(cvMonitor).setTimeoutTime(Duration.ofMillis(100));
+        Mockito.verify(cvMonitor).setTimeout(Duration.ofMillis(100));
     }
 
     @Test
-    void setPallRate_verification() {
+    void setPallRate_verification() throws Exception {
         sut.setPollRate(100);
         Mockito.verify(cvMonitor).setPollRate(Duration.ofMillis(100));
     }
 
     @Test
-    void getImagePaths_verification() {
-        cvMonitor.getImagePaths();
-        Mockito.verify(cvMonitor,Mockito.times(1)).getImagePaths();
-    }
-
-    @Test
-    void setResultPath_verification() throws Exception {
-        sut.setResultPath("path");
-        Mockito.verify(cvMonitor, Mockito.times(1)).setResultsLocation(Path.of("path"));
-    }
-
-    @Test
-    void setMathPercentage_verification() {
+    void setMathPercentage_verification() throws Exception {
         sut.setMatchPercentage(0.95);
         Mockito.verify(cvMonitor, Mockito.times(1)).setMatchScore(0.95);
-    }
-
-    @Test
-    void addImageLocation_verification() {
-        sut.addImageLocation("path");
-        Mockito.verify(cvMonitor, Mockito.times(1)).addImagePath("path");
     }
 
     @Test

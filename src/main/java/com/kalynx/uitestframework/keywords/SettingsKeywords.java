@@ -2,6 +2,7 @@ package com.kalynx.uitestframework.keywords;
 
 import com.kalynx.uitestframework.DI;
 import com.kalynx.uitestframework.controller.KeyboardController;
+import com.kalynx.uitestframework.controller.Settings;
 import com.kalynx.uitestframework.screen.CvMonitor;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
@@ -13,6 +14,7 @@ import java.util.List;
 @RobotKeywords
 public class SettingsKeywords {
 
+    private final Settings settings = DI.getInstance().getDependency(Settings.class);
     private final CvMonitor CV_MONITOR = DI.getInstance().getDependency(CvMonitor.class);
     private final KeyboardController KEYBOARD_CONTROLLER = DI.getInstance().getDependency(KeyboardController.class);
     @RobotKeyword("""
@@ -20,7 +22,7 @@ public class SettingsKeywords {
             Sets the timeout time for the monitor to look for an image in milliseconds.
             """)
     public void setTimeoutTime(int timeoutTime) {
-        CV_MONITOR.setTimeoutTime(Duration.ofMillis(timeoutTime));
+        settings.setTimeout(Duration.ofMillis(timeoutTime));
     }
 
     @RobotKeyword("""
@@ -29,8 +31,8 @@ public class SettingsKeywords {
             Note that it is not recommended to set this value below 100ms as it will attempt to poll at the given rate,
             but cannot be guarranteed due to potential system limitations.
             """)
-    public void setPollRate(int pollRate) {
-        CV_MONITOR.setPollRate(Duration.ofMillis(pollRate));
+    public void setPollRate(int pollRate) throws Exception {
+        settings.setPollRate(Duration.ofMillis(pollRate));
     }
 
     @RobotKeyword("""
@@ -54,8 +56,8 @@ public class SettingsKeywords {
             Sets the minimum accepted similarity as a percentage. When attempting to find image matching, if the image
             score is below the given similarity, it will be considered a failure.
             """)
-    public void setMatchPercentage(double minSimilarity) {
-        CV_MONITOR.setMatchScore(minSimilarity);
+    public void setMatchPercentage(double minSimilarity) throws Exception {
+        settings.setMatchScore(minSimilarity);
     }
 
     @RobotKeyword("""
@@ -65,15 +67,6 @@ public class SettingsKeywords {
     public void addImageLocation(String imageLocation) {
         CV_MONITOR.addImagePath(imageLocation);
     }
-
-    @RobotKeyword("""
-            Set Command Delay Speed
-            Sets a delay between each action command (Such as Mouse Move, Click, Key Press).
-            """)
-    public void setCommandDelaySpeed(int delaySpeed) {
-        //TBD
-    }
-
 
     @RobotKeyword("""
             Set Keystroke Speed

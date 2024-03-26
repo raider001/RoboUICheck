@@ -2,6 +2,7 @@ package com.kalynx.uitestframework.screen;
 
 import com.kalynx.simplethreadingservice.ThreadService;
 import com.kalynx.uitestframework.controller.DisplayManager;
+import com.kalynx.uitestframework.controller.Settings;
 import com.kalynx.uitestframework.data.*;
 import org.opencv.core.Point;
 import org.opencv.core.*;
@@ -26,17 +27,16 @@ import java.util.function.Supplier;
 
 public class CvMonitor {
     private final ImageLibrary imageLibrary = new ImageLibrary();
-    DisplayManager displayManager;
-    private double matchScore;
-    private Duration pollRate = Duration.ofMillis(100);
-    private Duration timeoutTime = Duration.ofMillis(2000);
+    private  final DisplayManager displayManager;
+
+    private final Settings settings;
     private Path logLocation = Path.of(".", "log");
     private Path imageLocation = Path.of(".", "images");
     private Path resultLocation = Path.of(".","log", "image_results");
 
     private final static Map<Integer, Function<Core.MinMaxLocResult,Double>> matchAlgorithm = new HashMap<>();
 
-    public CvMonitor(double matchScore, DisplayManager displayManager) {
+    public CvMonitor(double matchScore, DisplayManager displayManager, Settings settings) {
         if (matchScore <= 0 || matchScore >= 1) throw new AssertionError("matchScore can only be between 0 and 1");
         matchAlgorithm.put(Imgproc.TM_SQDIFF, (r) -> 1 - r.minVal);
         matchAlgorithm.put(Imgproc.TM_SQDIFF_NORMED, (r) -> 1 - r.minVal);
@@ -44,8 +44,8 @@ public class CvMonitor {
         matchAlgorithm.put(Imgproc.TM_CCOEFF_NORMED, (r) -> r.maxVal);
         matchAlgorithm.put(Imgproc.TM_CCORR, (r) -> r.maxVal);
         matchAlgorithm.put(Imgproc.TM_CCORR_NORMED, (r) -> r.maxVal);
-        this.matchScore = matchScore;
         this.displayManager = displayManager;
+        this.settings = settings;
     }
 
     private static Mat imageToMat(BufferedImage sourceImg) {
@@ -82,7 +82,6 @@ public class CvMonitor {
         results.sort(comp);
         Result<Data> res = results.get(0);
         Data data = res.getData();
-        Point locRes = data.loc;
         int width = match.cols();
         int height = match.rows();
         Imgproc.rectangle(res.getData().screenshot(), data.loc, new Point(data.loc.x + width, data.loc.y + height),
@@ -118,53 +117,9 @@ public class CvMonitor {
     }
 
 
-    public double getMatchScore() {
-        return matchScore;
-    }
-
-    public Result<String> setMatchScore(double matchScore) {
-        if (matchScore <= 0 || matchScore > 1)
-            return new FailedResult<>("matchScore must be greater than 0 or equal to/less than 1.");
-        this.matchScore = matchScore;
-        return new SuccessfulResult<>();
-    }
-
-    public Duration getPollRate() {
-        return pollRate;
-    }
-
-    public Result<String> setPollRate(Duration pollRate) {
-        if (pollRate.isNegative() || pollRate.isZero()) new FailedResult<>("pollRate must be greater than 0.");
-        if (timeoutTime.toMillis() < pollRate.toMillis())
-            return new FailedResult<>("pollRate must be less than timeoutTime: " + timeoutTime + "<" + pollRate);
-        this.pollRate = pollRate;
-        return new SuccessfulResult<>();
-    }
-
-    public Duration getTimeoutTime() {
-        return timeoutTime;
-    }
-
-    public void setTimeoutTime(Duration timeoutTime) {
-        if (timeoutTime.isNegative() || timeoutTime.isZero())
-            throw new AssertionError("Timeout time must be greater than 0.");
-        if (timeoutTime.toMillis() < pollRate.toMillis())
-            throw new AssertionError("timeoutTime must be greater than pollRate: " + timeoutTime + "<" + pollRate);
-        this.timeoutTime = timeoutTime;
-    }
-
-    public Result<ScreenshotData> monitorForImage(Duration duration, String imageLocation) throws Exception {
-        return monitorForImage(duration, imageLocation, matchScore);
-    }
-
-    public Result<ScreenshotData> monitorForImage(String imageLocation, double matchScore) throws Exception {
-        return monitorForImage(timeoutTime, imageLocation, matchScore);
-    }
-
     public Result<ScreenshotData> monitorForImage(String imageLocation) throws Exception {
-        return monitorForImage(timeoutTime, imageLocation, matchScore);
+        return monitorForImage(settings.getTimeout(), imageLocation, settings.getMatchScore());
     }
-
 
     public Result<ScreenshotData> monitorForLackOfImage(Duration duration, String imageLocation, double matchScore) throws IOException {
         Result<MonitorData> data = setupMonitoring(duration, imageLocation, matchScore);
@@ -173,7 +128,7 @@ public class CvMonitor {
         MonitorData monitorData = data.getData();
 
         Supplier<Result<Data>> action = buildMatchResults(monitorData.templateContainer, monitorData.results, monitorData.requiredMatchScore);
-        ThreadService.schedule(action).forEvery(pollRate).over(duration).orUntil(Result::isFailure).andWaitForCompletion();
+        ThreadService.schedule(action).forEvery(settings.getPollRate()).over(duration).orUntil(Result::isFailure).andWaitForCompletion();
         Optional<Result<Data>> finalResult = monitorData.results.stream().filter(Result::isFailure).findFirst();
 
         if (finalResult.isPresent()) return generateSuccessfulResult(monitorData.templateContainer.template, monitorData.requiredMatchScore, finalResult.get());
@@ -188,7 +143,7 @@ public class CvMonitor {
 
         MonitorData monitorData = data.getData();
         Supplier<Result<Data>> action = buildMatchResults(data.getData().templateContainer, monitorData.results, monitorData.requiredMatchScore);
-        ThreadService.schedule(action).forEvery(pollRate).over(duration).orUntil(Result::isSuccess).andWaitForCompletion();
+        ThreadService.schedule(action).forEvery(settings.getPollRate()).over(duration).orUntil(Result::isSuccess).andWaitForCompletion();
         Optional<Result<Data>> finalResult = monitorData.results.stream().filter(Result::isSuccess).findFirst();
         if (finalResult.isPresent()) return generateSuccessfulResult(monitorData.templateContainer.template, monitorData.requiredMatchScore, finalResult.get());
 
@@ -199,18 +154,17 @@ public class CvMonitor {
         Objects.requireNonNull(duration);
         Objects.requireNonNull(imageLocation);
 
-        if(matchScore == -1) matchScore = this.matchScore;
-
+        if(matchScore == -1) matchScore = settings.getMatchScore();
+        if(duration.isNegative()) duration = settings.getTimeout();
         Result<ImageLibrary.TemplateContainer> imageToFind = imageLibrary.findImage(Path.of(imageLocation));
 
         if (imageToFind.isFailure()) return new FailedResult<>(imageToFind.getInfo());
 
-
-        MonitorData monitorData = new MonitorData(matchScore, imageToFind.getData());
+        MonitorData monitorData = new MonitorData(matchScore, imageToFind.getData(), duration);
         return new SuccessfulResult<>(Optional.of(monitorData));
     }
 
-    private class MonitorData {
+    private static class MonitorData {
         final double requiredMatchScore;
         final ImageLibrary.TemplateContainer templateContainer;
         final List<Result<Data>> results = Collections.synchronizedList(new ArrayList<>());
