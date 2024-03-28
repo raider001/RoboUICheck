@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Ellipse2D;
 
 public class TestForm {
@@ -54,6 +56,14 @@ public class TestForm {
         panel.add(clickCounter);
         panel.add(pressAndRelease);
         jDialog.setTitle("Test Form");
+        jDialog.addMouseWheelListener(e -> {
+            int notches = e.getWheelRotation();
+            if (notches < 0) {
+                label.setText("Mouse Wheel Up");
+            } else {
+                label.setText("Mouse Wheel Down");
+            }
+        });
         jDialog.setContentPane(panel);
         jDialog.setVisible(true);
         jDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

@@ -47,3 +47,12 @@ Test Press And Release
     Verify Image Exists On Window  released.png  Test Form
     [Teardown]  Click Image On Window  LEFT  test1.png  Test Form
 
+Test Wheel Up And Down
+    Move Mouse To Image    PAndRTest.png
+    Mouse Scroll  1
+    Verify Image Exists On Window  mouseup.png  Test Form
+    Mouse Scroll  -1
+    Verify Image Exists On Window  mousedown.png  Test Form
+    [Teardown]  Click Image On Window  LEFT  test1.png  Test Form
+
+

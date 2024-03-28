@@ -18,7 +18,6 @@ public class Settings {
         if (pollRate.toMillis() < timeout.toMillis())
             throw new Exception("pollRate must be less than timeoutTime: " + timeout + "<" + pollRate);
         this.pollRate = pollRate;
-
     }
 
     public double getMatchScore() {

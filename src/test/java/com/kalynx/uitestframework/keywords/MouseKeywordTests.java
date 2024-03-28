@@ -143,13 +143,13 @@ class MouseKeywordTests {
 
     @Test
     void mouseScrollUp_verification() {
-        sut.mouseScrollUp(100);
+        sut.mouseScroll(100);
         Mockito.verify(mouseController).mouseScroll(100);
     }
 
     @Test
     void mouseScrollDown_verification() {
-        sut.mouseScrollDown(100);
+        sut.mouseScroll(-100);
         Mockito.verify(mouseController).mouseScroll(-100);
     }
 }

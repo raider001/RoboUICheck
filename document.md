@@ -89,27 +89,26 @@ into the following categories.
 
 
 ## Mouse Control
-| Keyword                            | Attributes                                                           | Default | Returns | Description | Implemented                             | Verified On Windows            | Verified on Linux                 |
-|------------------------------------|----------------------------------------------------------------------|---------|---------|-------------|-----------------------------------------|--------------------------------|-----------------------------------|
-| Move Mouse To                      | x, y                                                                 |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
-| Move Mouse To Display              | referenceName, x, y                                                  |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
-| Move Mouse To Image                | imageName                                                            |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
-| Move Mouse                         | x,y                                                                  |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
-| Click Location                     | button, x,y, _times_                                                 |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
-| Press Mouse Button                 | button                                                               |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       |                                   |
-| Release Mouse Button               | button                                                               |         |         |             | ![ok.svg](assets/ok.svg)                |  ![ok.svg](assets/ok.svg) | ![cross.svg](assets/cross.svg)    |
-| Click Mouse Button                 | button,_times_                                                       |         |         |             | ![ok.svg](assets/ok.svg)                | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
-| Mouse Scroll Up                    | ticks                                                                |         |         |             | ![ok.svg](assets/ok.svg)                | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
-| Mouse Scroll Down                  | ticks                                                                |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
-| Click Image                        | imageName                                                            |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
-| Click Image On Display             | imageName, referenceName                                             |         |         |             | ![cross.svg](assets/cross.svg)          | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
-| Click Image On Window              | imageName, windowName                                                |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
-| Drag Image To Image                | sourceImage, targetImage                                             |         |         |             | ![cross.svg](assets/cross.svg)          | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
-| Drag Image To Relative Location    | sourceImage, x, y                                                    |         |         |             | ![cross.svg](assets/cross.svg)          | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
-| Drag Image To Fixed                | sourceImage, x, y                                                    |         |         |             | ![cross.svg](assets/cross.svg)          | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
+| Keyword                         | Attributes                                                           | Default | Returns | Description | Implemented                             | Verified On Windows            | Verified on Linux                 |
+|---------------------------------|----------------------------------------------------------------------|---------|---------|-------------|-----------------------------------------|--------------------------------|-----------------------------------|
+| Move Mouse To                   | x, y                                                                 |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
+| Move Mouse To Display           | referenceName, x, y                                                  |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
+| Move Mouse To Image             | imageName                                                            |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
+| Move Mouse                      | x,y                                                                  |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
+| Click Location                  | button, x,y, _times_                                                 |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
+| Press Mouse Button              | button                                                               |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       |                                   |
+| Release Mouse Button            | button                                                               |         |         |             | ![ok.svg](assets/ok.svg)                |  ![ok.svg](assets/ok.svg) | ![cross.svg](assets/cross.svg)    |
+| Click Mouse Button              | button,_times_                                                       |         |         |             | ![ok.svg](assets/ok.svg)                | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
+| Mouse Scroll                    | ticks                                                                |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)  | ![cross.svg](assets/cross.svg)    |
+| Click Image                     | imageName                                                            |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
+| Click Image On Display          | imageName, referenceName                                             |         |         |             | ![cross.svg](assets/cross.svg)          | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
+| Click Image On Window           | imageName, windowName                                                |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
+| Drag Image To Image             | sourceImage, targetImage                                             |         |         |             | ![cross.svg](assets/cross.svg)          | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
+| Drag Image To Relative Location | sourceImage, x, y                                                    |         |         |             | ![cross.svg](assets/cross.svg)          | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
+| Drag Image To Fixed             | sourceImage, x, y                                                    |         |         |             | ![cross.svg](assets/cross.svg)          | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
 | Drag Image From Display To Display | sourceImage, sourceDisplay,x1,y1, targetImage, targetDisplay, x2, y2 |         |         |             | ![cross.svg](assets/cross.svg)          | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
 ```
-Expected Keywords:    75
-Mini-Milestones:      225
+Expected Keywords:    74
+Mini-Milestones:      222
 Milestones Completed: 77
 % completed:          34.22%

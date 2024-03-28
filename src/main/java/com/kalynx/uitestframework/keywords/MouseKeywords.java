@@ -208,12 +208,11 @@ public class MouseKeywords {
         }
     }
 
-    public void mouseScrollUp(int scrollAmount) {
+    @RobotKeyword("""
+            Mouse Scroll
+            """)
+    public void mouseScroll(int scrollAmount) {
         MOUSE_CONTROLLER.mouseScroll(scrollAmount);
-    }
-
-    public void mouseScrollDown(int scrollAmount) {
-        MOUSE_CONTROLLER.mouseScroll(-scrollAmount);
     }
 
     // Mouse Movement Settings
