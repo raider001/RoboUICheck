@@ -95,7 +95,7 @@ into the following categories.
 | Move Mouse To Display              | referenceName, x, y                                                  |         |         |             | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)     | ![cross.svg](assets/cross.svg)    |
 | Move Mouse To Image                | imageName                                                            |         |         |             | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)    | ![cross.svg](assets/cross.svg)    |
 | Move Mouse                         | x,y                                                                  |         |         |             | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)     | ![cross.svg](assets/cross.svg)    |
-| Click Location                     | button, x,y, _times_                                                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Click Location                     | button, x,y, _times_                                                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)    | ![cross.svg](assets/cross.svg)    |
 | Release Mouse Button               | button                                                               |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
 | Click Mouse Button                 | button,_times_                                                       |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
 | Mouse Scroll Up                    | ticks                                                                |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
@@ -110,5 +110,5 @@ into the following categories.
 ```
 Expected Keywords:    74
 Mini-Milestones:      222
-Milestones Completed: 73
+Milestones Completed: 74
 % completed:          32.88%

@@ -9,13 +9,14 @@ import org.robotframework.javalib.annotation.RobotKeywords;
 import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RobotKeywords
 public class WindowKeywords {
 
     public static final String WINDOW = "Window:";
     public static final String NOT_FOUND_AVAILABLE_WINDOWS = " not found. Available windows:";
-    private final WindowController WINDOW_CONTROLLER = DI.getInstance().getDependency(WindowController.class);
+    private static final WindowController WINDOW_CONTROLLER = DI.getInstance().getDependency(WindowController.class);
 
     @RobotKeyword("""
             Gets all available windows, minimized or maximized.
@@ -27,10 +28,10 @@ public class WindowKeywords {
     @RobotKeyword("""
             Gets the dimensions for the window requested.
             """)
-    public List<Integer> getWindowDimensions(String windowName) throws Exception {
+    public Map<String,Integer> getWindowDimensions(String windowName) throws Exception {
         Rectangle r = WINDOW_CONTROLLER.getWindowDimensions(windowName);
         if(r == null) throw new Exception(WINDOW + windowName + NOT_FOUND_AVAILABLE_WINDOWS + getAllAvailableWindows().toString());
-        return Arrays.asList(r.x, r.y, r.width, r.height);
+        return Map.of("x", r.x, "y", r.y, "width", r.width, "height", r.height);
     }
 
     @RobotKeyword("""

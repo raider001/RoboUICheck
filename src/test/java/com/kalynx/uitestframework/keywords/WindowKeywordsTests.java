@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 
 import java.awt.Rectangle;
 import java.util.List;
+import java.util.Map;
 
 class WindowKeywordsTests {
 
@@ -44,8 +45,9 @@ class WindowKeywordsTests {
         Mockito.when(windowController.getWindowDimensions("window1")).thenReturn(r);
         Exception e = Assertions.assertThrows(Exception.class, () -> sut.getWindowDimensions("windowName"));
         Assertions.assertEquals("Window:windowName not found. Available windows:[window1, window2, window3]", e.getMessage());
-        List<Integer> result = sut.getWindowDimensions("window1");
-        Assertions.assertEquals(List.of(0,0,10,10), result);
+        Map<String,Integer> result = sut.getWindowDimensions("window1");
+        Map<String, Integer> expected = Map.of("x", 0, "y", 0, "width", 10, "height", 10);
+        Assertions.assertEquals(expected, result);
     }
 
     @Test

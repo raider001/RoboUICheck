@@ -26,3 +26,15 @@ Test Click Image On Window
    Click Image On Window  LEFT  test1.png  Test Form
    Verify Image Exists On Window    labelconfirmation.png  Test Form
    [Teardown]  Click Image On Window  LEFT  test1.png  Test Form
+
+Test Click X Times
+    Move Mouse To Image  clickCounter.png
+    Click  LEFT  2
+    Verify Image Exists On Window    two.png    Test Form
+    [Teardown]  Click Image On Window  LEFT  test1.png  Test Form
+
+Test Click Location
+    &{dimensions}    Get Window Dimensions  Test Form
+    Click Location  LEFT  ${${dimensions}[x]+50}  ${${dimensions}[y]+50}
+    Verify Image Exists On Window    labelconfirmation.png    Test Form
+    [Teardown]  Click  LEFT

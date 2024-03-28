@@ -8,33 +8,33 @@ Suite Setup    Add Image Location  ${CURDIR}/
 *** Test Cases ***
 Test Window Move
     [Documentation]  Verify that the window can be moved
-    @{dimensions}=  Get Window Dimensions  Test Form
+    &{dimensions}=  Get Window Dimensions  Test Form
     Move Window  Test Form  100  200
-    @{new_dimensions}=  Get Window Dimensions  Test Form
+    &{new_dimensions}=  Get Window Dimensions  Test Form
 
-    IF  ${${dimensions}[0] + 100} != ${new_dimensions}[0] and ${${dimensions}[1] + 200} != ${new_dimensions}[1]
+    IF  ${${dimensions}[x] + 100} != ${new_dimensions}[x] and ${${dimensions}[y] + 200} != ${new_dimensions}[y]
         Fail  Window did not move correctly.
     END
 
-    IF  ${dimensions}[2] != ${new_dimensions}[2] and ${dimensions}[3] != ${new_dimensions}[3]
+    IF  ${dimensions}[width] != ${new_dimensions}[width] and ${dimensions}[height] != ${new_dimensions}[height]
         Fail  Window width and height should not have moved.
     END
     [Teardown]  Move Window  Test Form  -100  -200
 
 Test Resize Window
     [Documentation]  Verify that a window can be resized.
-    @{dimensions}=  Get Window Dimensions  Test Form
+    &{dimensions}=  Get Window Dimensions  Test Form
     Resize Window  Test Form  500  500
-    @{new_dimensions}=  Get Window Dimensions  Test Form
-    IF  ${dimensions}[0] != ${new_dimensions}[0] and ${dimensions}[1] != ${new_dimensions}[1]
+    &{new_dimensions}=  Get Window Dimensions  Test Form
+    IF  ${dimensions}[x] != ${new_dimensions}[x] and ${dimensions}[y] != ${new_dimensions}[y]
         Fail  Window should not have moved.
     END
 
-    IF  ${new_dimensions}[2] != 500 and ${new_dimensions}[3] != 500
+    IF  ${new_dimensions}[width] != 500 and ${new_dimensions}[height] != 500
         Fail  Window did not resize correctly.
     END
 
-    [Teardown]  Run Keywords  Sleep  1s  AND  Resize Window    Test Form  ${dimensions}[2]    ${dimensions}[3]
+    [Teardown]  Run Keywords  Sleep  1s  AND  Resize Window    Test Form  ${dimensions}[width]    ${dimensions}[height]
 
 Test Get All Windows
     [Documentation]  Tests that windows are returned

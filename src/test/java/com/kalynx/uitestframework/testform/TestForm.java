@@ -21,18 +21,35 @@ public class TestForm {
             } else { label.setText("");}
         });
         JButton test2Button = new JButton("Test2");
-        panel.add(textField);
         panel.add(testButton);
+        panel.add(textField);
         panel.add(test2Button);
 
         GraphicsPanel graphicsPanel = new GraphicsPanel();
 
+        JButton clickCounter = new JButton("Click Counter");
+        clickCounter.addActionListener((e) -> {
+            try {
+                int count = Integer.parseInt(label.getText());
+                count++;
+                label.setText(String.valueOf(count));
+            } catch (NumberFormatException ex) {
+                label.setText("1");
+            }
+        });
+
         panel.add(graphicsPanel);
         panel.add(label);
+        panel.add(clickCounter);
         jDialog.setTitle("Test Form");
         jDialog.setContentPane(panel);
         jDialog.setVisible(true);
         jDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        JDialog blockingDialog  = new JDialog();
+        blockingDialog.setTitle("Blocking Form");
+        blockingDialog.setSize(400,400);
+        blockingDialog.setVisible(true);
     }
 
     private static class GraphicsPanel extends JPanel {

@@ -26,6 +26,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class CvMonitor {
+    private final static Map<Integer, Function<Core.MinMaxLocResult,Double>> matchAlgorithm = new HashMap<>();
     private final ImageLibrary imageLibrary = new ImageLibrary();
     private  final DisplayManager displayManager;
 
@@ -34,16 +35,14 @@ public class CvMonitor {
     private Path imageLocation = Path.of(".", "images");
     private Path resultLocation = Path.of(".","log", "image_results");
 
-    private final static Map<Integer, Function<Core.MinMaxLocResult,Double>> matchAlgorithm = new HashMap<>();
-
     public CvMonitor(double matchScore, DisplayManager displayManager, Settings settings) {
         if (matchScore <= 0 || matchScore >= 1) throw new AssertionError("matchScore can only be between 0 and 1");
-        matchAlgorithm.put(Imgproc.TM_SQDIFF, (r) -> 1 - r.minVal);
+        matchAlgorithm.put(Imgproc.TM_SQDIFF, r -> 1 - r.minVal);
         matchAlgorithm.put(Imgproc.TM_SQDIFF_NORMED, (r) -> 1 - r.minVal);
-        matchAlgorithm.put(Imgproc.TM_CCOEFF, (r) -> r.maxVal / 100);
-        matchAlgorithm.put(Imgproc.TM_CCOEFF_NORMED, (r) -> r.maxVal);
-        matchAlgorithm.put(Imgproc.TM_CCORR, (r) -> r.maxVal);
-        matchAlgorithm.put(Imgproc.TM_CCORR_NORMED, (r) -> r.maxVal);
+        matchAlgorithm.put(Imgproc.TM_CCOEFF, r -> r.maxVal / 100);
+        matchAlgorithm.put(Imgproc.TM_CCOEFF_NORMED, r -> r.maxVal);
+        matchAlgorithm.put(Imgproc.TM_CCORR, r -> r.maxVal);
+        matchAlgorithm.put(Imgproc.TM_CCORR_NORMED, r -> r.maxVal);
         this.displayManager = displayManager;
         this.settings = settings;
     }
@@ -155,12 +154,11 @@ public class CvMonitor {
         Objects.requireNonNull(imageLocation);
 
         if(matchScore == -1) matchScore = settings.getMatchScore();
-        if(duration.isNegative()) duration = settings.getTimeout();
         Result<ImageLibrary.TemplateContainer> imageToFind = imageLibrary.findImage(Path.of(imageLocation));
 
         if (imageToFind.isFailure()) return new FailedResult<>(imageToFind.getInfo());
 
-        MonitorData monitorData = new MonitorData(matchScore, imageToFind.getData(), duration);
+        MonitorData monitorData = new MonitorData(matchScore, imageToFind.getData());
         return new SuccessfulResult<>(Optional.of(monitorData));
     }
 
@@ -243,9 +241,9 @@ public class CvMonitor {
 
         Mat screenshot = imageToMat(image);
         screenshot.convertTo(screenshot, CvType.CV_8U);
-        int result_cols = screenshot.cols() - template.cols() + 1;
-        int result_rows = screenshot.rows() - template.rows() + 1;
-        Mat result = new Mat(result_rows, result_cols, CvType.CV_8U);
+        int resultCols = screenshot.cols() - template.cols() + 1;
+        int resultRows = screenshot.rows() - template.rows() + 1;
+        Mat result = new Mat(resultRows, resultCols, CvType.CV_8U);
         int algorithm = Imgproc.TM_SQDIFF_NORMED;
         Imgproc.matchTemplate(screenshot, template, result, algorithm, mask);
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);

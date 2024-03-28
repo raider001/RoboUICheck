@@ -16,7 +16,6 @@ public class Main extends AnnotationLibrary {
 
     public Main() {
         super("com/kalynx/uitestframework/keywords/*.class");
-
     }
 
     private static RemoteServer loadArgs(String... args) {
