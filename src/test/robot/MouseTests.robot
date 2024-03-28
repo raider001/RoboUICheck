@@ -38,3 +38,12 @@ Test Click Location
     Click Location  LEFT  ${${dimensions}[x]+50}  ${${dimensions}[y]+50}
     Verify Image Exists On Window    labelconfirmation.png    Test Form
     [Teardown]  Click  LEFT
+
+Test Press And Release
+    Move Mouse To Image    PAndRTest.png
+    Press Mouse Button  Left
+    Verify Image Exists On Window  pressed.png  Test Form
+    Release Mouse Button  Left
+    Verify Image Exists On Window  released.png  Test Form
+    [Teardown]  Click Image On Window  LEFT  test1.png  Test Form
+

@@ -38,9 +38,21 @@ public class TestForm {
             }
         });
 
+
+        JButton pressAndRelease = new JButton();
+        pressAndRelease.setText("PAndRTest");
+        pressAndRelease.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                label.setText("Pressed");
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                label.setText("Released");
+            }
+        });
         panel.add(graphicsPanel);
         panel.add(label);
         panel.add(clickCounter);
+        panel.add(pressAndRelease);
         jDialog.setTitle("Test Form");
         jDialog.setContentPane(panel);
         jDialog.setVisible(true);
