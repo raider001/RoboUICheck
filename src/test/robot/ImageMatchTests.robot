@@ -11,7 +11,7 @@ Suite Setup   Run Keywords  Add Image Location  ${CURDIR}/  AND
 *** Test Cases ***
 Test Verify Image Exists
    [Documentation]  Tests that the basic verify Image Exist keyword functions as expected.
-   Verify Image Exists  test1.png
+   Verify Image Exists  testClick.png
 
 Verify Image Match Fails Properly
     [Documentation]  Tests that the match score resets back to original match score after a test case
@@ -33,12 +33,12 @@ Test Image Mask Verification
 
 Test Image Verification On Display
     [Documentation]    Basic test to demosntrate display ID referencing and Display Image Verification
-    Verify Image Does Not Exist On Display    test1.png   SECONDARY
-    Verify Image Exists On Display    test1.png      PRIMARY
+    Verify Image Does Not Exist On Display    testClick.png   SECONDARY
+    Verify Image Exists On Display    testClick.png      PRIMARY
 
 Test Image Verification On Form
     [Documentation]  Test form verification
-    Verify Image Exists On Window    test1.png    Test Form
+    Verify Image Exists On Window    testClick.png    Test Form
     Verify Image Does Not Exist On Window    fail.png    Test Form
 
 Test Image Bounds Verification
@@ -50,7 +50,7 @@ Test Image Bounds Verification
     Dictionary Should Contain Key  ${bounds}  height
     Get Image Bounds    test1.png  window=Test Form
     TRY
-        Get Image Bounds    test1.png  display=SECONDARY
+        Get Image Bounds    testClick.png  display=SECONDARY
         Fail  Should not have gotten bounds as image does not exist on secondary display.
     EXCEPT
         Log  Test Passed

@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.geom.Ellipse2D;
 
 public class TestForm {
@@ -16,7 +14,7 @@ public class TestForm {
         JPanel panel = new JPanel();
         JTextField textField = new JTextField();
         textField.setColumns(25);
-        JButton testButton = new JButton("Test");
+        JButton testButton = new JButton("Test Click");
         testButton.addActionListener((e) -> {
             if(label.getText().isEmpty()) {
                 label.setText("Test Button Clicked");

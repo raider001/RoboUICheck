@@ -44,8 +44,8 @@ Test Get All Windows
 Test Bring Window To Front
     [Documentation]  Tests that a window can be brought to the front
     Bring Window To Front  Blocking Form
-    Verify Image Does Not Exist  test1.png
+    Verify Image Does Not Exist  testClick.png
     Bring Window To Front  Test Form
-    Verify Image Exists  test1.png
+    Verify Image Exists  testClick.png
     [Teardown]  Bring Window To Front  Test Form
 

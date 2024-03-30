@@ -4,7 +4,6 @@ import com.kalynx.lwdi.AlreadyAddedException;
 import com.kalynx.uitestframework.DI;
 import com.kalynx.uitestframework.MouseEvent.MouseButtonDown;
 import com.kalynx.uitestframework.controller.MouseController;
-import com.kalynx.uitestframework.data.Result;
 import com.kalynx.uitestframework.data.ScreenshotData;
 import com.kalynx.uitestframework.data.SuccessfulResult;
 import com.kalynx.uitestframework.screen.CvMonitor;
@@ -13,10 +12,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.opencv.core.Mat;
 
 import java.awt.Rectangle;
-import java.awt.event.InputEvent;
 
 class MouseKeywordTests {
     private static MouseKeywords sut;
@@ -57,7 +54,7 @@ class MouseKeywordTests {
 
     @Test
     void mouseMoveToImage_verification() throws Exception {
-        Result<ScreenshotData> data = Mockito.mock(SuccessfulResult.class);
+        SuccessfulResult<ScreenshotData> data = Mockito.mock(SuccessfulResult.class);
         Mockito.when(data.getData()).thenReturn(new ScreenshotData(100L, null, new Rectangle(100,100,50,100)));
         Mockito.when(cvMonitor.monitorForImage("image")).thenReturn(data);
         sut.moveMouseToImage("image");
@@ -66,43 +63,43 @@ class MouseKeywordTests {
 
     @Test
     void click_extension_verification() throws Exception {
-        sut.click("LEFT", 1);
+        sut.click("LEFT", 1, null, null, null, null, null);
         Mockito.verify(mouseController).mouseClick(MouseButtonDown.LEFT, 1);
 
-        sut.click("RIGHT", 3);
+        sut.click("RIGHT", 3, null, null, null, null, null);
         Mockito.verify(mouseController).mouseClick(MouseButtonDown.RIGHT, 3);
 
-        sut.click("MIDDLE", 5);
+        sut.click("MIDDLE", 5, null, null, null, null, null);
         Mockito.verify(mouseController).mouseClick(MouseButtonDown.MIDDLE, 5);
 
-        Exception e = Assertions.assertThrows(Exception.class, () -> sut.click("INVALID", 1));
+        Exception e = Assertions.assertThrows(Exception.class, () -> sut.click("INVALID", 1, null, null, null, null, null));
         Assertions.assertEquals("Invalid Click option INVALID given.", e.getMessage());
     }
 
     @Test
     void click_verification() throws Exception {
-        sut.click("LEFT");
+        sut.click("LEFT", 1, null, null, null, null, null);
         Mockito.verify(mouseController).mouseClick(MouseButtonDown.LEFT, 1);
 
-        sut.click("RIGHT");
+        sut.click("RIGHT",1, null, null, null, null, null);
         Mockito.verify(mouseController).mouseClick(MouseButtonDown.LEFT, 1);
 
-        sut.click("MIDDLE");
+        sut.click("MIDDLE",1, null, null, null, null, null);
         Mockito.verify(mouseController).mouseClick(MouseButtonDown.LEFT, 1);
 
-        Exception e = Assertions.assertThrows(Exception.class, () -> sut.click("INVALID", 1));
+        Exception e = Assertions.assertThrows(Exception.class, () -> sut.click("INVALID", 1, null, null, null, null, null));
         Assertions.assertEquals("Invalid Click option INVALID given.", e.getMessage());
     }
 
     @Test
     void clickLocation_verification() throws Exception {
 
-        Exception e = Assertions.assertThrows(Exception.class, () -> sut.clickLocation("LEFT", 1, 2,-1));
-        Assertions.assertEquals("Must click at least once.", e.getMessage());
+        Exception e = Assertions.assertThrows(Exception.class, () -> sut.click("LEFT", 0, 2,-1, null, null, null));
+        Assertions.assertEquals("Mouse click count must be greater than 0", e.getMessage());
 
-        sut.clickLocation("LEFT", 3, 4,2);
-        Mockito.verify(mouseController).moveMouseTo(3, 4);
-        Mockito.verify(mouseController).mouseClick(MouseButtonDown.LEFT, 2);
+        sut.click("LEFT", 3, 4,2, null, null, null);
+        Mockito.verify(mouseController).moveMouseTo(4, 2);
+        Mockito.verify(mouseController).mouseClick(MouseButtonDown.LEFT, 3);
     }
 
     @Test

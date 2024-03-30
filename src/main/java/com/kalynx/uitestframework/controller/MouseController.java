@@ -3,15 +3,12 @@ package com.kalynx.uitestframework.controller;
 import com.kalynx.lwdi.DI;
 import com.kalynx.uitestframework.MouseEvent.MouseButtonDown;
 import com.kalynx.uitestframework.data.DisplayAttributes;
+import com.kalynx.uitestframework.exceptions.MouseException;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 
 public class MouseController {
 
@@ -19,7 +16,7 @@ public class MouseController {
     private final MouseInfoControl mouseInfo;
     private final DisplayManager displayManager;
     private final Consumer<Point> performMove;
-    private long mouseMoveSpeed = 700;
+    private long distancePerSecond = 2000;
 
     @DI
     public MouseController(RobotControl robot, MouseInfoControl mouseInfo, DisplayManager displayManager) {
@@ -28,11 +25,7 @@ public class MouseController {
     }
 
     public MouseController(RobotControl robot, MouseInfoControl mouseInfo, DisplayManager displayManager, Consumer<Point> performMove) {
-        if (performMove != null) {
-            this.performMove = performMove;
-        } else {
-            this.performMove = this::mouseMove;
-        }
+        this.performMove = Objects.requireNonNullElseGet(performMove, () -> this::mouseMove);
         this.robot = Objects.requireNonNull(robot);
         this.mouseInfo = Objects.requireNonNull(mouseInfo);
         this.displayManager = displayManager;
@@ -50,24 +43,24 @@ public class MouseController {
         performMove.accept(new Point(actualX, actualY));
     }
 
-    public void moveMouseTo(String display, int x, int y) throws Exception {
+    public void moveMouseTo(String display, int x, int y) throws MouseException {
         DisplayAttributes r = displayManager.getDisplay(display);
         if (x < 0 || x > r.width())
-            throw new Exception("Mouse location x: " + x + " must be equal to or between " + 0 + "-" + r.width());
+            throw new MouseException("Mouse location x: " + x + " must be equal to or between " + 0 + "-" + r.width());
         if (y < 0 || y > r.height())
-            throw new Exception("Mouse location y: " + y + " must be equal to or between " + 0 + "-" + r.height());
+            throw new MouseException("Mouse location y: " + y + " must be equal to or between " + 0 + "-" + r.height());
         performMove.accept(new Point(x + r.x(), y + r.y()));
     }
 
-    public void moveMouseTo(int x, int y) throws Exception {
+    public void moveMouseTo(int x, int y) throws MouseException {
         Point mousePos = mouseInfo.getMousePosition();
         DisplayAttributes currDisplay = getCurrentDisplay(mousePos);
 
         if (currDisplay == null)
-            throw new Exception("Can't find mouse on screen! Please report this issue and provide your configuration setup to help stop this from happening again!");
+            throw new MouseException("Can't find mouse on screen! Please report this issue and provide your configuration setup to help stop this from happening again!");
 
         if (x < 0 || x > currDisplay.width() || y < 0 || y > currDisplay.height())
-            throw new Exception("x %s and y %s out of bounds for current display width %s and height %s".formatted(x, y, currDisplay.width(), currDisplay.height()));
+            throw new MouseException("x %s and y %s out of bounds for current display width %s and height %s".formatted(x, y, currDisplay.width(), currDisplay.height()));
         performMove.accept(new Point(x + currDisplay.x(), y + currDisplay.y()));
     }
 
@@ -94,11 +87,11 @@ public class MouseController {
 
     public void setMouseMoveSpeed(long mouseMoveSpeed) {
         if (mouseMoveSpeed <= 0) throw new IllegalArgumentException("Mouse Move Speed must be greater than 0");
-        this.mouseMoveSpeed = mouseMoveSpeed;
+        this.distancePerSecond = mouseMoveSpeed;
     }
 
     public long getMouseMoveSpeed() {
-        return mouseMoveSpeed;
+        return distancePerSecond;
     }
 
     public DisplayAttributes getCurrentDisplay(Point p) {
@@ -109,33 +102,21 @@ public class MouseController {
         return currDisplay.orElse(null);
     }
 
-
     private void mouseMove(Point destination) {
-        long lastTime = System.currentTimeMillis();
         Point current = mouseInfo.getMousePosition();
-        double startDistance = current.distance(destination);
-        double distancePerMs = startDistance / mouseMoveSpeed;
-        while (!destination.equals(current)) {
-            current = mouseInfo.getMousePosition();
-            long timeDifference = System.currentTimeMillis() - lastTime;
-            lastTime = System.currentTimeMillis();
-            double calcDistanceOnTime = distancePerMs * timeDifference;
-            double angle = Math.toRadians(Math.atan2(destination.getY() - current.getY(), destination.getX() - current.getX()) * (180 / Math.PI));
-
-            double distanceToFinalLocation = current.distance(destination);
-            if (distanceToFinalLocation > calcDistanceOnTime) {
-                long xStep = Math.round(calcDistanceOnTime * cos(angle));
-                long yStep = Math.round(calcDistanceOnTime * sin(angle));
-                robot.mouseMove((int) (current.getX() + xStep), (int) (current.getY() + yStep));
-            } else {
+        double distancePerMs = distancePerSecond / 1000.0;
+        long lastTime = System.currentTimeMillis();
+        while(!current.equals(destination)) {
+            long currentTime = System.currentTimeMillis();
+            double distanceToTravel = distancePerMs * (currentTime - lastTime);
+            double angle = Math.atan2((double)destination.y - current.y, (double)destination.x - current.x);
+            if(distanceToTravel >= current.distance(destination)) {
                 robot.mouseMove(destination.x, destination.y);
                 break;
             }
-            try {
-                TimeUnit.MILLISECONDS.sleep(10);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            int x = (int) (current.x + distanceToTravel * Math.cos(angle));
+            int y = (int) (current.y + distanceToTravel * Math.sin(angle));
+            robot.mouseMove(x, y);
         }
     }
 }
