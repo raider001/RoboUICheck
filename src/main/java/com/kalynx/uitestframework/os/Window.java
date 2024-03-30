@@ -1,5 +1,7 @@
 package com.kalynx.uitestframework.os;
 
+import com.kalynx.uitestframework.exceptions.WindowException;
+
 import java.awt.*;
 import java.util.List;
 
@@ -8,7 +10,7 @@ public interface Window {
     /**
      * Returns all window names.
      *
-     * @return
+     * @return Name of All windows
      */
     List<String> getAllWindows();
 
@@ -18,7 +20,7 @@ public interface Window {
      * @param windowName
      * @return Window dimensions, or Null if window not found.
      */
-    Rectangle getWindowDimensions(String windowName);
+    Rectangle getWindowDimensions(String windowName) throws WindowException;
 
     /**
      * Sets the window position relative to its current position

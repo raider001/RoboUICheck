@@ -3,6 +3,7 @@ package com.kalynx.uitestframework.controller;
 import com.kalynx.lwdi.DI;
 import com.kalynx.uitestframework.data.DisplayAttributes;
 import com.kalynx.uitestframework.data.RelativeEnum;
+import com.kalynx.uitestframework.exceptions.DisplayNotFoundException;
 
 import java.awt.*;
 import java.util.*;
@@ -119,8 +120,10 @@ public class DisplayManager {
         });
     }
 
-    public DisplayAttributes getDisplay(String reference) {
-        return displayNameToDimensionMap.get(reference);
+    public DisplayAttributes getDisplay(String reference) throws DisplayNotFoundException {
+        DisplayAttributes attr = displayNameToDimensionMap.get(reference);
+        if(attr == null) throw new DisplayNotFoundException(reference);
+        return attr;
     }
 
     public DisplayAttributes getDisplay(int reference) {
@@ -133,7 +136,7 @@ public class DisplayManager {
         return displayIdToDimensionMap.values().stream().toList();
     }
 
-    public void setDisplay(String display) {
+    public void setDisplay(String display) throws DisplayNotFoundException {
         DisplayAttributes attributes = getDisplay(display);
         if (attributes == null) throw new IllegalArgumentException("Display " + display + " does not exist");
         selectedDisplay = attributes;
@@ -164,33 +167,30 @@ public class DisplayManager {
         return new Relative(referenceName);
     }
 
-    private void determineDisplayClosestToLeft(String referenced, DisplayAttributes referenceAttr, String displayName) {
+    private void determineDisplayClosestToLeft(DisplayAttributes referenceAttr, String displayName) {
         // calculation
         // must be within or equal the reference monitor vertical range (x, x + height)
         // must be the closest to the left of the reference monitor without it being the same 'x' position
         // where more than one monitor is to the left, use the closest to the reference monitor.
         displayIdToDimensionMap.values().stream()
-                .filter(dispAttr -> {
-                            return dispAttr.displayId() != referenceAttr.displayId()                                         // Is not the same display
+                .filter(dispAttr ->
+                            dispAttr.displayId() != referenceAttr.displayId()                                         // Is not the same display
                                     && dispAttr.y() >= referenceAttr.y() && dispAttr.y() <= referenceAttr.y() + referenceAttr.height()    // y is within the horizontal bounds
-                                    && dispAttr.x() < referenceAttr.x();                                                             // x is to the left of the reference monitor
-                        }
+                                    && dispAttr.x() < referenceAttr.x()
                 ).max(Comparator.comparingInt(DisplayAttributes::x))                                                          // find the closest to the left
                 .ifPresent(res -> displayNameToDimensionMap.put(displayName, res));
 
     }
 
-    private void determineDisplayClosestToRight(String referenced, DisplayAttributes referenceAttr, String displayName) {
+    private void determineDisplayClosestToRight(DisplayAttributes referenceAttr, String displayName) {
         // calculation
         // must be within or equal the reference monitor vertical range (x, x + height)
         // must be the closest to the left of the reference monitor without it being the same 'x' position
         // where more than one monitor is to the left, use the closest to the reference monitor.
         displayIdToDimensionMap.values().stream()
-                .filter(dispAttr -> {
-                            return dispAttr.displayId() != referenceAttr.displayId()                                         // Is not the same display
+                .filter(dispAttr -> dispAttr.displayId() != referenceAttr.displayId()                                         // Is not the same display
                                     && dispAttr.y() >= referenceAttr.y() && dispAttr.y() <= referenceAttr.y() + referenceAttr.height()    // y is within the horizontal bounds
-                                    && dispAttr.x() > referenceAttr.x();                                                              // x is to the left of the reference monitor
-                        }
+                                    && dispAttr.x() > referenceAttr.x()
                 ).min(Comparator.comparingInt(DisplayAttributes::x))                                                          // find the closest to the left
                 .ifPresent(res -> displayNameToDimensionMap.put(displayName, res));
 
@@ -200,45 +200,39 @@ public class DisplayManager {
         return selectedDisplay;
     }
 
-    private void determineDisplayClosestToTop(String referenced, DisplayAttributes referenceAttr, String displayName) {
+    private void determineDisplayClosestToTop(DisplayAttributes referenceAttr, String displayName) {
         displayIdToDimensionMap.values().stream()
-                .filter(dispAttr -> {
-                            return dispAttr.displayId() != referenceAttr.displayId()                                     // Is not the same display
+                .filter(dispAttr ->
+                            dispAttr.displayId() != referenceAttr.displayId()                                     // Is not the same display
                                     && dispAttr.x() >= referenceAttr.x() && dispAttr.x() <= referenceAttr.x() + referenceAttr.width() // x is within the reference vertical bounds
-                                    && dispAttr.y() < referenceAttr.y();
-                        }// y is above the reference monitor
-
+                                    && dispAttr.y() < referenceAttr.y()// y is above the reference monitor
                 ).max(Comparator.comparingInt(DisplayAttributes::y))
                 .ifPresent(res -> displayNameToDimensionMap.put(displayName, res));
     }
 
-    private void determineDisplayClosestToBottom(String referenced, DisplayAttributes referenceAttr, String displayName) {
+    private void determineDisplayClosestToBottom(DisplayAttributes referenceAttr, String displayName) {
         displayIdToDimensionMap.values().stream()
-                .filter(dispAttr -> {
-                            return dispAttr.displayId() != referenceAttr.displayId()                                     // Is not the same display
+                .filter(dispAttr ->
+                            dispAttr.displayId() != referenceAttr.displayId()                                     // Is not the same display
                                     && dispAttr.x() >= referenceAttr.x() && dispAttr.x() <= referenceAttr.x() + referenceAttr.width() // x is within the reference vertical bounds
-                                    && dispAttr.y() > referenceAttr.y();
-                        }// y is below the reference monitor
+                                    && dispAttr.y() > referenceAttr.y()
 
                 ).min(Comparator.comparingInt(DisplayAttributes::y))
                 .ifPresent(res -> displayNameToDimensionMap.put(displayName, res));
     }
 
-    private void determineLargerScreen(String referenced, DisplayAttributes referenceAttr, String displayName) {
+    private void determineLargerScreen(DisplayAttributes referenceAttr, String displayName) {
         displayIdToDimensionMap.values().stream()
-                .filter(dispAttr -> {
-                    return dispAttr.displayId() != referenceAttr.displayId()                                    // Is not the same display
-                            && dispAttr.width() * dispAttr.height() > referenceAttr.width() * referenceAttr.height();   // Is larger than the reference monitor
-                }).min(Comparator.comparingInt(distAttr -> distAttr.width() * distAttr.height()))
+                .filter(dispAttr -> dispAttr.displayId() != referenceAttr.displayId()                                    // Is not the same display
+                            && dispAttr.width() * dispAttr.height() > referenceAttr.width() * referenceAttr.height())
+                .min(Comparator.comparingInt(distAttr -> distAttr.width() * distAttr.height()))
                 .ifPresent(res -> displayNameToDimensionMap.put(displayName, res));
     }
 
-    private void determineSmallerScreen(String referenced, DisplayAttributes referenceAttr, String displayName) {
+    private void determineSmallerScreen(DisplayAttributes referenceAttr, String displayName) {
         displayIdToDimensionMap.values().stream()
-                .filter(dispAttr -> {
-                    return dispAttr.displayId() != referenceAttr.displayId()                                    // Is not the same display
-                            && dispAttr.width() * dispAttr.height() < referenceAttr.width() * referenceAttr.height();   // Is larger than the reference monitor
-                }).max(Comparator.comparingInt(distAttr -> distAttr.width() * distAttr.height()))
+                .filter(dispAttr -> dispAttr.displayId() != referenceAttr.displayId()                                    // Is not the same display
+                            && dispAttr.width() * dispAttr.height() < referenceAttr.width() * referenceAttr.height()).max(Comparator.comparingInt(distAttr -> distAttr.width() * distAttr.height()))
                 .ifPresent(res -> displayNameToDimensionMap.put(displayName, res));
     }
 
@@ -270,12 +264,12 @@ public class DisplayManager {
             DisplayAttributes referenceAttr = DisplayManager.this.displayNameToDimensionMap.get(referenceName);
             displayNameToDimensionMap.put(newReference, displayNameToDimensionMap.get(referenceName));
             switch (rel) {
-                case LEFT -> determineDisplayClosestToLeft(referenceName, referenceAttr, newReference);
-                case RIGHT -> determineDisplayClosestToRight(referenceName, referenceAttr, newReference);
-                case ABOVE -> determineDisplayClosestToTop(referenceName, referenceAttr, newReference);
-                case BELOW -> determineDisplayClosestToBottom(referenceName, referenceAttr, newReference);
-                case SMALLER_THAN -> determineSmallerScreen(referenceName, referenceAttr, newReference);
-                case LARGER_THAN -> determineLargerScreen(referenceName, referenceAttr, newReference);
+                case LEFT -> determineDisplayClosestToLeft(referenceAttr, newReference);
+                case RIGHT -> determineDisplayClosestToRight(referenceAttr, newReference);
+                case ABOVE -> determineDisplayClosestToTop(referenceAttr, newReference);
+                case BELOW -> determineDisplayClosestToBottom(referenceAttr, newReference);
+                case SMALLER_THAN -> determineSmallerScreen(referenceAttr, newReference);
+                case LARGER_THAN -> determineLargerScreen(referenceAttr, newReference);
             }
         }
     }

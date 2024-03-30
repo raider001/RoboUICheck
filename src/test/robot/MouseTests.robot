@@ -9,13 +9,13 @@ Suite Setup   Run Keywords  Add Image Location  ${CURDIR}/  AND
 
 *** Test Cases ***
 Test Move Mouse To Image
-   Move Mouse To Image  testClick.png
+   Move Mouse To  image=testClick.png
 
 Test Move Mouse Between Displays
    Move Mouse    100    0
-   Move Mouse To Display  SECONDARY  100  100
-   Move Mouse To  400  400
-   Move Mouse To Display  PRIMARY  100  100
+   Move Mouse To  display=SECONDARY  x=100  y=100
+   Move Mouse To  x=400  y=400
+   Move Mouse To  display=PRIMARY  x=100  y=100
 
 Test Click Image
    Click  image=testClick.png
@@ -28,7 +28,7 @@ Test Click Image On Window
    [Teardown]  Click  image=testClick.png  window=Test Form
 
 Test Click X Times
-    Move Mouse To Image  clickCounter.png
+    Move Mouse To  image=clickCounter.png
     Click  times=2
     Verify Image Exists On Window    two.png    Test Form
     [Teardown]  Click  image=testClick.png  window=Test Form
@@ -40,7 +40,7 @@ Test Click Location
     [Teardown]  Click  x=${${dimensions}[x]+50}  y=${${dimensions}[y]+50}
 
 Test Press And Release
-    Move Mouse To Image    PAndRTest.png
+    Move Mouse To    image=PAndRTest.png
     Press Mouse Button  Left
     Verify Image Exists On Window  pressed.png  Test Form
     Release Mouse Button  Left
@@ -48,7 +48,7 @@ Test Press And Release
     [Teardown]  Click  image=testClick.png  window=Test Form
 
 Test Wheel Up And Down
-    Move Mouse To Image    PAndRTest.png
+    Move Mouse To    image=PAndRTest.png
     Mouse Scroll  1
     Verify Image Exists On Window  mousedown.png  Test Form
     Mouse Scroll  -1

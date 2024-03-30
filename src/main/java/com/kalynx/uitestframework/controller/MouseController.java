@@ -3,6 +3,7 @@ package com.kalynx.uitestframework.controller;
 import com.kalynx.lwdi.DI;
 import com.kalynx.uitestframework.MouseEvent.MouseButtonDown;
 import com.kalynx.uitestframework.data.DisplayAttributes;
+import com.kalynx.uitestframework.exceptions.DisplayNotFoundException;
 import com.kalynx.uitestframework.exceptions.MouseException;
 
 import java.awt.Point;
@@ -43,7 +44,7 @@ public class MouseController {
         performMove.accept(new Point(actualX, actualY));
     }
 
-    public void moveMouseTo(String display, int x, int y) throws MouseException {
+    public void moveMouseTo(String display, int x, int y) throws MouseException, DisplayNotFoundException {
         DisplayAttributes r = displayManager.getDisplay(display);
         if (x < 0 || x > r.width())
             throw new MouseException("Mouse location x: " + x + " must be equal to or between " + 0 + "-" + r.width());
@@ -56,8 +57,7 @@ public class MouseController {
         Point mousePos = mouseInfo.getMousePosition();
         DisplayAttributes currDisplay = getCurrentDisplay(mousePos);
 
-        if (currDisplay == null)
-            throw new MouseException("Can't find mouse on screen! Please report this issue and provide your configuration setup to help stop this from happening again!");
+        if (currDisplay == null) throw new MouseException("Can't find mouse on screen! Please report this issue and provide your configuration setup to help stop this from happening again!");
 
         if (x < 0 || x > currDisplay.width() || y < 0 || y > currDisplay.height())
             throw new MouseException("x %s and y %s out of bounds for current display width %s and height %s".formatted(x, y, currDisplay.width(), currDisplay.height()));
@@ -85,8 +85,8 @@ public class MouseController {
         robot.mouseWheel(scrollAmount);
     }
 
-    public void setMouseMoveSpeed(long mouseMoveSpeed) {
-        if (mouseMoveSpeed <= 0) throw new IllegalArgumentException("Mouse Move Speed must be greater than 0");
+    public void setMouseMoveSpeed(long mouseMoveSpeed) throws MouseException {
+        if (mouseMoveSpeed <= 0) throw new MouseException("Mouse Move Speed must be greater than 0");
         this.distancePerSecond = mouseMoveSpeed;
     }
 

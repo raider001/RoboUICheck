@@ -1,25 +1,27 @@
 package com.kalynx.uitestframework.controller;
 
+import com.kalynx.uitestframework.exceptions.UnsupportedOS;
+import com.kalynx.uitestframework.exceptions.WindowException;
 import com.kalynx.uitestframework.os.Window;
 import com.kalynx.uitestframework.os.linux.LinuxWindowApi;
 import com.kalynx.uitestframework.os.windows.WindowsWindowApi;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.List;
 
 public class WindowController implements Window {
 
     private final Window window;
 
-    public WindowController(DisplayManager displayManager) {
-        String OS = System.getProperty("os.name").toLowerCase();
+    public WindowController(DisplayManager displayManager) throws UnsupportedOS {
+        String os = System.getProperty("os.name").toLowerCase();
 
-        if (OS.contains("win")) {
+        if (os.contains("win")) {
             window = new WindowsWindowApi(displayManager);
-        } else if (OS.contains("nix") || OS.contains("nux") || OS.contains("aix")) {
+        } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
             window = new LinuxWindowApi();
         } else {
-            throw new RuntimeException("Unsupported OS");
+            throw new UnsupportedOS();
         }
     }
 
@@ -34,8 +36,10 @@ public class WindowController implements Window {
     }
 
     @Override
-    public Rectangle getWindowDimensions(String windowName) {
-        return window.getWindowDimensions(windowName);
+    public Rectangle getWindowDimensions(String windowName) throws WindowException {
+        Rectangle r = window.getWindowDimensions(windowName);
+        if(r == null) throw new WindowException(windowName + " does Not Exist");
+        return r;
     }
 
     /**

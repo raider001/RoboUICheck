@@ -3,6 +3,7 @@ package com.kalynx.uitestframework.controller;
 
 import com.kalynx.uitestframework.data.DisplayAttributes;
 import com.kalynx.uitestframework.data.RelativeEnum;
+import com.kalynx.uitestframework.exceptions.DisplayNotFoundException;
 import com.kalynx.uitestframework.testdata.TestData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 
-public class DisplayManagerTests {
+class DisplayManagerTests {
     private static DisplayManager sut;
 
     @BeforeEach
@@ -20,7 +21,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void referenced_topScreen_givesTopScreen() {
+    void referenced_topScreen_givesTopScreen() throws DisplayNotFoundException {
         sut.setPrimaryReference("PRIMARY_SCREEN");
         sut.setReference("TOP_SCREEN")
                 .relative(RelativeEnum.ABOVE)
@@ -32,7 +33,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void setDisplay_correctDisplayReference() {
+    void setDisplay_correctDisplayReference() throws DisplayNotFoundException {
         sut.setPrimaryReference("PRIMARY_SCREEN");
         sut.setReference("TOP_SCREEN")
                 .relative(RelativeEnum.ABOVE)
@@ -46,7 +47,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void referenced_bottomScreen_givesBottomScreen() {
+    void referenced_bottomScreen_givesBottomScreen() throws DisplayNotFoundException {
         sut.setPrimaryReference("PRIMARY_SCREEN");
         sut.setReference("BOTTOM_SCREEN")
                 .relative(RelativeEnum.BELOW)
@@ -58,7 +59,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void referenced_leftScreen_givesLeftScreen() {
+    void referenced_leftScreen_givesLeftScreen() throws DisplayNotFoundException {
         sut.setPrimaryReference("PRIMARY_SCREEN");
         sut.setReference("LEFT_SCREEN")
                 .relative(RelativeEnum.LEFT)
@@ -70,7 +71,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void referenced_rightScreen_givesRightScreen() {
+    void referenced_rightScreen_givesRightScreen() throws DisplayNotFoundException {
         sut.setPrimaryReference("PRIMARY_SCREEN");
         sut.setReference("RIGHT_SCREEN")
                 .relative(RelativeEnum.RIGHT)
@@ -82,7 +83,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void referenced_largerScreen_givesLargerScreen() {
+    void referenced_largerScreen_givesLargerScreen() throws DisplayNotFoundException {
         sut.setPrimaryReference("PRIMARY_SCREEN");
         sut.setReference("LARGER_SCREEN")
                 .relative(RelativeEnum.LARGER_THAN)
@@ -94,7 +95,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void referenced_largerScreen_givesSmallerScreen() {
+    void referenced_largerScreen_givesSmallerScreen() throws DisplayNotFoundException {
         sut.setPrimaryReference("PRIMARY_SCREEN");
         sut.setReference("SMALLER_SCREEN")
                 .relative(RelativeEnum.SMALLER_THAN)
@@ -106,7 +107,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void setCaptureRegion_setsCapturedRegionForSelectedDisplay() {
+    void setCaptureRegion_setsCapturedRegionForSelectedDisplay() {
         // Test 1
         Rectangle r = new Rectangle(1,1,2,2);
         sut.setDisplay(0);
@@ -122,7 +123,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void setCaptureRegion_xIsLessThan0_throwAssertionError() {
+    void setCaptureRegion_xIsLessThan0_throwAssertionError() {
         AssertionError e = Assertions.assertThrows(AssertionError.class, () -> {
             Rectangle r = new Rectangle(-1,1,2,2);
             sut.setCaptureRegion(r);
@@ -131,7 +132,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void setCaptureRegion_yIsLessThan0_throwAssertionError() {
+    void setCaptureRegion_yIsLessThan0_throwAssertionError() {
         AssertionError e = Assertions.assertThrows(AssertionError.class, () ->
         {
             Rectangle r = new Rectangle(0,-1,2,2);
@@ -141,7 +142,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void setCaptureRegion_xIsGreaterThanScreenWidth_throwAssertionError() {
+    void setCaptureRegion_xIsGreaterThanScreenWidth_throwAssertionError() {
         AssertionError e = Assertions.assertThrows(AssertionError.class, () -> {
             Rectangle r = new Rectangle(1921,1,2,2);
             sut.setCaptureRegion(r);
@@ -150,7 +151,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void setCaptureRegion_widthIsLessThanOrEqualTo0_throwAssertionError() {
+    void setCaptureRegion_widthIsLessThanOrEqualTo0_throwAssertionError() {
         AssertionError e = Assertions.assertThrows(AssertionError.class, () -> {
             Rectangle r = new Rectangle(0,1,0,2);
             sut.setCaptureRegion(r);
@@ -159,7 +160,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void setCaptureRegion_heightIsLessThanOrEqualTo0_throwAssertionError() {
+    void setCaptureRegion_heightIsLessThanOrEqualTo0_throwAssertionError() {
         AssertionError e = Assertions.assertThrows(AssertionError.class, () -> {
             Rectangle r = new Rectangle(0,1,2,0);
             sut.setCaptureRegion(r);
@@ -168,7 +169,7 @@ public class DisplayManagerTests {
     }
 
     @Test
-    public void setCaptureRegion_heightPlusYIsGreaterThanScreenWidth_throwAssertionError() {
+    void setCaptureRegion_heightPlusYIsGreaterThanScreenWidth_throwAssertionError() {
         AssertionError e = Assertions.assertThrows(AssertionError.class, () -> {
             Rectangle r = new Rectangle(0,1,2,1080);
             sut.setCaptureRegion(r);

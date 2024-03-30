@@ -46,37 +46,43 @@ public class MouseKeywords {
     }
 
     @RobotKeyword("""
-            Move Mouse To Display
-                        
-            | variable  | default | unit         |
-            | display   |   N/A   | monitorId    |
-            | x         |   N/A   | pixel        |
-            | y         |   N/A   | pixel        |
-                        
-            If the mouse x and y is outside of the display bounds, an exception will be fired.
-            """)
-    @ArgumentNames({"display", "x", "y"})
-    public void moveMouseToDisplay(String display, int x, int y) throws MouseException {
-        MOUSE_CONTROLLER.moveMouseTo(display, x, y);
-    }
-
-    @RobotKeyword("""
             Move Mouse To
                         
             If the mouse x and y is outside of the monitor bounds it is on, an exception will be fired.
             If wanting to change the mouse to another display, use the 'Move Mouse To Display' keyword.
             """)
-    @ArgumentNames({"x", "y"})
-    public void moveMouseTo(int x, int y) throws MouseException {
-        MOUSE_CONTROLLER.moveMouseTo(x, y);
+    @ArgumentNames({"x=", "y=", "image=", "display=", "window="})
+    public void moveMouseTo(Integer x, Integer y, String image, String display, String window) throws Exception {
+        performBasicValidation(1, display, window, image, x, y);
+        if(x != null) {
+            if(display != null) {
+                MOUSE_CONTROLLER.moveMouseTo(display, x, y);
+            } else if (window != null) {
+                 Rectangle r = WINDOW_CONTROLLER.getWindowDimensions(window);
+                 MOUSE_CONTROLLER.moveMouseTo(r.x + x, r.y + y);
+            } else {
+                MOUSE_CONTROLLER.moveMouseTo(x, y);
+            }
+        } else if (image != null) {
+            if(display != null) {
+                DisplayAttributes orig = DISPLAY_MANAGER.getSelectedDisplay();
+                DisplayAttributes temp = DISPLAY_MANAGER.getDisplay(display);
+                DISPLAY_MANAGER.setDisplay(temp.displayId());
+                Result<ScreenshotData> res = CV_MONITOR.monitorForImage(image);
+                DISPLAY_MANAGER.setDisplay(orig.displayId());
+                if (res.isFailure()) throw new MouseException(HTML + res.getInfo());
+            } else if(window != null) {
+                Rectangle r = WINDOW_CONTROLLER.getWindowDimensions(window);
+                DISPLAY_MANAGER.setCaptureRegion(r);
+                Result<ScreenshotData> res = CV_MONITOR.monitorForImage(image);
+                if (res.isFailure()) throw new MouseException(HTML + res.getInfo());
+            } else {
+                moveMouseToImage(image);
+            }
+        }
     }
 
-    @RobotKeyword("""
-            Move Mouse To Image
-            Moves the mouse to the center of the matched image on the screen.
-            """)
-    @ArgumentNames({"image"})
-    public void moveMouseToImage(String image) throws Exception {
+    private void moveMouseToImage(String image) throws Exception {
         Result<ScreenshotData> res = CV_MONITOR.monitorForImage(image);
         if (res.isFailure()) throw new MouseException(HTML + res.getInfo());
         LOGGER.info(res.getInfo());
@@ -251,7 +257,7 @@ public class MouseKeywords {
     // Mouse Movement Settings
     @RobotKeyword("Set Mouse Move Speed")
     @ArgumentNames({"speed"})
-    public void setMouseMoveSpeed(long speed) {
+    public void setMouseMoveSpeed(long speed) throws MouseException {
         MOUSE_CONTROLLER.setMouseMoveSpeed(speed);
     }
 }

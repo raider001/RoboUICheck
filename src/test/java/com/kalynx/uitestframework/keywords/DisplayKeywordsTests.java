@@ -3,6 +3,7 @@ package com.kalynx.uitestframework.keywords;
 import com.kalynx.lwdi.AlreadyAddedException;
 import com.kalynx.uitestframework.DI;
 import com.kalynx.uitestframework.controller.DisplayManager;
+import com.kalynx.uitestframework.exceptions.DisplayNotFoundException;
 import com.kalynx.uitestframework.testdata.TestData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,7 +24,7 @@ class DisplayKeywordsTests {
     }
 
     @Test
-    void setMonitoredDisplay_verification() {
+    void setMonitoredDisplay_verification() throws DisplayNotFoundException {
         sut.setDisplayById(3);
         sut.setPrimaryDisplayReference("PRIMARY");
         sut.setMonitoredDisplay("PRIMARY");
@@ -31,7 +32,7 @@ class DisplayKeywordsTests {
     }
 
     @Test
-    void setDisplayReference_verification() {
+    void setDisplayReference_verification() throws DisplayNotFoundException {
         sut.setDisplayById(3);
         sut.setPrimaryDisplayReference("PRIMARY");
         sut.setDisplayReference("PRIMARY","RIGHT", "LEFT_MONITOR");
@@ -82,7 +83,7 @@ class DisplayKeywordsTests {
     }
 
     @Test
-    void setMonitoredAreaForDisplay_verification() {
+    void setMonitoredAreaForDisplay_verification() throws DisplayNotFoundException {
         sut.setDisplayById(3);
         sut.setPrimaryDisplayReference("PRIMARY");
         sut.setDisplayReference("PRIMARY","RIGHT", "LEFT_MONITOR");
@@ -94,7 +95,7 @@ class DisplayKeywordsTests {
     }
 
     @Test
-    void resetMonitoredAreaForDisplay_verification() {
+    void resetMonitoredAreaForDisplay_verification() throws DisplayNotFoundException {
         sut.setDisplayById(3);
         sut.setPrimaryDisplayReference("PRIMARY");
         sut.setDisplayReference("PRIMARY","RIGHT", "LEFT_MONITOR");

@@ -4,16 +4,13 @@ import com.kalynx.lwdi.AlreadyAddedException;
 import com.kalynx.uitestframework.DI;
 import com.kalynx.uitestframework.MouseEvent.MouseButtonDown;
 import com.kalynx.uitestframework.controller.MouseController;
-import com.kalynx.uitestframework.data.ScreenshotData;
-import com.kalynx.uitestframework.data.SuccessfulResult;
+import com.kalynx.uitestframework.exceptions.MouseException;
 import com.kalynx.uitestframework.screen.CvMonitor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.awt.Rectangle;
 
 class MouseKeywordTests {
     private static MouseKeywords sut;
@@ -42,23 +39,14 @@ class MouseKeywordTests {
 
     @Test
     void mouseMoveToDisplay_verification() throws Exception {
-        sut.moveMouseToDisplay("display", 1, 2);
+        sut.moveMouseTo(1, 2, null, "display", null);
         Mockito.verify(mouseController).moveMouseTo("display", 1, 2);
     }
 
     @Test
     void mouseMoveTo_verification() throws Exception {
-        sut.moveMouseTo(1, 2);
+        sut.moveMouseTo(1, 2, null, null, null);
         Mockito.verify(mouseController).moveMouseTo(1, 2);
-    }
-
-    @Test
-    void mouseMoveToImage_verification() throws Exception {
-        SuccessfulResult<ScreenshotData> data = Mockito.mock(SuccessfulResult.class);
-        Mockito.when(data.getData()).thenReturn(new ScreenshotData(100L, null, new Rectangle(100,100,50,100)));
-        Mockito.when(cvMonitor.monitorForImage("image")).thenReturn(data);
-        sut.moveMouseToImage("image");
-        Mockito.verify(mouseController).moveMouseTo(125, 150);
     }
 
     @Test
@@ -133,7 +121,7 @@ class MouseKeywordTests {
     }
 
     @Test
-    void setMouseMoveSpeed_verification() {
+    void setMouseMoveSpeed_verification() throws MouseException {
         sut.setMouseMoveSpeed(100L);
         Mockito.verify(mouseController).setMouseMoveSpeed(100L);
     }

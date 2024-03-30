@@ -4,6 +4,7 @@ import com.kalynx.uitestframework.DI;
 import com.kalynx.uitestframework.controller.DisplayManager;
 import com.kalynx.uitestframework.data.DisplayAttributes;
 import com.kalynx.uitestframework.data.RelativeEnum;
+import com.kalynx.uitestframework.exceptions.DisplayNotFoundException;
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
@@ -95,7 +96,7 @@ public class DisplayKeywords {
     @RobotKeyword("""
             Set Monitored Area For Display
             """)
-    public void setMonitoredAreaForDisplay(String displayReference, int x, int y, int width, int height) {
+    public void setMonitoredAreaForDisplay(String displayReference, int x, int y, int width, int height) throws DisplayNotFoundException {
         DisplayAttributes attr = DISPLAY_MANAGER.getDisplay(displayReference);
         DISPLAY_MANAGER.setDisplayRegion(attr.displayId(),x,y,width,height);
     }
@@ -103,7 +104,7 @@ public class DisplayKeywords {
     @RobotKeyword("""
             ResetMonitoredAreaForDisplay
             """)
-    public void resetMonitoredAreaForDisplay(String displayReference) {
+    public void resetMonitoredAreaForDisplay(String displayReference) throws DisplayNotFoundException {
         DisplayAttributes attr = DISPLAY_MANAGER.getDisplay(displayReference);
         Rectangle displayRegion = new Rectangle(0, 0, attr.width(), attr.height());
         DISPLAY_MANAGER.setCaptureRegion(displayRegion);
@@ -119,7 +120,7 @@ public class DisplayKeywords {
             """
     )
     @ArgumentNames({"display"})
-    public void setMonitoredDisplay(String display) {
+    public void setMonitoredDisplay(String display) throws DisplayNotFoundException {
         DISPLAY_MANAGER.setDisplay(display);
     }
 
@@ -143,7 +144,7 @@ public class DisplayKeywords {
             Get Display Monitored Area
             """)
     @ArgumentNames({"displayName"})
-    public Map<String, Integer> getDisplayMonitoredArea(String displayName) {
+    public Map<String, Integer> getDisplayMonitoredArea(String displayName) throws DisplayNotFoundException {
         DisplayAttributes dispattr = DISPLAY_MANAGER.getDisplay(displayName);
         if(dispattr == null) throw new IllegalArgumentException("Display not found");
         Rectangle r = DISPLAY_MANAGER.getDisplayDisplayRegion(dispattr).displayRegion();

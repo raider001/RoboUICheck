@@ -43,12 +43,12 @@ Test Image Verification On Form
 
 Test Image Bounds Verification
     [Documentation]  Tests that the image bounds verification works as expected
-    &{bounds}    Get Image Bounds  test1.png
+    &{bounds}    Get Image Bounds  testClick.png
     Dictionary Should Contain Key  ${bounds}  x
     Dictionary Should Contain Key  ${bounds}  y
     Dictionary Should Contain Key  ${bounds}  width
     Dictionary Should Contain Key  ${bounds}  height
-    Get Image Bounds    test1.png  window=Test Form
+    Get Image Bounds    testClick.png  window=Test Form
     TRY
         Get Image Bounds    testClick.png  display=SECONDARY
         Fail  Should not have gotten bounds as image does not exist on secondary display.
