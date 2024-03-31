@@ -16,7 +16,12 @@ into the following categories.
 | Reset Monitored Area                |                                    |         |              | Resets the monitored area to the original display size            | ![ok.svg](assets/ok.svg)   | ![ok.svg](assets/ok.svg) |![cross.svg](assets/cross.svg) |
 | Set Monitored Area For Display      | referenceName, x, y, width, height |         |              | Sets the monitored area for a given display reference             | ![ok.svg](assets/ok.svg)   | ![ok.svg](assets/ok.svg) |![cross.svg](assets/cross.svg) |
 | Reset Monitored Area For Display    | referenceName                      |         |              | Resets the given monitored display area for the specified monitor | ![ok.svg](assets/ok.svg)   | ![ok.svg](assets/ok.svg) |![cross.svg](assets/cross.svg) |
-
+```
+Expected Keywords:    8
+Mini-Milestones:      24
+Milestones Completed: 16
+% Complete:           66.67%
+```
 ## Settings Keywords
 | Keyword                   | Attributes           | Default | Return Value | Description                                      | Implemented                    | Verified On Windows              | Verified on Linux                |
 | ------------------------- | -------------------- | ------- | ------------ | ------------------------------------------------ |--------------------------------|----------------------------------|----------------------------------|
@@ -25,13 +30,18 @@ into the following categories.
 | Get Image Paths           |                      |         | List[String] |                                                  | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   | 
 | Set Result Path           | path                 |         |              | The location for the image results/              | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
 | Set Match Percentage      | matchPercentage      |         |              | The percentage the image must match as a minimum | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
-| Add Image Location        | path                 |         |              | Adds a path to search for images.                | ![ok.svg](assets/ok.svg)       |  ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
+| Add Image Location        | path                 |         |              | Adds a path to search for images.                | ![ok.svg](assets/ok.svg)       |  ![ok.svg](assets/ok.svg)  | ![cross.svg](assets/cross.svg)   |
 | Set Command Delay Speed   | delayTime            |         |              | Delay Time after each command                    | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
 | Set Keystroke Speed       | timeBetweenKeystroke | 20ms    |              | Time between keystrokes                          | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
 | Set OCR Segmentation Mode | mode                 |         |              | Sets the OCR Segmentation Mode                   | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
 | Set OCR Language          | language             |         |              | Sets the language for OCR                        | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
 | Set OCR Engine            | engine               |         |              | Sets the OCR Engine                              | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)   |
-
+```
+Expected Keywords:    11
+Mini-Milestones:      33
+Milestones Completed: 8
+% Complete:           21.21%
+```
 ## Window Keywords
 | Keyword                   | Attributes                | Default | Return Value                 | Description                                  | Implemented                    | Verified On Windows            | Verified on Linux                   |
 | ------------------------- | ------------------------- | ------- |------------------------------| -------------------------------------------- |--------------------------------|--------------------------------|-------------------------------------|
@@ -41,7 +51,12 @@ into the following categories.
 | Send Window To Back       | windowName                |         | N/A                          | Sends the window behind all other windows.   | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)      |
 | Resize Window             | windowName, width, height |         |                              | Resizes the window to the given dimensions.  | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)      |
 | Move Window               | windowName, x, y          |         |                              | Moves the window to the given coordinates.   | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)      |
-
+```
+Expected Keywords:    6
+Mini-Milestones:      18
+Milestones Completed: 10
+% Complete:           55.55%
+```
 ## Image Match Keywords
 | Keyword                                | Attributes                                                           | Default | Return          | Description                                             | Implemented                    | Verified On Windows            | Verified on Linux               |
 |----------------------------------------|----------------------------------------------------------------------| ------- |-----------------| ------------------------------------------------------- |--------------------------------|--------------------------------|---------------------------------|
@@ -55,7 +70,12 @@ into the following categories.
 | Get Image Bounds On Display            | imageName, referenceName                                             |         | Dictionary      |                                                         |  ![ok.svg](assets/ok.svg) |  ![ok.svg](assets/ok.svg) | ![cross.svg](assets/cross.svg)  |
 | Get Image bounds On Window             | imageName, windowName                                                |         | Dictionary      |                                                         |  ![ok.svg](assets/ok.svg) |  ![ok.svg](assets/ok.svg) | ![cross.svg](assets/cross.svg)  |
 | Get Match Locations                    | imageName                                                            |         | List[Dictionary |                                                         | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)  |
-
+```
+Expected Keywords:    10
+Mini-Milestones:      30
+Milestones Completed: 18
+% Complete:           60%
+```
 ## Text Recognition
 | Keyword                       | Attributes             | Returns                                    | Description             | Implemented                      | Verified On Windows               | Verified on Linux                 |
 | ----------------------------- | ---------------------- | ------------------------------------------ | ----------------------- |----------------------------------|-----------------------------------|-----------------------------------|
@@ -74,26 +94,34 @@ into the following categories.
 | Get Text Bounds               | text                   | Dictionary                                 | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
 | Get Text Bounds On Window     | text, windowName       | Dictionary                                 | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
 | Get Text Bounds Matched Image | text, imageName        | Dictionary                                 | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+```
+Expected Keywords:    16
+Mini-Milestones:      48
+Milestones Completed: 0
+% Complete:           0%
+```
 
 ## Keyboard Controls
 | Keyword               | Attributes           | Default | Returns | Description | Implemented                    | Verified On Windows               | Verified on Linux                 |
 |-----------------------|----------------------| ------- | ------- | ----------- |--------------------------------|-----------------------------------|-----------------------------------|
-| Type                  | text                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Type                  | text                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)    | ![cross.svg](assets/cross.svg)    |
 | Copy Selected Text    |                      |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
 | Paste Selected Text   |                      |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
 | Get Selected Text     |                      |         | text    |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
 | Paste Text            | text                 |         |         |             | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Press Keys            | keys                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Hold Keys             | keys                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Release Keys          | keys                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-
+| Press Keys            | keys                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)   | ![cross.svg](assets/cross.svg)    |
+| Release Keys          | keys                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)   | ![cross.svg](assets/cross.svg)    |
+```
+Expected Keywords:    8
+Mini-Milestones:      24
+Milestones Completed: 4
+% Complete:           16%
+```
 
 ## Mouse Control
 | Keyword                            | Attributes                                                             | Default | Returns | Description | Implemented                             | Verified On Windows            | Verified on Linux                 |
 |------------------------------------|------------------------------------------------------------------------|---------|---------|-------------|-----------------------------------------|--------------------------------|-----------------------------------|
-| Move Mouse To                      | x, y                                                                   |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
-| Move Mouse To Display              | referenceName, x, y                                                    |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
-| Move Mouse To Image                | imageName                                                              |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
+| Move Mouse To                      | "x=", "y=", "image=", "display=", "window="                                                                  |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
 | Move Mouse                         | x,y                                                                    |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       | ![cross.svg](assets/cross.svg)    |
 | Press Mouse Button                 | button                                                                 |         |         |             | ![ok.svg](assets/ok.svg)                | ![ok.svg](assets/ok.svg)       |                                   |
 | Release Mouse Button               | button                                                                 |         |         |             | ![ok.svg](assets/ok.svg)                |  ![ok.svg](assets/ok.svg) | ![cross.svg](assets/cross.svg)    |
@@ -104,7 +132,16 @@ into the following categories.
 | Drag Image To Fixed                | sourceImage, x, y                                                      |         |         |             | ![cross.svg](assets/cross.svg)          | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
 | Drag Image From Display To Display | sourceImage, sourceDisplay,x1,y1, targetImage, targetDisplay, x2, y2   |         |         |             | ![cross.svg](assets/cross.svg)          | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    |
 ```
-Expected Keywords:    74
-Mini-Milestones:      222
-Milestones Completed: 78
-% completed:          35.13%
+Expected Keywords:    10
+Mini-Milestones:      30
+Milestones Completed: 12
+% Complete:           33%
+```
+
+## Total Statistics
+```
+Expected Keywords:    69
+Mini-Milestones:      207
+Milestones Completed: 68
+% Complete:           32.36%
+```

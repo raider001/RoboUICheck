@@ -7,9 +7,10 @@ import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
 public class TestForm {
+    private static int width = 585, height = 510;
     public static void main(String[] args) {
         JDialog jDialog = new JDialog();
-        jDialog.setSize(400,400);
+        jDialog.setSize(width,height);
         JLabel label = new JLabel();
         JPanel panel = new JPanel();
         JTextField textField = new JTextField();
@@ -21,6 +22,15 @@ public class TestForm {
             } else { label.setText("");}
         });
         JButton test2Button = new JButton("Test2");
+
+        JPanel textAreaPanel = new JPanel();
+        textAreaPanel.setBorder(BorderFactory.createTitledBorder("Text Area"));
+
+        JTextArea textArea = new JTextArea();
+        textArea.setColumns(50);
+        textArea.setRows(10);
+        textArea.setLineWrap(true);
+        textAreaPanel.add(textArea);
         panel.add(testButton);
         panel.add(textField);
         panel.add(test2Button);
@@ -50,9 +60,10 @@ public class TestForm {
             }
         });
         panel.add(graphicsPanel);
-        panel.add(label);
+        panel.add(textAreaPanel);
         panel.add(clickCounter);
         panel.add(pressAndRelease);
+        panel.add(label);
         jDialog.setTitle("Test Form");
         jDialog.addMouseWheelListener(e -> {
             int notches = e.getWheelRotation();
@@ -68,7 +79,7 @@ public class TestForm {
 
         JDialog blockingDialog  = new JDialog();
         blockingDialog.setTitle("Blocking Form");
-        blockingDialog.setSize(400,400);
+        blockingDialog.setSize(width,height);
         blockingDialog.setVisible(true);
     }
 

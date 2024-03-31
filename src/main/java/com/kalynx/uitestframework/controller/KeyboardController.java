@@ -19,8 +19,8 @@ public class KeyboardController {
     public void keyPress(KeyboardSpecialKeys... specialKeys) throws InterruptedException {
         for (KeyboardSpecialKeys specialKey : specialKeys) {
             robot.keyPress(specialKey.id);
-            TimeUnit.MILLISECONDS.sleep(TYPE_DELAY_MS);
         }
+        TimeUnit.MILLISECONDS.sleep(TYPE_DELAY_MS);
     }
 
     public void keyRelease(KeyboardSpecialKeys... specialKeys) throws InterruptedException {
@@ -28,8 +28,8 @@ public class KeyboardController {
         TimeUnit.MILLISECONDS.sleep(TYPE_DELAY_MS);
         for (KeyboardSpecialKeys specialKey : specialKeys) {
             robot.keyRelease(specialKey.id);
-            TimeUnit.MILLISECONDS.sleep(TYPE_DELAY_MS);
         }
+        TimeUnit.MILLISECONDS.sleep(TYPE_DELAY_MS);
     }
 
     public void setTypeDelay(Duration delay) {
@@ -53,8 +53,8 @@ public class KeyboardController {
     }
 
     private void pressKeySet(int[] keyset) {
-        for (int i = 0; i < keyset.length; i++) {
-            robot.keyPress(keyset[i]);
+        for (int j : keyset) {
+            robot.keyPress(j);
         }
     }
 

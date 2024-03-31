@@ -1,6 +1,7 @@
 package com.kalynx.uitestframework.controller;
 
 import com.kalynx.uitestframework.data.FailedResult;
+import com.kalynx.uitestframework.exceptions.SettingsException;
 
 import java.time.Duration;
 
@@ -13,10 +14,10 @@ public class Settings {
         return pollRate;
     }
 
-    public void setPollRate(Duration pollRate) throws Exception {
+    public void setPollRate(Duration pollRate) throws SettingsException {
         if (pollRate.isNegative() || pollRate.isZero()) new FailedResult<>("pollRate must be greater than 0.");
         if (pollRate.toMillis() < timeout.toMillis())
-            throw new Exception("pollRate must be less than timeoutTime: " + timeout + "<" + pollRate);
+            throw new SettingsException("pollRate must be less than timeoutTime: " + timeout + "<" + pollRate);
         this.pollRate = pollRate;
     }
 
@@ -24,9 +25,9 @@ public class Settings {
         return matchScore;
     }
 
-    public void setMatchScore(double matchScore) throws Exception {
+    public void setMatchScore(double matchScore) throws SettingsException {
         if (matchScore <= 0 || matchScore > 1)
-            throw new Exception("matchScore must be greater than 0 or equal to/less than 1.");
+            throw new SettingsException("matchScore must be greater than 0 or equal to/less than 1.");
         this.matchScore = matchScore;
 
     }

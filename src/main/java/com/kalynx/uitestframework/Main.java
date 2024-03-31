@@ -64,6 +64,7 @@ public class Main extends AnnotationLibrary {
         OpenCV.loadShared();
         DI.getInstance().inject(Settings.class);
         DI.getInstance().add(RobotControl.class, new RobotWrapper(new Robot()));
+        DI.getInstance().inject(KeyboardController.class);
         DI.getInstance().add(MouseInfoControl.class, new MouseInfoWrapper());
         DI.getInstance().inject(DisplayManager.class);
         DI.getInstance().inject(WindowController.class);
