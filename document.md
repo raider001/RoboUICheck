@@ -77,23 +77,23 @@ Milestones Completed: 18
 % Complete:           60%
 ```
 ## Text Recognition
-| Keyword                       | Attributes             | Returns                                    | Description             | Implemented                      | Verified On Windows               | Verified on Linux                 |
-| ----------------------------- | ---------------------- | ------------------------------------------ | ----------------------- |----------------------------------|-----------------------------------|-----------------------------------|
-| Get Text                      |                        | All Interpreted Text                       | All Text on set display | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Get Text on Display           | displayReference       | All Interprested Test in Display Reference |                         | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Get Text on Window            | windowName             | All Interpreted Text in Window             |                         | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Verify Text Exists            | text                   |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Verify Text Exists On Display | text, displayReference |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Verify Text Exists On Window  | text, windowName       |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Verify Text In Image          | text, imageName        |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Click Text                    | text                   |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Click Text On Display         | text, displayReference |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Click Text On Window          | text, windowName       |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Click Text In Image           | text, imageName        |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Move Mouse To Text            | text                   |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Get Text Bounds               | text                   | Dictionary                                 | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Get Text Bounds On Window     | text, windowName       | Dictionary                                 | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
-| Get Text Bounds Matched Image | text, imageName        | Dictionary                                 | Regex Matching enabled  | ![cross.svg](assets/cross.svg)   | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Keyword                       | Attributes             | Returns                                    | Description             | Implemented                    | Verified On Windows               | Verified on Linux                 |
+| ----------------------------- | ---------------------- | ------------------------------------------ | ----------------------- |--------------------------------|-----------------------------------|-----------------------------------|
+| Get Text                      |                        | All Interpreted Text                       | All Text on set display | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)   | ![cross.svg](assets/cross.svg)    |
+| Get Text on Display           | displayReference       | All Interprested Test in Display Reference |                         | ![ok.svg](assets/ok.svg) | ![ok.svg](assets/ok.svg)    | ![cross.svg](assets/cross.svg)    |
+| Get Text on Window            | windowName             | All Interpreted Text in Window             |                         | ![ok.svg](assets/ok.svg) | ![ok.svg](assets/ok.svg)    | ![cross.svg](assets/cross.svg)    |
+| Verify Text Exists            | text                   |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Verify Text Exists On Display | text, displayReference |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Verify Text Exists On Window  | text, windowName       |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Verify Text In Image          | text, imageName        |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Click Text                    | text                   |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Click Text On Display         | text, displayReference |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Click Text On Window          | text, windowName       |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Click Text In Image           | text, imageName        |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Move Mouse To Text            | text                   |                                            | Regex Matching enabled  | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Get Text Bounds               | text                   | Dictionary                                 | Regex Matching enabled  | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Get Text Bounds On Window     | text, windowName       | Dictionary                                 | Regex Matching enabled  | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
+| Get Text Bounds Matched Image | text, imageName        | Dictionary                                 | Regex Matching enabled  | ![cross.svg](assets/cross.svg) | ![cross.svg](assets/cross.svg)    | ![cross.svg](assets/cross.svg)    |
 ```
 Expected Keywords:    16
 Mini-Milestones:      48
@@ -112,10 +112,10 @@ Milestones Completed: 0
 | Press Keys            | keys                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)   | ![cross.svg](assets/cross.svg)    |
 | Release Keys          | keys                 |         |         |             | ![ok.svg](assets/ok.svg)       | ![ok.svg](assets/ok.svg)   | ![cross.svg](assets/cross.svg)    |
 ```
-Expected Keywords:    8
-Mini-Milestones:      24
-Milestones Completed: 4
-% Complete:           16%
+Expected Keywords:    7
+Mini-Milestones:      21
+Milestones Completed: 7
+% Complete:           33.33%
 ```
 
 ## Mouse Control

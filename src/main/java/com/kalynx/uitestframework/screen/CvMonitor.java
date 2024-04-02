@@ -29,7 +29,6 @@ public class CvMonitor {
     private final static Map<Integer, Function<Core.MinMaxLocResult,Double>> matchAlgorithm = new HashMap<>();
     private final ImageLibrary imageLibrary = new ImageLibrary();
     private  final DisplayManager displayManager;
-
     private final Settings settings;
     private Path logLocation = Path.of(".", "log");
     private Path imageLocation = Path.of(".", "images");
@@ -38,7 +37,7 @@ public class CvMonitor {
     public CvMonitor(double matchScore, DisplayManager displayManager, Settings settings) {
         if (matchScore <= 0 || matchScore >= 1) throw new AssertionError("matchScore can only be between 0 and 1");
         matchAlgorithm.put(Imgproc.TM_SQDIFF, r -> 1 - r.minVal);
-        matchAlgorithm.put(Imgproc.TM_SQDIFF_NORMED, (r) -> 1 - r.minVal);
+        matchAlgorithm.put(Imgproc.TM_SQDIFF_NORMED, r -> 1 - r.minVal);
         matchAlgorithm.put(Imgproc.TM_CCOEFF, r -> r.maxVal / 100);
         matchAlgorithm.put(Imgproc.TM_CCOEFF_NORMED, r -> r.maxVal);
         matchAlgorithm.put(Imgproc.TM_CCORR, r -> r.maxVal);
@@ -135,7 +134,7 @@ public class CvMonitor {
         return generateFailedResult(monitorData.templateContainer.template, monitorData.requiredMatchScore, monitorData.results);
     }
 
-    public Result<ScreenshotData> monitorForImage(Duration duration, String imageLocation, double matchScore) throws Exception {
+    public Result<ScreenshotData> monitorForImage(Duration duration, String imageLocation, double matchScore) throws IOException {
         Result<MonitorData> data = setupMonitoring(duration, imageLocation, matchScore);
 
         if (data.isFailure()) return new FailedResult<>(data.getInfo());
@@ -223,21 +222,12 @@ public class CvMonitor {
                 relativeToLogExpected.toString());
     }
 
-    public BufferedImage capture() {
-        DisplayManager.DisplayData displayData = displayManager.getSelectedDisplayRegion();
-
-        Robot robot = displayManager.getSelectedDisplayRegion().robots().poll();
-        assert robot != null;
-        BufferedImage img = robot.createScreenCapture(displayData.displayRegion());
-        displayManager.getSelectedDisplayRegion().robots().add(robot);
-        return img;
-    }
 
     private Result<Data> match(Mat template, Mat mask, double matchScore) {
         mask.convertTo(mask, CvType.CV_8U);
         template.convertTo(template, CvType.CV_8U);
         long takenTime = System.currentTimeMillis();
-        BufferedImage image = capture();
+        BufferedImage image = displayManager.capture();
 
         Mat screenshot = imageToMat(image);
         screenshot.convertTo(screenshot, CvType.CV_8U);

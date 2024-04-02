@@ -3,12 +3,15 @@ package com.kalynx.uitestframework;
 import com.kalynx.lwdi.DependencyInjectionException;
 import com.kalynx.uitestframework.arg.ArgParser;
 import com.kalynx.uitestframework.controller.*;
+import com.kalynx.uitestframework.exceptions.UnsupportedOS;
 import com.kalynx.uitestframework.screen.CvMonitor;
+import net.sourceforge.tess4j.Tesseract;
 import nu.pattern.OpenCV;
 import org.robotframework.javalib.library.AnnotationLibrary;
 import org.robotframework.remoteserver.RemoteServer;
 
 import java.awt.*;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -60,9 +63,10 @@ public class Main extends AnnotationLibrary {
         return super.getKeywordDocumentation(keywordName);
     }
 
-    private static void injectDependencies() throws AWTException, DependencyInjectionException {
+    private static void injectDependencies() throws AWTException, DependencyInjectionException, UnsupportedOS, IOException {
         OpenCV.loadShared();
         DI.getInstance().inject(Settings.class);
+        DI.getInstance().add(new OcrController(new Tesseract()));
         DI.getInstance().add(RobotControl.class, new RobotWrapper(new Robot()));
         DI.getInstance().inject(KeyboardController.class);
         DI.getInstance().add(MouseInfoControl.class, new MouseInfoWrapper());
