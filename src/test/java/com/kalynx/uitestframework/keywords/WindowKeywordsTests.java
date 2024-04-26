@@ -62,15 +62,15 @@ class WindowKeywordsTests {
 
     @Test
     void moveWindow_verification() throws Exception {
-        Exception e = Assertions.assertThrows(Exception.class, () -> sut.moveWindow("windowName", 0, 0));
+        Exception e = Assertions.assertThrows(Exception.class, () -> sut.moveWindow("windowName", 0, 0, null));
         Assertions.assertEquals("Window:windowName not found. Available windows:[window1, window2, window3]", e.getMessage());
 
         Mockito.when(windowController.setWindowPosition("window3", 0, 0)).thenReturn(false);
-        e = Assertions.assertThrows(Exception.class, () -> sut.moveWindow("window3",0,0));
+        e = Assertions.assertThrows(Exception.class, () -> sut.moveWindow("window3",0,0, null));
         Assertions.assertEquals("Window attempted to be moved out of bounds", e.getMessage());
 
         Mockito.when(windowController.setWindowPosition("window1", 0, 0)).thenReturn(true);
-        sut.moveWindow("window1", 0, 0);
+        sut.moveWindow("window1", 0, 0, null);
     }
 
     @Test

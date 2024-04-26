@@ -2,7 +2,9 @@
 Library  Remote         http://127.0.0.1:7442/
 Library  BuiltIn
 Library  Collections
-Suite Setup    Add Image Location  ${CURDIR}/
+Suite Setup   Run Keywords   Add Image Location  ${CURDIR}/  AND
+...    Set Primary Display Reference    PRIMARY    AND
+...    Set Display Reference    PRIMARY    SMALLER_THAN    SECONDARY
 
 
 *** Test Cases ***
@@ -19,7 +21,22 @@ Test Window Move
     IF  ${dimensions}[width] != ${new_dimensions}[width] and ${dimensions}[height] != ${new_dimensions}[height]
         Fail  Window width and height should not have moved.
     END
+
     [Teardown]  Move Window  Test Form  -100  -200
+
+Test Move Window To Another Screen
+    Move Window  Test Form  0  0  SECONDARY
+    &{display}=  Get Display Dimensions    SECONDARY
+    &{dimensions}=  Get Window Dimensions  Test Form
+    IF  ${dimensions}[x] != ${display}[x] and ${dimensions}[y] != ${display}[y]
+        Fail  Window did not move to the secondary display.
+    END
+    Move Window  Test Form  0  0  PRIMARY
+    ${display}=  Get Display Dimensions    PRIMARY
+    &{dimensions}=  Get Window Dimensions  Test Form
+    IF  ${dimensions}[x] != ${display}[x] and ${dimensions}[y] != ${display}[y]
+        Fail  Window did not move to the primary display.
+    END
 
 Test Resize Window
     [Documentation]  Verify that a window can be resized.

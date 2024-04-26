@@ -10,13 +10,13 @@ import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
 import java.awt.Rectangle;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 @RobotKeywords
 public class DisplayKeywords {
+    public static final String WIDTH = "width";
     private static final DisplayManager DISPLAY_MANAGER = DI.getInstance().getDependency(DisplayManager.class);
+    public static final String HEIGHT = "height";
 
     @RobotKeyword("""
             Sets the primary display to the given reference name
@@ -58,7 +58,7 @@ public class DisplayKeywords {
     }
 
     @RobotKeyword
-    @ArgumentNames({"x", "y", "width", "height"})
+    @ArgumentNames({"x", "y", WIDTH, HEIGHT})
     public void setMonitoredArea(int x, int y, int width, int height) {
         DISPLAY_MANAGER.setCaptureRegion(new Rectangle(x, y, width, height));
     }
@@ -125,29 +125,38 @@ public class DisplayKeywords {
     }
 
     @RobotKeyword("""
-            Get Monitored Display
+            Get Selected Display Dimensions
             """)
-    public List<Integer> getMonitoredDisplay() {
-        Rectangle r = DISPLAY_MANAGER.getSelectedDisplayRegion().displayRegion();
-        return Arrays.asList(r.x, r.y, r.width, r.height);
+    public Map<String, Integer> getSelectedDisplayDimensions() {
+        DisplayAttributes r = DISPLAY_MANAGER.getSelectedDisplay();
+       return Map.of("x", r.x(), "y", r.y(), WIDTH, r.width(), HEIGHT, r.height());
     }
 
     @RobotKeyword("""
-            Get Selected Monitored Area
+            Get Selected Display Monitored Area
             """)
-    public Map<String, Integer> getSelectedMonitoredArea() {
+    public Map<String, Integer> getSelectedDisplayMonitoredArea() {
         Rectangle r = DISPLAY_MANAGER.getSelectedDisplayRegion().displayRegion();
-        return Map.of("x", r.x, "y", r.y, "width", r.width, "height", r.height);
+        return Map.of("x", r.x, "y", r.y, WIDTH, r.width, HEIGHT, r.height);
+    }
+
+    @RobotKeyword("""
+            Get Display Dimensions
+            """)
+    @ArgumentNames("display")
+    public Map<String, Integer> getDisplayDimensions(String display) throws DisplayNotFoundException {
+        DisplayAttributes r = DISPLAY_MANAGER.getDisplay(display);
+        return Map.of("x", r.x(), "y", r.y(), WIDTH, r.width(), HEIGHT, r.height());
     }
 
     @RobotKeyword("""
             Get Display Monitored Area
             """)
-    @ArgumentNames({"displayName"})
-    public Map<String, Integer> getDisplayMonitoredArea(String displayName) throws DisplayNotFoundException {
-        DisplayAttributes dispattr = DISPLAY_MANAGER.getDisplay(displayName);
-        if(dispattr == null) throw new IllegalArgumentException("Display not found");
-        Rectangle r = DISPLAY_MANAGER.getDisplayDisplayRegion(dispattr).displayRegion();
-        return Map.of("x", r.x, "y", r.y, "width", r.width, "height", r.height);
+    @ArgumentNames("display")
+    public Map<String, Integer> getDisplayMonitoredArea(String display) throws DisplayNotFoundException {
+        DisplayAttributes attr = DISPLAY_MANAGER.getDisplay(display);
+        Rectangle r = DISPLAY_MANAGER.getDisplayDisplayRegion(attr).displayRegion();
+        return Map.of("x", r.x, "y", r.y, WIDTH, r.width, HEIGHT, r.height);
     }
+
 }
