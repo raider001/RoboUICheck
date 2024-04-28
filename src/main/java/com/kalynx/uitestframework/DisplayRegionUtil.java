@@ -44,7 +44,7 @@ public class DisplayRegionUtil {
         displayRegion.y = display.y - displayRegion.y;
     }
 
-    public class Regions {
+    public static class Regions {
 
         public final int originalDisplay;
         public final Rectangle original;

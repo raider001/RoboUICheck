@@ -79,7 +79,7 @@ public class MouseKeywords {
         if(clicks > 0)  click(button, clicks);
     }
 
-    private void handleImageMouseMove(String image, String display, String window, int clicks, String button) throws DisplayNotFoundException, MonitorException, MouseException, WindowException, InterruptedException, IOException {
+    private void handleImageMouseMove(String image, String display, String window, int clicks, String button) throws DisplayNotFoundException, MouseException, WindowException, InterruptedException, IOException {
         if(display != null) {
             handleMoveMouseToImageOnDisplay(image, display, clicks, button);
         } else if(window != null) {

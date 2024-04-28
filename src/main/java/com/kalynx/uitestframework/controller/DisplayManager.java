@@ -92,15 +92,6 @@ public class DisplayManager {
                 height);
     }
 
-    public int getDisplayFromPosition(Point r) throws DisplayNotFoundException {
-        return displayIdToDimensionMap.values().stream()
-                .filter(displayAttributes -> displayAttributes.x() <= r.x && displayAttributes.y() <= r.y &&
-                        displayAttributes.x() + displayAttributes.width() >= r.x && displayAttributes.y() + displayAttributes.height() >= r.y)
-                .findFirst()
-                .orElseThrow(() -> new DisplayNotFoundException("Point is not within any display"))
-                .displayId();
-    }
-
     private void validateRegionData(Rectangle screenRegion, DisplayAttributes selectedDisplay ) {if(screenRegion.x < 0) throw new AssertionError("screenRegion x must be greater than or equal to 0");
         if(screenRegion.y < 0)  throw new AssertionError("screenRegion y must be greater than or equal to 0");
         if (screenRegion.width <= 0) throw new AssertionError("screenRegion width must be greater than 0");
