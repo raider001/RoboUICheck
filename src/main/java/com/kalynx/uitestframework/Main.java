@@ -73,6 +73,7 @@ public class Main extends AnnotationLibrary {
         DI.getInstance().inject(DisplayManager.class);
         DI.getInstance().inject(WindowController.class);
         DI.getInstance().inject(MouseController.class);
+        DI.getInstance().inject(DisplayRegionUtil.class);
         DI.getInstance().add(new CvMonitor(0.95, DI.getInstance().getDependency(DisplayManager.class), DI.getInstance().getDependency(Settings.class)));
     }
     public static void main(String... args ) throws Exception {

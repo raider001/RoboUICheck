@@ -8,7 +8,6 @@ import com.kalynx.uitestframework.exceptions.MouseException;
 
 import java.awt.Point;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class MouseController {
@@ -44,6 +43,10 @@ public class MouseController {
         performMove.accept(new Point(actualX, actualY));
     }
 
+    public Point getMousePosition() {
+        return mouseInfo.getMousePosition();
+    }
+
     public void moveMouseTo(String display, int x, int y) throws MouseException, DisplayNotFoundException {
         DisplayAttributes r = displayManager.getDisplay(display);
         if (x < 0 || x > r.width())
@@ -54,8 +57,7 @@ public class MouseController {
     }
 
     public void moveMouseTo(int x, int y) throws MouseException {
-        Point mousePos = mouseInfo.getMousePosition();
-        DisplayAttributes currDisplay = getCurrentDisplay(mousePos);
+        DisplayAttributes currDisplay = displayManager.getSelectedDisplay();
 
         if (currDisplay == null) throw new MouseException("Can't find mouse on screen! Please report this issue and provide your configuration setup to help stop this from happening again!");
 
@@ -92,14 +94,6 @@ public class MouseController {
 
     public long getMouseMoveSpeed() {
         return distancePerSecond;
-    }
-
-    public DisplayAttributes getCurrentDisplay(Point p) {
-        Optional<DisplayAttributes> currDisplay = displayManager.getDisplays().stream().filter(display -> p.x >= display.x() &&
-                p.x <= display.x() + display.width() &&
-                p.y >= display.y() &&
-                p.y <= display.y() + display.height()).findFirst();
-        return currDisplay.orElse(null);
     }
 
     private void mouseMove(Point destination) {

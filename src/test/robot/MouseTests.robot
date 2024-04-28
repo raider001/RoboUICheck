@@ -4,12 +4,60 @@ Library  BuiltIn
 Suite Setup   Run Keywords  Add Image Location  ${CURDIR}/  AND
 ...    Bring Window To Front  Test Form    AND
 ...    Set Primary Display Reference    PRIMARY    AND
-...    Set Display Reference    PRIMARY    SMALLER_THAN    SECONDARY
+...    Set Display Reference    PRIMARY    SMALLER_THAN    SECONDARY  AND
+...    Set Match Percentage    .9
 
 
 *** Test Cases ***
 Test Move Mouse To Image
    Move Mouse To  image=testClick.png
+
+Test Move Mouse To Image On Display
+   &{bounds}=  Get Image Bounds    testClick.png    display=PRIMARY
+   &{display_bounds}=  Get Display Dimensions  PRIMARY
+   Move Mouse To  image=testClick.png  display=PRIMARY
+   &{mouse_position}=  Get Mouse Position
+   ${x}=  Evaluate  ${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2
+   ${y}=  Evaluate  ${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2
+   IF  ${x} != ${mouse_position}[x] or ${y} != ${mouse_position}[y]
+          Fail  Mouse did not move to the correct location
+   END
+   Move Window  Test Form  x=0  y=0  display=SECONDARY
+   &{bounds}=  Get Image Bounds    testClick.png    display=SECONDARY
+   &{display_bounds}=  Get Display Dimensions  SECONDARY
+   Move Mouse To  image=testClick.png  display=SECONDARY
+   &{mouse_position}=  Get Mouse Position
+   ${x}=  Evaluate  ${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2
+   ${y}=  Evaluate  ${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2
+   IF  ${x} != ${mouse_position}[x] or ${y} != ${mouse_position}[y]
+          Fail  Mouse did not move to the correct location
+   END
+   [Teardown]  Move Window  Test Form  x=0  y=0  display=PRIMARY
+
+Test Move Mouse To Image On Window
+   &{bounds}=  Get Image Bounds    testClick.png  window=Test Form
+   &{display_bounds}=  Get Display Dimensions  PRIMARY
+   Move Mouse To  image=testClick.png  window=Test Form
+   &{mouse_position}=  Get Mouse Position
+   ${x}=  Evaluate  ${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2
+   ${y}=  Evaluate  ${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2
+
+   IF  ${x} != ${mouse_position}[x] or ${y} != ${mouse_position}[y]
+       Fail  Mouse did not move to the correct location
+   END
+
+   Move Window  Test Form  x=0  y=0  display=SECONDARY
+   &{bounds}=  Get Image Bounds    testClick.png  window=Test Form
+   &{display_bounds}=  Get Display Dimensions  SECONDARY
+    Move Mouse To  image=testClick.png  window=Test Form
+    &{mouse_position}=  Get Mouse Position
+    ${x}=  Evaluate  ${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2
+    ${y}=  Evaluate  ${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2
+
+    IF  ${x} != ${mouse_position}[x] or ${y} != ${mouse_position}[y]
+        Fail  Mouse did not move to the correct location
+    END
+    [Teardown]  Move Window  Test Form  x=0  y=0  display=PRIMARY
 
 Test Move Mouse Between Displays
    Move Mouse    100    0

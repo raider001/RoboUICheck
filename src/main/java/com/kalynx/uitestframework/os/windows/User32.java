@@ -27,6 +27,8 @@ public interface User32 extends Library {
 
     int GetWindowRect(Pointer hWnd, RECT lpRect);
 
+    boolean GetClientRect(Pointer hWnd, RECT lpRect);
+
     boolean MoveWindow(Pointer hWnd, int x, int y, int nWidth, int nHeight, boolean bRepaint);
 
     interface WNDENUMPROC extends Callback {

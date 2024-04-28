@@ -1,9 +1,8 @@
 package com.kalynx.uitestframework.keywords;
 
 import com.kalynx.uitestframework.DI;
+import com.kalynx.uitestframework.DisplayRegionUtil;
 import com.kalynx.uitestframework.controller.DisplayManager;
-import com.kalynx.uitestframework.controller.WindowController;
-import com.kalynx.uitestframework.data.DisplayAttributes;
 import com.kalynx.uitestframework.data.Result;
 import com.kalynx.uitestframework.data.ScreenshotData;
 import com.kalynx.uitestframework.screen.CvMonitor;
@@ -13,10 +12,8 @@ import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
-import java.awt.Rectangle;
 import java.time.Duration;
 import java.util.Map;
-import java.util.Optional;
 
 
 @RobotKeywords
@@ -25,7 +22,7 @@ public class ScreenKeywords {
     private static final Logger LOGGER = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
     private static final CvMonitor CV_MONITOR = DI.getInstance().getDependency(CvMonitor.class);
     private static final DisplayManager DISPLAY_MANAGER = DI.getInstance().getDependency(DisplayManager.class);
-    private static final WindowController WINDOW_CONTROLLER = DI.getInstance().getDependency(WindowController.class);
+    private static final DisplayRegionUtil DISPLAY_REGION_UTIL = DI.getInstance().getDependency(DisplayRegionUtil.class);
     public static final String HTML = "*HTML*";
 
 
@@ -204,7 +201,7 @@ public class ScreenKeywords {
     }
 
     private Result<ScreenshotData> getResultFromWindow(String image, double minMatchScore, int waitTime, String window, ContainType type) throws Exception {
-        Regions regions = getWindowDisplayRegions(window);
+        DisplayRegionUtil.Regions regions = DISPLAY_REGION_UTIL.getWindowDisplayRegions(window);
         regions.switchToTemporaryDisplay();
         Result<ScreenshotData> r = type == ContainType.DOES_CONTAIN ? CV_MONITOR.monitorForImage(Duration.ofMillis(waitTime), image, minMatchScore) : CV_MONITOR.monitorForLackOfImage(Duration.ofMillis(waitTime), image, minMatchScore);
         regions.switchToOriginalDisplay();
@@ -220,49 +217,10 @@ public class ScreenKeywords {
     }
 
 
-    private Regions getWindowDisplayRegions(String window) throws Exception {
-        Rectangle formRegion = WINDOW_CONTROLLER.getWindowDimensions(window);
-        if(formRegion == null) throw new Exception("Window: " + window + " not found. Available windows:" + WINDOW_CONTROLLER.getAllWindows().toString());
-        Optional<DisplayAttributes> attr = DISPLAY_MANAGER.getDisplays().stream().filter(display -> formRegion.x >= display.x()
-                && formRegion.x < display.x() + display.width()
-                && formRegion.y >= display.y()
-                && formRegion.y < display.y() + display.height()).findFirst();
-        if(attr.isEmpty()) throw new Exception("Window not found on any display. Is the form currently hidden or partially off a screen?");
-        int originalDisplay = DISPLAY_MANAGER.getSelectedDisplay().displayId();
-        DISPLAY_MANAGER.setDisplay(attr.get().displayId());
-        DisplayManager.DisplayData displayData =DISPLAY_MANAGER.getSelectedDisplayRegion();
-        Rectangle originalRegion = new Rectangle(displayData.displayRegion());
-        return new Regions(originalDisplay, originalRegion, attr.get().displayId(), formRegion);
-    }
+
 
     private enum ContainType {
         DOES_CONTAIN,
         DOES_NOT_CONTAIN
-    }
-
-    private static class Regions {
-
-        public final int originalDisplay;
-        public final Rectangle original;
-
-        public final int temporaryDisplay;
-        public final Rectangle temporary;
-
-        private Regions(int originalDisplay, Rectangle original, int temporaryDisplay,  Rectangle temporary) {
-            this.originalDisplay = originalDisplay;
-            this.original = original;
-            this.temporaryDisplay = temporaryDisplay;
-            this.temporary = temporary;
-        }
-
-        public void switchToOriginalDisplay() {
-            DISPLAY_MANAGER.setDisplay(originalDisplay);
-            DISPLAY_MANAGER.setCaptureRegion(original);
-        }
-
-        public void switchToTemporaryDisplay() {
-            DISPLAY_MANAGER.setDisplay(temporaryDisplay);
-            DISPLAY_MANAGER.setCaptureRegion(temporary);
-        }
     }
 }

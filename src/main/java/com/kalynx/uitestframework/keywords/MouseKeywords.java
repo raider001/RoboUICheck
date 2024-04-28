@@ -1,6 +1,7 @@
 package com.kalynx.uitestframework.keywords;
 
 import com.kalynx.uitestframework.DI;
+import com.kalynx.uitestframework.DisplayRegionUtil;
 import com.kalynx.uitestframework.MouseEvent.MouseButtonDown;
 import com.kalynx.uitestframework.controller.DisplayManager;
 import com.kalynx.uitestframework.controller.MouseController;
@@ -8,6 +9,8 @@ import com.kalynx.uitestframework.controller.WindowController;
 import com.kalynx.uitestframework.data.DisplayAttributes;
 import com.kalynx.uitestframework.data.Result;
 import com.kalynx.uitestframework.data.ScreenshotData;
+import com.kalynx.uitestframework.exceptions.DisplayNotFoundException;
+import com.kalynx.uitestframework.exceptions.MonitorException;
 import com.kalynx.uitestframework.exceptions.MouseException;
 import com.kalynx.uitestframework.exceptions.WindowException;
 import com.kalynx.uitestframework.screen.CvMonitor;
@@ -18,8 +21,10 @@ import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
+import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.Map;
 
 @RobotKeywords
 public class MouseKeywords {
@@ -28,6 +33,7 @@ public class MouseKeywords {
     private static final WindowController WINDOW_CONTROLLER = DI.getInstance().getDependency(WindowController.class);
     private static final DisplayManager DISPLAY_MANAGER = DI.getInstance().getDependency(DisplayManager.class);
     private static final CvMonitor CV_MONITOR = DI.getInstance().getDependency(CvMonitor.class);
+    private static final DisplayRegionUtil DISPLAY_REGION_UTIL = DI.getInstance().getDependency(DisplayRegionUtil.class);
     public static final String INVALID_CLICK_OPTION_S_GIVEN = "Invalid Click option %s given.";
     public static final String HTML = "*HTML*";
 
@@ -52,37 +58,66 @@ public class MouseKeywords {
             If wanting to change the mouse to another display, use the 'Move Mouse To Display' keyword.
             """)
     @ArgumentNames({"x=", "y=", "image=", "display=", "window="})
-    public void moveMouseTo(Integer x, Integer y, String image, String display, String window) throws Exception {
+    public void moveMouseTo(Integer x, Integer y, String image, String display, String window) throws MouseException, WindowException, DisplayNotFoundException, InterruptedException, MonitorException, IOException {
         performBasicValidation(1, display, window, image, x, y);
         if(x != null) {
-            if(display != null) {
-                MOUSE_CONTROLLER.moveMouseTo(display, x, y);
-            } else if (window != null) {
-                 Rectangle r = WINDOW_CONTROLLER.getWindowDimensions(window);
-                 MOUSE_CONTROLLER.moveMouseTo(r.x + x, r.y + y);
-            } else {
-                MOUSE_CONTROLLER.moveMouseTo(x, y);
-            }
+            handleXAndYMouseMove(x, y, display, window, 0, MouseButtonDown.LEFT.name());
         } else if (image != null) {
-            if(display != null) {
-                DisplayAttributes orig = DISPLAY_MANAGER.getSelectedDisplay();
-                DisplayAttributes temp = DISPLAY_MANAGER.getDisplay(display);
-                DISPLAY_MANAGER.setDisplay(temp.displayId());
-                Result<ScreenshotData> res = CV_MONITOR.monitorForImage(image);
-                DISPLAY_MANAGER.setDisplay(orig.displayId());
-                if (res.isFailure()) throw new MouseException(HTML + res.getInfo());
-            } else if(window != null) {
-                Rectangle r = WINDOW_CONTROLLER.getWindowDimensions(window);
-                DISPLAY_MANAGER.setCaptureRegion(r);
-                Result<ScreenshotData> res = CV_MONITOR.monitorForImage(image);
-                if (res.isFailure()) throw new MouseException(HTML + res.getInfo());
-            } else {
-                moveMouseToImage(image);
-            }
+            handleImageMouseMove(image, display, window, 0, MouseButtonDown.LEFT.name());
         }
     }
 
-    private void moveMouseToImage(String image) throws Exception {
+    private void handleXAndYMouseMove(int x, int y, String display, String window, int clicks, String button) throws MouseException, DisplayNotFoundException, WindowException, InterruptedException {
+        if(display != null) {
+            MOUSE_CONTROLLER.moveMouseTo(display, x, y);
+        } else if (window != null) {
+            Rectangle r = WINDOW_CONTROLLER.getWindowDimensions(window);
+            MOUSE_CONTROLLER.moveMouseTo(r.x + x, r.y + y);
+        } else {
+            MOUSE_CONTROLLER.moveMouseTo(x, y);
+        }
+        if(clicks > 0)  click(button, clicks);
+    }
+
+    private void handleImageMouseMove(String image, String display, String window, int clicks, String button) throws DisplayNotFoundException, MonitorException, MouseException, WindowException, InterruptedException, IOException {
+        if(display != null) {
+            handleMoveMouseToImageOnDisplay(image, display, clicks, button);
+        } else if(window != null) {
+            handleMoveMouseToImageOnWindow(image, window, clicks, button);
+        } else {
+            moveMouseToImage(image);
+        }
+        if(clicks > 0) click(button, clicks);
+    }
+
+    private void handleMoveMouseToImageOnDisplay(String image, String display, int clicks, String button) throws DisplayNotFoundException, IOException, MouseException, InterruptedException {
+        DisplayAttributes originalDisplay = DISPLAY_MANAGER.getSelectedDisplay();
+        DisplayAttributes displayOfInterest = DISPLAY_MANAGER.getDisplay(display);
+        DISPLAY_MANAGER.setDisplay(displayOfInterest.displayId());
+        Result<ScreenshotData> res = CV_MONITOR.monitorForImage(image);
+        DISPLAY_MANAGER.setDisplay(originalDisplay.displayId());
+        if (res.isFailure()) throw new MouseException(HTML + res.getInfo());
+        LOGGER.info(res.getInfo());
+        DISPLAY_MANAGER.setDisplay(displayOfInterest.displayId());
+        Rectangle p = res.getData().foundLocation();
+        MOUSE_CONTROLLER.moveMouseTo(p.x + p.width / 2, p.y + p.height / 2);
+        DISPLAY_MANAGER.setDisplay(originalDisplay.displayId());
+        if(clicks > 0) click(button, clicks);
+    }
+    private void handleMoveMouseToImageOnWindow(String image, String window, int clicks, String button) throws WindowException, IOException, MouseException, InterruptedException {
+        DisplayRegionUtil.Regions region = DISPLAY_REGION_UTIL.getWindowDisplayRegions(window);
+        region.switchToTemporaryDisplay();
+        Result<ScreenshotData> res = CV_MONITOR.monitorForImage(image);
+        region.switchToOriginalDisplay();
+        if (res.isFailure()) throw new MouseException(HTML + res.getInfo());
+        LOGGER.info(res.getInfo());
+        Rectangle p = res.getData().foundLocation();
+        region.switchToTemporaryDisplay();
+        MOUSE_CONTROLLER.moveMouseTo(p.x + p.width / 2, p.y + p.height / 2);
+        region.switchToOriginalDisplay();
+        if(clicks > 0) click(button, clicks);
+    }
+    private void moveMouseToImage(String image) throws MouseException, IOException {
         Result<ScreenshotData> res = CV_MONITOR.monitorForImage(image);
         if (res.isFailure()) throw new MouseException(HTML + res.getInfo());
         LOGGER.info(res.getInfo());
@@ -125,35 +160,15 @@ public class MouseKeywords {
             
             """)
     @ArgumentNames({"button=LEFT", "times=1", "x=", "y=", "image=", "display=", "window="})
-    public void click(String button, int times, Integer x, Integer y, String image, String display, String window) throws Exception {
+    public void click(String button, int times, Integer x, Integer y, String image, String display, String window) throws MouseException, WindowException, IOException, DisplayNotFoundException, InterruptedException, MonitorException {
         performBasicValidation(times, display, window, image, x, y);
-
         // handle images
         if(image != null) {
-            if(window != null) {
-                clickImageOnWindow(button, image, window, times);
-            }else if(display  != null) {
-                clickImageOnDisplay(button, image, display, times);
-            }else {
-                clickImage(button, image, times);
-            }
-        }
-
-        if(x == null && image == null) {
+            handleImageMouseMove(image, display, window, times, button);
+        } else if(x == null) {
             click(button, times);
-        }
-
-        if(x != null) {
-            if(window != null) {
-                Rectangle r = WINDOW_CONTROLLER.getWindowDimensions(window);
-                clickLocation(button, r.x + x, r.y + y, times);
-            }else if(display != null) {
-                MOUSE_CONTROLLER.moveMouseTo(display, x, y);
-                click(button, times);
-            }
-            else {
-                clickLocation(button, x, y, times);
-            }
+        } else {
+            handleXAndYMouseMove(x, y, display, window, times, button);
         }
     }
 
@@ -162,65 +177,6 @@ public class MouseKeywords {
         if(image != null && (x != null || y != null)) throw new MouseException("Cannot use both image and x/y coordinates");
         if(x != null && y == null || x == null && y != null) throw new MouseException("Both x and y must be defined");
         if(display != null && window != null) throw new NotImplementedException("Cannot use both display and window");
-    }
-
-    private void clickImageOnDisplay(String button, String image, String display, int times) throws Exception {
-        int originalId = DISPLAY_MANAGER.getSelectedDisplay().displayId();
-        DISPLAY_MANAGER.setDisplay(display);
-        Result<ScreenshotData> res = CV_MONITOR.monitorForImage(image);
-        DISPLAY_MANAGER.setDisplay(originalId);
-        if (res.isFailure()) throw new MouseException(HTML + res.getInfo());
-        LOGGER.info(res.getInfo());
-        Rectangle p = res.getData().foundLocation();
-        clickLocation(button, p.x + p.width / 2, p.y + p.height / 2, times);
-    }
-
-    private void clickLocation(String button, int x, int y, int times) throws MouseException, InterruptedException {
-        try {
-            MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
-            MOUSE_CONTROLLER.moveMouseTo(x, y);
-            MOUSE_CONTROLLER.mouseClick(mask, times);
-        } catch (InterruptedException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new MouseException(INVALID_CLICK_OPTION_S_GIVEN.formatted(button));
-        }
-    }
-
-    private void clickImage(String button, String image, int times) throws Exception {
-        Result<ScreenshotData> res = CV_MONITOR.monitorForImage(image);
-        if (res.isFailure()) throw new MouseException(HTML + res.getInfo());
-        LOGGER.info(res.getInfo());
-        Rectangle p = res.getData().foundLocation();
-        clickLocation(button, p.x + p.width / 2, p.y + p.height / 2, times);
-    }
-
-    private void clickImageOnWindow(String button, String image, String windowName, int times) throws Exception {
-        Rectangle formRegion = WINDOW_CONTROLLER.getWindowDimensions(windowName);
-        if(formRegion == null) throw new MouseException("Window: " + windowName + " not found. Available windows:" + WINDOW_CONTROLLER.getAllWindows().toString());
-
-        // get the currently selected display
-        int originalDisplay = DISPLAY_MANAGER.getSelectedDisplay().displayId();
-
-        Optional<DisplayAttributes> attr = DISPLAY_MANAGER.getDisplays().stream().filter(display -> formRegion.x >= display.x()
-                && formRegion.x < display.x() + display.width()
-                && formRegion.y >= display.y()
-                && formRegion.y < display.y() + display.height()).findFirst();
-        if(attr.isEmpty()) throw new WindowException("Window not found on any display. Is the form currently hidden or partially off a screen?");
-        DISPLAY_MANAGER.setDisplay(attr.get().displayId());
-        DisplayManager.DisplayData displayData =DISPLAY_MANAGER.getSelectedDisplayRegion();
-        Rectangle originalRegion = displayData.displayRegion();
-        DISPLAY_MANAGER.setCaptureRegion(formRegion);
-        Result<ScreenshotData> r = CV_MONITOR.monitorForImage(image);
-        DISPLAY_MANAGER.setCaptureRegion(originalRegion);
-        DISPLAY_MANAGER.setDisplay(originalDisplay);
-        if (r.isFailure()) {
-            throw new MouseException(HTML + r.getInfo());
-        }
-
-        LOGGER.info(r.getInfo());
-        Rectangle p = r.getData().foundLocation();
-        clickLocation(button, p.x + p.width / 2, p.y + p.height / 2, times);
     }
 
     @RobotKeyword("""
@@ -236,7 +192,15 @@ public class MouseKeywords {
     }
 
     @RobotKeyword("""
-            Press Mouse Button
+            Get Mouse Position
+            """)
+    public Map<String, Integer> getMousePosition() {
+        Point p = MOUSE_CONTROLLER.getMousePosition();
+        return Map.of("x", p.x, "y", p.y );
+    }
+
+    @RobotKeyword("""
+            Release Mouse Button
             """)
     public void releaseMouseButton(String button) throws MouseException {
         try {

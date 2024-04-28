@@ -4,14 +4,13 @@ import com.kalynx.simplethreadingservice.ThreadService;
 import com.kalynx.uitestframework.controller.DisplayManager;
 import com.kalynx.uitestframework.controller.Settings;
 import com.kalynx.uitestframework.data.*;
-import org.opencv.core.Point;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,7 +19,6 @@ import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.List;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -46,13 +44,13 @@ public class CvMonitor {
         this.settings = settings;
     }
 
-    private static Mat imageToMat(BufferedImage sourceImg) {
+    private static Mat imageToMat(BufferedImage sourceImg) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
             ImageIO.write(sourceImg, "jpg", byteArrayOutputStream);
             byteArrayOutputStream.flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IOException(e);
         }
         return Imgcodecs.imdecode(new MatOfByte(byteArrayOutputStream.toByteArray()), Imgcodecs.IMREAD_COLOR);
     }
@@ -115,7 +113,7 @@ public class CvMonitor {
     }
 
 
-    public Result<ScreenshotData> monitorForImage(String imageLocation) throws Exception {
+    public Result<ScreenshotData> monitorForImage(String imageLocation) throws IOException {
         return monitorForImage(settings.getTimeout(), imageLocation, settings.getMatchScore());
     }
 
@@ -174,13 +172,14 @@ public class CvMonitor {
 
     private Supplier<Result<Data>> buildMatchResults(ImageLibrary.TemplateContainer template, List<Result<Data>> results, double requiredMatchScore) {
         return () -> {
+            Result<Data> res;
             try {
-                Result<Data> res = match(template.template, template.mask, requiredMatchScore);
-                results.add(res);
-                return res;
-            } catch (Exception e) {
-                throw new RuntimeException(e.toString());
+                res = match(template.template, template.mask, requiredMatchScore);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
+            results.add(res);
+                return res;
         };
     }
 
@@ -223,7 +222,7 @@ public class CvMonitor {
     }
 
 
-    private Result<Data> match(Mat template, Mat mask, double matchScore) {
+    private Result<Data> match(Mat template, Mat mask, double matchScore) throws IOException {
         mask.convertTo(mask, CvType.CV_8U);
         template.convertTo(template, CvType.CV_8U);
         long takenTime = System.currentTimeMillis();
