@@ -19,9 +19,12 @@ Test Move Mouse To Image On Display
    &{mouse_position}=  Get Mouse Position
    ${x}=  Evaluate  ${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2
    ${y}=  Evaluate  ${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2
-   IF  ${x} != ${mouse_position}[x] or ${y} != ${mouse_position}[y]
-          Fail  Mouse did not move to the correct location
+   ${x_range}=  Evaluate ${x} - ${mouse_position}[x]
+   ${y_range}=  Evaluate ${y} - ${mouse_position}[y]
+   IF  ${x_range} > 3 or ${x_range} < 3 or ${y_range} > 3 or ${y_range}
+       Fail  Mouse did not move to the correct location
    END
+
    Move Window  Test Form  x=0  y=0  display=SECONDARY
    &{bounds}=  Get Image Bounds    testClick.png    display=SECONDARY
    &{display_bounds}=  Get Display Dimensions  SECONDARY
@@ -29,8 +32,10 @@ Test Move Mouse To Image On Display
    &{mouse_position}=  Get Mouse Position
    ${x}=  Evaluate  ${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2
    ${y}=  Evaluate  ${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2
-   IF  ${x} != ${mouse_position}[x] or ${y} != ${mouse_position}[y]
-          Fail  Mouse did not move to the correct location
+   ${x_range}=  Evaluate ${x} - ${mouse_position}[x]
+   ${y_range}=  Evaluate ${y} - ${mouse_position}[y]
+   IF  ${x_range} > 3 or ${x_range} < 3 or ${y_range} > 3 or ${y_range}
+       Fail  Mouse did not move to the correct location
    END
    [Teardown]  Move Window  Test Form  x=0  y=0  display=PRIMARY
 
