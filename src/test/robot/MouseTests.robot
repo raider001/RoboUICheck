@@ -19,8 +19,8 @@ Test Move Mouse To Image On Display
    &{mouse_position}=  Get Mouse Position
    ${x}=  Evaluate  ${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2
    ${y}=  Evaluate  ${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2
-   ${x_range}=  Evaluate ${x} - ${mouse_position}[x]
-   ${y_range}=  Evaluate ${y} - ${mouse_position}[y]
+   ${x_range}=  Evaluate  ${x} - ${mouse_position}[x]
+   ${y_range}=  Evaluate  ${y} - ${mouse_position}[y]
    IF  ${x_range} > 3 or ${x_range} < 3 or ${y_range} > 3 or ${y_range}
        Fail  Mouse did not move to the correct location
    END

@@ -13,7 +13,6 @@ Test Window Move
     &{dimensions}=  Get Window Dimensions  Test Form
     Move Window  Test Form  100  200
     &{new_dimensions}=  Get Window Dimensions  Test Form
-
     IF  ${${dimensions}[x] + 100} != ${new_dimensions}[x] and ${${dimensions}[y] + 200} != ${new_dimensions}[y]
         Fail  Window did not move correctly.
     END

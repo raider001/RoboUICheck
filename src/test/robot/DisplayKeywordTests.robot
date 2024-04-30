@@ -41,3 +41,4 @@ Test Set Display By Id
     IF  ${display_two} == ${display_one}
         Fail  The display is meant to be different from the first one
     END
+    [Teardown]  Set Monitored Display  PRIMARY
