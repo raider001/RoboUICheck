@@ -51,7 +51,7 @@ public class WindowKeywords {
     public void moveWindow(String windowName, int x, int y, String display) throws IllegalArgumentException, WindowException {
         if(!WINDOW_CONTROLLER.getAllWindows().contains(windowName)) throw new IllegalArgumentException(WINDOW + windowName + NOT_FOUND_AVAILABLE_WINDOWS + getAllAvailableWindows().toString());
         boolean success = display == null ? WINDOW_CONTROLLER.setWindowPosition(windowName, x, y) : WINDOW_CONTROLLER.setWindowPosition(windowName, display, x, y);
-        if(success) throw new WindowException("Window attempted to be moved out of bounds");
+        if(!success) throw new WindowException("Window attempted to be moved out of bounds");
     }
 
     @RobotKeyword("""

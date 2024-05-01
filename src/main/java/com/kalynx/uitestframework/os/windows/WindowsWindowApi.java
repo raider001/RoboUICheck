@@ -92,7 +92,7 @@ public class WindowsWindowApi implements Window {
             }
             return true;
         };
-        return WINDOW_API.EnumWindows(enumCallback, null);
+        return !WINDOW_API.EnumWindows(enumCallback, null);
     }
 
     /**

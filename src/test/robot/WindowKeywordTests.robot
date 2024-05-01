@@ -4,7 +4,8 @@ Library  BuiltIn
 Library  Collections
 Suite Setup   Run Keywords   Add Image Location  ${CURDIR}/  AND
 ...    Set Primary Display Reference    PRIMARY    AND
-...    Set Display Reference    PRIMARY    SMALLER_THAN    SECONDARY
+...    Set Display Reference    PRIMARY    SMALLER_THAN    SECONDARY  AND
+...    Set Monitored Display    PRIMARY
 
 
 *** Test Cases ***
@@ -20,7 +21,6 @@ Test Window Move
     IF  ${dimensions}[width] != ${new_dimensions}[width] and ${dimensions}[height] != ${new_dimensions}[height]
         Fail  Window width and height should not have moved.
     END
-
     [Teardown]  Move Window  Test Form  -100  -200
 
 Test Move Window To Another Screen

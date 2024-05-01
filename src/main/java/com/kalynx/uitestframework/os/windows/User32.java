@@ -3,13 +3,11 @@ package com.kalynx.uitestframework.os.windows;
 import com.kalynx.uitestframework.exceptions.DisplayNotFoundException;
 import com.sun.jna.*;
 
+import java.util.List;
 import java.util.Objects;
 
 public interface User32 extends Library {
     User32 INSTANCE = Native.load("user32", User32.class);
-    int MB_ICONERROR = 0x00000010;
-    int SM_CXSCREEN = 0;
-    int SM_CYSCREEN = 1;
 
     int MessageBoxW(Pointer hWnd, String lpText, String lpCaption, int uType);
 
@@ -39,7 +37,7 @@ public interface User32 extends Library {
         public int x, y;
 
         @Override
-        protected java.util.List getFieldOrder() {
+        protected List getFieldOrder() {
             return java.util.Arrays.asList("x", "y");
         }
 
