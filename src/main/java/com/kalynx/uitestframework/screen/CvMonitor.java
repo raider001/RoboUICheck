@@ -93,7 +93,6 @@ public class CvMonitor {
     }
 
     public void setLogLocation(Path logLocation) {
-        this.logLocation = logLocation;
         resultLocation = Path.of(logLocation.toString(), imageLocation.toString());
 
     }
