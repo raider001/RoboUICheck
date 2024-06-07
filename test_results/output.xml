@@ -1,0 +1,2582 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 5.0.1 (Python 3.11.2 on win32)" generated="20240607 21:52:15.463" rpa="false" schemaversion="3">
+<suite id="s1" name="Robot" source="G:\Projects\Fuckaround\robotuitestframework\src\test\robot">
+<suite id="s1-s1" name="DisplayKeywordTests" source="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\DisplayKeywordTests.robot">
+<kw name="Run Keywords" library="BuiltIn" type="SETUP">
+<arg>Add Image Location</arg>
+<arg>G:\\Projects\\Fuckaround\\robotuitestframework\\src\\test\\robot/</arg>
+<arg>AND</arg>
+<arg>Set Primary Display Reference</arg>
+<arg>PRIMARY</arg>
+<arg>AND</arg>
+<arg>Set Display Reference</arg>
+<arg>PRIMARY</arg>
+<arg>SMALLER_THAN</arg>
+<arg>SECONDARY</arg>
+<arg>AND</arg>
+<arg>Set Result Path</arg>
+<arg>${OUTPUT_DIR}</arg>
+<doc>Executes all the given keywords in a sequence.</doc>
+<kw name="Add Image Location" library="Remote">
+<arg>G:\\Projects\\Fuckaround\\robotuitestframework\\src\\test\\robot/</arg>
+<doc>Add Image Location
+Adds a location to search for images.</doc>
+<status status="PASS" starttime="20240607 21:52:15.504" endtime="20240607 21:52:15.506"/>
+</kw>
+<kw name="Set Primary Display Reference" library="Remote">
+<arg>PRIMARY</arg>
+<doc>Sets the primary display to the given reference name</doc>
+<status status="PASS" starttime="20240607 21:52:15.506" endtime="20240607 21:52:15.507"/>
+</kw>
+<kw name="Set Display Reference" library="Remote">
+<arg>PRIMARY</arg>
+<arg>SMALLER_THAN</arg>
+<arg>SECONDARY</arg>
+<doc>    Sets the reference display to the given reference name
+    Options:
+     LEFT
+     RIGHT
+     ABOVE
+     BELOW
+     SMALLER_THAN
+     LARGER_THAN</doc>
+<status status="PASS" starttime="20240607 21:52:15.507" endtime="20240607 21:52:15.508"/>
+</kw>
+<kw name="Set Result Path" library="Remote">
+<arg>${OUTPUT_DIR}</arg>
+<doc>Set Result Path
+Sets the path for where images will be saved.</doc>
+<status status="PASS" starttime="20240607 21:52:15.508" endtime="20240607 21:52:15.509"/>
+</kw>
+<status status="PASS" starttime="20240607 21:52:15.504" endtime="20240607 21:52:15.509"/>
+</kw>
+<test id="s1-s1-t1" name="Test Change Monitored Displays" line="13">
+<kw name="Set Monitored Display" library="Remote" type="SETUP">
+<arg>PRIMARY</arg>
+<doc>Set Display Reference</doc>
+<status status="PASS" starttime="20240607 21:52:15.510" endtime="20240607 21:52:15.510"/>
+</kw>
+<kw name="Set Monitored Display" library="Remote">
+<arg>SECONDARY</arg>
+<doc>Set Display Reference</doc>
+<status status="PASS" starttime="20240607 21:52:15.511" endtime="20240607 21:52:15.511"/>
+</kw>
+<kw name="Get Selected Display Dimensions" library="Remote">
+<var>&amp;{secondary}</var>
+<doc>Get Selected Display Dimensions</doc>
+<msg timestamp="20240607 21:52:15.513" level="INFO">&amp;{secondary} = { width=2560 | height=1440 | x=611 | y=-2160 }</msg>
+<status status="PASS" starttime="20240607 21:52:15.511" endtime="20240607 21:52:15.513"/>
+</kw>
+<kw name="Set Monitored Display" library="Remote">
+<arg>PRIMARY</arg>
+<doc>Set Display Reference</doc>
+<status status="PASS" starttime="20240607 21:52:15.513" endtime="20240607 21:52:15.514"/>
+</kw>
+<kw name="Get Selected Display Dimensions" library="Remote">
+<var>&amp;{primary}</var>
+<doc>Get Selected Display Dimensions</doc>
+<msg timestamp="20240607 21:52:15.514" level="INFO">&amp;{primary} = { width=5120 | height=1440 | x=0 | y=0 }</msg>
+<status status="PASS" starttime="20240607 21:52:15.514" endtime="20240607 21:52:15.514"/>
+</kw>
+<if>
+<branch type="IF" condition="${primary}[x] == ${secondary}[x] and ${primary}[y] == ${secondary}[y]">
+<kw name="Fail" library="BuiltIn">
+<arg>The primary and secondary displays are the same</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:52:15.515" endtime="20240607 21:52:15.515"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:52:15.515" endtime="20240607 21:52:15.515"/>
+</branch>
+<status status="PASS" starttime="20240607 21:52:15.514" endtime="20240607 21:52:15.515"/>
+</if>
+<doc>Test the monitored area</doc>
+<status status="PASS" starttime="20240607 21:52:15.509" endtime="20240607 21:52:15.515"/>
+</test>
+<test id="s1-s1-t2" name="Test Change Monitored Display Region" line="23">
+<kw name="Set Monitored Display" library="Remote" type="SETUP">
+<arg>PRIMARY</arg>
+<doc>Set Display Reference</doc>
+<status status="PASS" starttime="20240607 21:52:15.516" endtime="20240607 21:52:15.517"/>
+</kw>
+<kw name="Set Monitored Area" library="Remote">
+<arg>50</arg>
+<arg>50</arg>
+<arg>100</arg>
+<arg>100</arg>
+<status status="PASS" starttime="20240607 21:52:15.517" endtime="20240607 21:52:15.518"/>
+</kw>
+<kw name="Get Selected Display Monitored Area" library="Remote">
+<var>&amp;{area}</var>
+<doc>Get Selected Display Monitored Area</doc>
+<msg timestamp="20240607 21:52:15.519" level="INFO">&amp;{area} = { width=100 | height=100 | x=50 | y=50 }</msg>
+<status status="PASS" starttime="20240607 21:52:15.518" endtime="20240607 21:52:15.519"/>
+</kw>
+<if>
+<branch type="IF" condition="${area}[x] != 50 or ${area}[y] != 50 or ${area}[width] != 100 or ${area}[height] != 100">
+<kw name="Fail" library="BuiltIn">
+<arg>The selected area is not correct</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:52:15.520" endtime="20240607 21:52:15.520"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:52:15.520" endtime="20240607 21:52:15.520"/>
+</branch>
+<status status="PASS" starttime="20240607 21:52:15.519" endtime="20240607 21:52:15.520"/>
+</if>
+<kw name="Reset Monitored Area" library="Remote">
+<doc>Reset Monitored Area</doc>
+<status status="PASS" starttime="20240607 21:52:15.520" endtime="20240607 21:52:15.521"/>
+</kw>
+<kw name="Get Selected Display Monitored Area" library="Remote">
+<var>&amp;{area}</var>
+<doc>Get Selected Display Monitored Area</doc>
+<msg timestamp="20240607 21:52:15.522" level="INFO">&amp;{area} = { width=5120 | height=1440 | x=0 | y=0 }</msg>
+<status status="PASS" starttime="20240607 21:52:15.521" endtime="20240607 21:52:15.522"/>
+</kw>
+<if>
+<branch type="IF" condition="${area}[x] == 50 and ${area}[y] == 50 and ${area}[width] == 100 and ${area}[height] == 100">
+<kw name="Fail" library="BuiltIn">
+<arg>The selected area is not correct</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:52:15.522" endtime="20240607 21:52:15.522"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:52:15.522" endtime="20240607 21:52:15.522"/>
+</branch>
+<status status="PASS" starttime="20240607 21:52:15.522" endtime="20240607 21:52:15.522"/>
+</if>
+<doc>Test the defined region for monitoring on each screen.</doc>
+<status status="PASS" starttime="20240607 21:52:15.515" endtime="20240607 21:52:15.522"/>
+</test>
+<test id="s1-s1-t3" name="Test Set Display By Id" line="36">
+<kw name="Set Monitored Display" library="Remote" type="SETUP">
+<arg>PRIMARY</arg>
+<doc>Set Display Reference</doc>
+<status status="PASS" starttime="20240607 21:52:15.523" endtime="20240607 21:52:15.524"/>
+</kw>
+<kw name="Set Display By Id" library="Remote">
+<arg>0</arg>
+<doc>Set Display</doc>
+<status status="PASS" starttime="20240607 21:52:15.524" endtime="20240607 21:52:15.524"/>
+</kw>
+<kw name="Get Selected Display Dimensions" library="Remote">
+<var>&amp;{display_one}</var>
+<doc>Get Selected Display Dimensions</doc>
+<msg timestamp="20240607 21:52:15.525" level="INFO">&amp;{display_one} = { width=2560 | height=1440 | x=611 | y=-2160 }</msg>
+<status status="PASS" starttime="20240607 21:52:15.524" endtime="20240607 21:52:15.525"/>
+</kw>
+<kw name="Set Display By Id" library="Remote">
+<arg>1</arg>
+<doc>Set Display</doc>
+<status status="PASS" starttime="20240607 21:52:15.525" endtime="20240607 21:52:15.527"/>
+</kw>
+<kw name="Get Selected Display Dimensions" library="Remote">
+<var>&amp;{display_two}</var>
+<doc>Get Selected Display Dimensions</doc>
+<msg timestamp="20240607 21:52:15.528" level="INFO">&amp;{display_two} = { width=5120 | height=1440 | x=0 | y=0 }</msg>
+<status status="PASS" starttime="20240607 21:52:15.527" endtime="20240607 21:52:15.528"/>
+</kw>
+<if>
+<branch type="IF" condition="${display_two} == ${display_one}">
+<kw name="Fail" library="BuiltIn">
+<arg>The display is meant to be different from the first one</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:52:15.529" endtime="20240607 21:52:15.529"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:52:15.529" endtime="20240607 21:52:15.529"/>
+</branch>
+<status status="PASS" starttime="20240607 21:52:15.529" endtime="20240607 21:52:15.529"/>
+</if>
+<kw name="Set Monitored Display" library="Remote" type="TEARDOWN">
+<arg>PRIMARY</arg>
+<doc>Set Display Reference</doc>
+<status status="PASS" starttime="20240607 21:52:15.529" endtime="20240607 21:52:15.530"/>
+</kw>
+<doc>Test setting the display by id</doc>
+<status status="PASS" starttime="20240607 21:52:15.523" endtime="20240607 21:52:15.530"/>
+</test>
+<status status="PASS" starttime="20240607 21:52:15.480" endtime="20240607 21:52:15.531"/>
+</suite>
+<suite id="s1-s2" name="ImageMatchTests" source="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\ImageMatchTests.robot">
+<kw name="Run Keywords" library="BuiltIn" type="SETUP">
+<arg>Add Image Location</arg>
+<arg>G:\\Projects\\Fuckaround\\robotuitestframework\\src\\test\\robot/</arg>
+<arg>AND</arg>
+<arg>Bring Window To Front</arg>
+<arg>Test Form</arg>
+<arg>AND</arg>
+<arg>Set Primary Display Reference</arg>
+<arg>PRIMARY</arg>
+<arg>AND</arg>
+<arg>Set Display Reference</arg>
+<arg>PRIMARY</arg>
+<arg>SMALLER_THAN</arg>
+<arg>SECONDARY</arg>
+<arg>AND</arg>
+<arg>Set Match Percentage</arg>
+<arg>.95</arg>
+<arg>AND</arg>
+<arg>Set Result Path</arg>
+<arg>${OUTPUT_DIR}</arg>
+<doc>Executes all the given keywords in a sequence.</doc>
+<kw name="Add Image Location" library="Remote">
+<arg>G:\\Projects\\Fuckaround\\robotuitestframework\\src\\test\\robot/</arg>
+<doc>Add Image Location
+Adds a location to search for images.</doc>
+<status status="PASS" starttime="20240607 21:52:15.534" endtime="20240607 21:52:15.535"/>
+</kw>
+<kw name="Bring Window To Front" library="Remote">
+<arg>Test Form</arg>
+<doc>Brings the window to the front.</doc>
+<status status="PASS" starttime="20240607 21:52:15.535" endtime="20240607 21:52:15.538"/>
+</kw>
+<kw name="Set Primary Display Reference" library="Remote">
+<arg>PRIMARY</arg>
+<doc>Sets the primary display to the given reference name</doc>
+<status status="PASS" starttime="20240607 21:52:15.538" endtime="20240607 21:52:15.539"/>
+</kw>
+<kw name="Set Display Reference" library="Remote">
+<arg>PRIMARY</arg>
+<arg>SMALLER_THAN</arg>
+<arg>SECONDARY</arg>
+<doc>    Sets the reference display to the given reference name
+    Options:
+     LEFT
+     RIGHT
+     ABOVE
+     BELOW
+     SMALLER_THAN
+     LARGER_THAN</doc>
+<status status="PASS" starttime="20240607 21:52:15.539" endtime="20240607 21:52:15.540"/>
+</kw>
+<kw name="Set Match Percentage" library="Remote">
+<arg>.95</arg>
+<doc>Set Match Percentage
+Sets the minimum accepted similarity as a percentage. When attempting to find image matching, if the image
+score is below the given similarity, it will be considered a failure.</doc>
+<status status="PASS" starttime="20240607 21:52:15.540" endtime="20240607 21:52:15.541"/>
+</kw>
+<kw name="Set Result Path" library="Remote">
+<arg>${OUTPUT_DIR}</arg>
+<doc>Set Result Path
+Sets the path for where images will be saved.</doc>
+<status status="PASS" starttime="20240607 21:52:15.541" endtime="20240607 21:52:15.542"/>
+</kw>
+<status status="PASS" starttime="20240607 21:52:15.534" endtime="20240607 21:52:15.542"/>
+</kw>
+<test id="s1-s2-t1" name="Test Verify Image Exists" line="14">
+<kw name="Verify Image Exists" library="Remote">
+<arg>testClick.png</arg>
+<doc>Verify Image Exists</doc>
+<msg timestamp="20240607 21:52:20.014" level="INFO" html="true">Best match score: 0.98631
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762935546_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762935546_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762935546_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:15.543" endtime="20240607 21:52:20.014"/>
+</kw>
+<doc>Tests that the basic verify Image Exist keyword functions as expected.</doc>
+<status status="PASS" starttime="20240607 21:52:15.542" endtime="20240607 21:52:20.015"/>
+</test>
+<test id="s1-s2-t2" name="Verify Image Match Fails Properly" line="18">
+<kw name="Verify Image Does Not Exist" library="Remote">
+<arg>fail.png</arg>
+<doc>Verify Image Does Not Exist</doc>
+<msg timestamp="20240607 21:52:24.734" level="INFO" html="true">Best match score: 0.74979
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762940023_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762940023_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762940023_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:20.016" endtime="20240607 21:52:24.734"/>
+</kw>
+<doc>Tests that the match score resets back to original match score after a test case</doc>
+<status status="PASS" starttime="20240607 21:52:20.015" endtime="20240607 21:52:24.734"/>
+</test>
+<test id="s1-s2-t3" name="Test Stored Match Score Remains" line="22">
+<kw name="Verify Image Exists" library="Remote">
+<arg>fail.png</arg>
+<arg>minMatchScore=0.005</arg>
+<doc>Verify Image Exists</doc>
+<msg timestamp="20240607 21:52:29.475" level="INFO" html="true">Best match score: 0.74979
+ Needed: 0.005
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762944742_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762944742_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762944742_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:24.735" endtime="20240607 21:52:29.475"/>
+</kw>
+<kw name="Verify Image Does Not Exist" library="Remote">
+<arg>fail.png</arg>
+<doc>Verify Image Does Not Exist</doc>
+<msg timestamp="20240607 21:52:34.159" level="INFO" html="true">Best match score: 0.74979
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762949482_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762949482_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762949482_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:29.476" endtime="20240607 21:52:34.159"/>
+</kw>
+<doc>Tests that the match score is correctly stored and is not modified for one-time changes.</doc>
+<status status="PASS" starttime="20240607 21:52:24.734" endtime="20240607 21:52:34.159"/>
+</test>
+<test id="s1-s2-t4" name="Test Match Percentage" line="27">
+<kw name="Verify Image Exists" library="Remote">
+<arg>fail.png</arg>
+<arg>minMatchScore=0.005</arg>
+<doc>Verify Image Exists</doc>
+<msg timestamp="20240607 21:52:38.833" level="INFO" html="true">Best match score: 0.74979
+ Needed: 0.005
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762954175_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762954175_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762954175_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:34.160" endtime="20240607 21:52:38.833"/>
+</kw>
+<kw name="Verify Image Does Not Exist" library="Remote">
+<arg>fail.png</arg>
+<arg>minMatchScore=0.95</arg>
+<doc>Verify Image Does Not Exist</doc>
+<msg timestamp="20240607 21:52:43.554" level="INFO" html="true">Best match score: 0.74979
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762958840_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762958840_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762958840_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:38.834" endtime="20240607 21:52:43.554"/>
+</kw>
+<doc>Tests that the match percentage can be set and retrieved</doc>
+<status status="PASS" starttime="20240607 21:52:34.160" endtime="20240607 21:52:43.554"/>
+</test>
+<test id="s1-s2-t5" name="Test Image Mask Verification" line="32">
+<kw name="Verify Image Exists" library="Remote">
+<arg>transparencyTest.png</arg>
+<doc>Verify Image Exists</doc>
+<msg timestamp="20240607 21:52:48.385" level="INFO" html="true">Best match score: 0.99423
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762963561_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762963561_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762963561_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:43.556" endtime="20240607 21:52:48.385"/>
+</kw>
+<doc>Tests that the image mask verification works as expected</doc>
+<status status="PASS" starttime="20240607 21:52:43.556" endtime="20240607 21:52:48.385"/>
+</test>
+<test id="s1-s2-t6" name="Test Image Verification On Display" line="36">
+<kw name="Verify Image Does Not Exist On Display" library="Remote">
+<arg>testClick.png</arg>
+<arg>SECONDARY</arg>
+<doc>Verify Image Does Not Exist On Display</doc>
+<msg timestamp="20240607 21:52:48.834" level="INFO" html="true">Best match score: 0.66462
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762968390_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762968390_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762968390_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:48.386" endtime="20240607 21:52:48.834"/>
+</kw>
+<kw name="Verify Image Exists On Display" library="Remote">
+<arg>testClick.png</arg>
+<arg>PRIMARY</arg>
+<doc>Verify Image Exists On Display</doc>
+<msg timestamp="20240607 21:52:53.262" level="INFO" html="true">Best match score: 0.98631
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762968837_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762968837_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762968837_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:48.834" endtime="20240607 21:52:53.262"/>
+</kw>
+<doc>Basic test to demosntrate display ID referencing and Display Image Verification</doc>
+<status status="PASS" starttime="20240607 21:52:48.386" endtime="20240607 21:52:53.262"/>
+</test>
+<test id="s1-s2-t7" name="Test Image Verification On Form" line="41">
+<kw name="Verify Image Exists On Window" library="Remote">
+<arg>testClick.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:52:53.472" level="INFO" html="true">Best match score: 0.98631
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762973268_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762973268_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762973268_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:53.263" endtime="20240607 21:52:53.472"/>
+</kw>
+<kw name="Verify Image Does Not Exist On Window" library="Remote">
+<arg>fail.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:52:53.682" level="INFO" html="true">Best match score: 0.74979
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762973479_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762973479_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762973479_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:53.472" endtime="20240607 21:52:53.682"/>
+</kw>
+<doc>Test form verification</doc>
+<status status="PASS" starttime="20240607 21:52:53.263" endtime="20240607 21:52:53.683"/>
+</test>
+<test id="s1-s2-t8" name="Test Image Bounds Verification" line="46">
+<kw name="Get Image Bounds" library="Remote">
+<var>&amp;{bounds}</var>
+<arg>testClick.png</arg>
+<doc>Get Image Bounds</doc>
+<msg timestamp="20240607 21:52:58.120" level="INFO" html="true">Best match score: 0.98631
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762973687_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762973687_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762973687_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<msg timestamp="20240607 21:52:58.121" level="INFO">&amp;{bounds} = { width=62 | height=14 | x=84 | y=42 }</msg>
+<status status="PASS" starttime="20240607 21:52:53.683" endtime="20240607 21:52:58.121"/>
+</kw>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<arg>${bounds}</arg>
+<arg>x</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" starttime="20240607 21:52:58.121" endtime="20240607 21:52:58.122"/>
+</kw>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<arg>${bounds}</arg>
+<arg>y</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" starttime="20240607 21:52:58.122" endtime="20240607 21:52:58.122"/>
+</kw>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<arg>${bounds}</arg>
+<arg>width</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" starttime="20240607 21:52:58.122" endtime="20240607 21:52:58.122"/>
+</kw>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<arg>${bounds}</arg>
+<arg>height</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" starttime="20240607 21:52:58.122" endtime="20240607 21:52:58.122"/>
+</kw>
+<kw name="Get Image Bounds" library="Remote">
+<arg>testClick.png</arg>
+<arg>window=Test Form</arg>
+<doc>Get Image Bounds</doc>
+<msg timestamp="20240607 21:52:58.324" level="INFO" html="true">Best match score: 0.98631
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762978127_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762978127_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762978127_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:58.123" endtime="20240607 21:52:58.324"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Get Image Bounds" library="Remote">
+<arg>testClick.png</arg>
+<arg>display=SECONDARY</arg>
+<doc>Get Image Bounds</doc>
+<msg timestamp="20240607 21:52:58.752" level="FAIL" html="true">Best match score: 0.66462
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762978328_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762978328_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762978328_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;
+</msg>
+<status status="FAIL" starttime="20240607 21:52:58.325" endtime="20240607 21:52:58.752"/>
+</kw>
+<kw name="Fail" library="BuiltIn">
+<arg>Should not have gotten bounds as image does not exist on secondary display.</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:52:58.752" endtime="20240607 21:52:58.752"/>
+</kw>
+<status status="FAIL" starttime="20240607 21:52:58.325" endtime="20240607 21:52:58.752"/>
+</branch>
+<branch type="EXCEPT">
+<kw name="Log" library="BuiltIn">
+<arg>Test Passed</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240607 21:52:58.753" level="INFO">Test Passed</msg>
+<status status="PASS" starttime="20240607 21:52:58.752" endtime="20240607 21:52:58.753"/>
+</kw>
+<status status="PASS" starttime="20240607 21:52:58.752" endtime="20240607 21:52:58.753"/>
+</branch>
+<status status="PASS" starttime="20240607 21:52:58.325" endtime="20240607 21:52:58.753"/>
+</try>
+<doc>Tests that the image bounds verification works as expected</doc>
+<status status="PASS" starttime="20240607 21:52:53.683" endtime="20240607 21:52:58.753"/>
+</test>
+<status status="PASS" starttime="20240607 21:52:15.532" endtime="20240607 21:52:58.754"/>
+</suite>
+<suite id="s1-s3" name="KeyboardTests" source="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\KeyboardTests.robot">
+<kw name="Run Keywords" library="BuiltIn" type="SETUP">
+<arg>Add Image Location</arg>
+<arg>G:\\Projects\\Fuckaround\\robotuitestframework\\src\\test\\robot/</arg>
+<arg>AND</arg>
+<arg>Bring Window To Front</arg>
+<arg>Test Form</arg>
+<arg>AND</arg>
+<arg>Set Primary Display Reference</arg>
+<arg>PRIMARY</arg>
+<arg>AND</arg>
+<arg>Set Display Reference</arg>
+<arg>PRIMARY</arg>
+<arg>SMALLER_THAN</arg>
+<arg>SECONDARY</arg>
+<arg>AND</arg>
+<arg>Set Result Path</arg>
+<arg>${OUTPUT_DIR}</arg>
+<doc>Executes all the given keywords in a sequence.</doc>
+<kw name="Add Image Location" library="Remote">
+<arg>G:\\Projects\\Fuckaround\\robotuitestframework\\src\\test\\robot/</arg>
+<doc>Add Image Location
+Adds a location to search for images.</doc>
+<status status="PASS" starttime="20240607 21:52:58.758" endtime="20240607 21:52:58.760"/>
+</kw>
+<kw name="Bring Window To Front" library="Remote">
+<arg>Test Form</arg>
+<doc>Brings the window to the front.</doc>
+<status status="PASS" starttime="20240607 21:52:58.760" endtime="20240607 21:52:58.761"/>
+</kw>
+<kw name="Set Primary Display Reference" library="Remote">
+<arg>PRIMARY</arg>
+<doc>Sets the primary display to the given reference name</doc>
+<status status="PASS" starttime="20240607 21:52:58.761" endtime="20240607 21:52:58.762"/>
+</kw>
+<kw name="Set Display Reference" library="Remote">
+<arg>PRIMARY</arg>
+<arg>SMALLER_THAN</arg>
+<arg>SECONDARY</arg>
+<doc>    Sets the reference display to the given reference name
+    Options:
+     LEFT
+     RIGHT
+     ABOVE
+     BELOW
+     SMALLER_THAN
+     LARGER_THAN</doc>
+<status status="PASS" starttime="20240607 21:52:58.762" endtime="20240607 21:52:58.763"/>
+</kw>
+<kw name="Set Result Path" library="Remote">
+<arg>${OUTPUT_DIR}</arg>
+<doc>Set Result Path
+Sets the path for where images will be saved.</doc>
+<status status="PASS" starttime="20240607 21:52:58.763" endtime="20240607 21:52:58.764"/>
+</kw>
+<status status="PASS" starttime="20240607 21:52:58.758" endtime="20240607 21:52:58.764"/>
+</kw>
+<test id="s1-s3-t1" name="Test Keyboard KeyPress" line="12">
+<kw name="Click" library="Remote">
+<arg>image=textarea.png</arg>
+<arg>window=Test Form</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<msg timestamp="20240607 21:53:00.104" level="INFO" html="true">Best match score: 0.99799
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762978770_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762978770_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762978770_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:52:58.765" endtime="20240607 21:53:00.104"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>A</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:00.104" endtime="20240607 21:53:00.197"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>B</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:00.197" endtime="20240607 21:53:00.290"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>C</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:00.290" endtime="20240607 21:53:00.383"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>D</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:00.383" endtime="20240607 21:53:00.476"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>E</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:00.477" endtime="20240607 21:53:00.569"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>F</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:00.569" endtime="20240607 21:53:00.662"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>G</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:00.662" endtime="20240607 21:53:00.755"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>H</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:00.756" endtime="20240607 21:53:00.848"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>I</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:00.848" endtime="20240607 21:53:00.941"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>J</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:00.941" endtime="20240607 21:53:01.034"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>K</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:01.035" endtime="20240607 21:53:01.128"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>L</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:01.128" endtime="20240607 21:53:01.221"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>M</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:01.221" endtime="20240607 21:53:01.313"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>N</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:01.314" endtime="20240607 21:53:01.406"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>O</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:01.407" endtime="20240607 21:53:01.498"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>P</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:01.499" endtime="20240607 21:53:01.591"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>Q</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:01.591" endtime="20240607 21:53:01.685"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>R</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:01.685" endtime="20240607 21:53:01.778"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>S</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:01.778" endtime="20240607 21:53:01.869"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>T</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:01.870" endtime="20240607 21:53:01.963"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>U</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:01.963" endtime="20240607 21:53:02.057"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>V</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:02.057" endtime="20240607 21:53:02.150"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>W</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:02.150" endtime="20240607 21:53:02.243"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>X</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:02.244" endtime="20240607 21:53:02.337"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>Y</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:02.338" endtime="20240607 21:53:02.429"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>Z</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:02.429" endtime="20240607 21:53:02.523"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>A</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:02.524" endtime="20240607 21:53:02.709"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>B</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:02.709" endtime="20240607 21:53:02.894"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>C</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:02.895" endtime="20240607 21:53:03.080"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>D</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:03.080" endtime="20240607 21:53:03.264"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>E</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:03.265" endtime="20240607 21:53:03.451"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>F</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:03.451" endtime="20240607 21:53:03.638"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>G</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:03.638" endtime="20240607 21:53:03.823"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>H</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:03.823" endtime="20240607 21:53:04.009"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>I</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:04.010" endtime="20240607 21:53:04.196"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>J</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:04.197" endtime="20240607 21:53:04.382"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>K</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:04.383" endtime="20240607 21:53:04.568"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>L</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:04.568" endtime="20240607 21:53:04.754"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>M</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:04.754" endtime="20240607 21:53:04.939"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>N</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:04.940" endtime="20240607 21:53:05.126"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>O</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:05.126" endtime="20240607 21:53:05.311"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>P</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:05.312" endtime="20240607 21:53:05.497"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>Q</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:05.497" endtime="20240607 21:53:05.683"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>R</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:05.683" endtime="20240607 21:53:05.870"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>S</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:05.870" endtime="20240607 21:53:06.056"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>T</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:06.057" endtime="20240607 21:53:06.243"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>U</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:06.243" endtime="20240607 21:53:06.428"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>V</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:06.429" endtime="20240607 21:53:06.615"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>W</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:06.616" endtime="20240607 21:53:06.801"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>X</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:06.801" endtime="20240607 21:53:06.987"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>Y</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:06.987" endtime="20240607 21:53:07.174"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>SHIFT</arg>
+<arg>Z</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:07.174" endtime="20240607 21:53:07.361"/>
+</kw>
+<kw name="Verify Image Exists On Window" library="Remote">
+<arg>alphabet.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:53:07.523" level="INFO" html="true">Best match score: 0.97998
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762987365_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762987365_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762987365_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:07.361" endtime="20240607 21:53:07.523"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>CONTROL</arg>
+<arg>A</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:07.523" endtime="20240607 21:53:07.703"/>
+</kw>
+<kw name="Verify Image Exists On Window" library="Remote">
+<arg>alphabetselected.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:53:07.858" level="INFO" html="true">Best match score: 0.98346
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762987707_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762987707_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762987707_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:07.703" endtime="20240607 21:53:07.858"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>BACK_SPACE</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:07.858" endtime="20240607 21:53:07.952"/>
+</kw>
+<kw name="Verify Image Does Not Exist On Window" library="Remote">
+<arg>alphabetselected.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:53:08.113" level="INFO" html="true">Best match score: 0.84211
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762987957_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762987957_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762987957_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:07.953" endtime="20240607 21:53:08.114"/>
+</kw>
+<doc>Test Keyboard KeyPress</doc>
+<status status="PASS" starttime="20240607 21:52:58.764" endtime="20240607 21:53:08.114"/>
+</test>
+<test id="s1-s3-t2" name="Test Typing" line="73">
+<kw name="Click" library="Remote">
+<arg>image=textarea.png</arg>
+<arg>window=Test Form</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<msg timestamp="20240607 21:53:08.528" level="INFO" html="true">Best match score: 0.99799
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762988121_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762988121_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762988121_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:08.114" endtime="20240607 21:53:08.528"/>
+</kw>
+<kw name="Type" library="Remote">
+<arg>Hello world! this is a demonstration of typing with this framework.</arg>
+<doc>Types the given message</doc>
+<status status="PASS" starttime="20240607 21:53:08.529" endtime="20240607 21:53:10.604"/>
+</kw>
+<kw name="Verify Image Exists On Window" library="Remote">
+<arg>sentence.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:53:10.766" level="INFO" html="true">Best match score: 0.98617
+ Needed: 0.95
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762990609_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762990609_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762990609_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:10.605" endtime="20240607 21:53:10.766"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>CONTROL</arg>
+<arg>A</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:10.767" endtime="20240607 21:53:10.948"/>
+</kw>
+<kw name="Press Keys" library="Remote">
+<arg>BACK_SPACE</arg>
+<doc>presses a set of keys, then releases them immediately afterwords.</doc>
+<status status="PASS" starttime="20240607 21:53:10.949" endtime="20240607 21:53:11.043"/>
+</kw>
+<status status="PASS" starttime="20240607 21:53:08.114" endtime="20240607 21:53:11.043"/>
+</test>
+<status status="PASS" starttime="20240607 21:52:58.755" endtime="20240607 21:53:11.044"/>
+</suite>
+<suite id="s1-s4" name="MouseTests" source="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\MouseTests.robot">
+<kw name="Run Keywords" library="BuiltIn" type="SETUP">
+<arg>Add Image Location</arg>
+<arg>G:\\Projects\\Fuckaround\\robotuitestframework\\src\\test\\robot/</arg>
+<arg>AND</arg>
+<arg>Bring Window To Front</arg>
+<arg>Test Form</arg>
+<arg>AND</arg>
+<arg>Set Primary Display Reference</arg>
+<arg>PRIMARY</arg>
+<arg>AND</arg>
+<arg>Set Display Reference</arg>
+<arg>PRIMARY</arg>
+<arg>SMALLER_THAN</arg>
+<arg>SECONDARY</arg>
+<arg>AND</arg>
+<arg>Set Match Percentage</arg>
+<arg>.9</arg>
+<arg>AND</arg>
+<arg>Set Result Path</arg>
+<arg>${OUTPUT_DIR}</arg>
+<doc>Executes all the given keywords in a sequence.</doc>
+<kw name="Add Image Location" library="Remote">
+<arg>G:\\Projects\\Fuckaround\\robotuitestframework\\src\\test\\robot/</arg>
+<doc>Add Image Location
+Adds a location to search for images.</doc>
+<status status="PASS" starttime="20240607 21:53:11.048" endtime="20240607 21:53:11.050"/>
+</kw>
+<kw name="Bring Window To Front" library="Remote">
+<arg>Test Form</arg>
+<doc>Brings the window to the front.</doc>
+<status status="PASS" starttime="20240607 21:53:11.050" endtime="20240607 21:53:11.051"/>
+</kw>
+<kw name="Set Primary Display Reference" library="Remote">
+<arg>PRIMARY</arg>
+<doc>Sets the primary display to the given reference name</doc>
+<status status="PASS" starttime="20240607 21:53:11.051" endtime="20240607 21:53:11.052"/>
+</kw>
+<kw name="Set Display Reference" library="Remote">
+<arg>PRIMARY</arg>
+<arg>SMALLER_THAN</arg>
+<arg>SECONDARY</arg>
+<doc>    Sets the reference display to the given reference name
+    Options:
+     LEFT
+     RIGHT
+     ABOVE
+     BELOW
+     SMALLER_THAN
+     LARGER_THAN</doc>
+<status status="PASS" starttime="20240607 21:53:11.052" endtime="20240607 21:53:11.053"/>
+</kw>
+<kw name="Set Match Percentage" library="Remote">
+<arg>.9</arg>
+<doc>Set Match Percentage
+Sets the minimum accepted similarity as a percentage. When attempting to find image matching, if the image
+score is below the given similarity, it will be considered a failure.</doc>
+<status status="PASS" starttime="20240607 21:53:11.053" endtime="20240607 21:53:11.053"/>
+</kw>
+<kw name="Set Result Path" library="Remote">
+<arg>${OUTPUT_DIR}</arg>
+<doc>Set Result Path
+Sets the path for where images will be saved.</doc>
+<status status="PASS" starttime="20240607 21:53:11.054" endtime="20240607 21:53:11.054"/>
+</kw>
+<status status="PASS" starttime="20240607 21:53:11.048" endtime="20240607 21:53:11.054"/>
+</kw>
+<test id="s1-s4-t1" name="Test Move Mouse To Image" line="13">
+<kw name="Move Mouse To" library="Remote">
+<arg>image=testClick.png</arg>
+<doc>Move Mouse To</doc>
+<msg timestamp="20240607 21:53:15.619" level="INFO" html="true">Best match score: 0.98874
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762991058_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762991058_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762991058_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:11.054" endtime="20240607 21:53:15.619"/>
+</kw>
+<status status="PASS" starttime="20240607 21:53:11.054" endtime="20240607 21:53:15.619"/>
+</test>
+<test id="s1-s4-t2" name="Test Move Mouse To Image On Display" line="16">
+<kw name="Get Image Bounds" library="Remote">
+<var>&amp;{bounds}</var>
+<arg>testClick.png</arg>
+<arg>display=PRIMARY</arg>
+<doc>Get Image Bounds</doc>
+<msg timestamp="20240607 21:53:20.072" level="INFO" html="true">Best match score: 0.98879
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762995623_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762995623_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717762995623_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<msg timestamp="20240607 21:53:20.072" level="INFO">&amp;{bounds} = { width=62 | height=14 | x=84 | y=42 }</msg>
+<status status="PASS" starttime="20240607 21:53:15.620" endtime="20240607 21:53:20.072"/>
+</kw>
+<kw name="Get Display Dimensions" library="Remote">
+<var>&amp;{display_bounds}</var>
+<arg>PRIMARY</arg>
+<doc>Get Display Dimensions</doc>
+<msg timestamp="20240607 21:53:20.074" level="INFO">&amp;{display_bounds} = { width=5120 | height=1440 | x=0 | y=0 }</msg>
+<status status="PASS" starttime="20240607 21:53:20.072" endtime="20240607 21:53:20.074"/>
+</kw>
+<kw name="Move Mouse To" library="Remote">
+<arg>image=testClick.png</arg>
+<arg>display=PRIMARY</arg>
+<doc>Move Mouse To</doc>
+<msg timestamp="20240607 21:53:24.528" level="INFO" html="true">Best match score: 0.98879
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763000076_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763000076_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763000076_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:20.074" endtime="20240607 21:53:24.528"/>
+</kw>
+<kw name="Get Mouse Position" library="Remote">
+<var>&amp;{mouse_position}</var>
+<doc>Get Mouse Position</doc>
+<msg timestamp="20240607 21:53:24.530" level="INFO">&amp;{mouse_position} = { x=115 | y=49 }</msg>
+<status status="PASS" starttime="20240607 21:53:24.528" endtime="20240607 21:53:24.531"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${x}</var>
+<arg>${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:24.531" level="INFO">${x} = 115.0</msg>
+<status status="PASS" starttime="20240607 21:53:24.531" endtime="20240607 21:53:24.531"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${y}</var>
+<arg>${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:24.531" level="INFO">${y} = 49.0</msg>
+<status status="PASS" starttime="20240607 21:53:24.531" endtime="20240607 21:53:24.531"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${x_range}</var>
+<arg>${x} - ${mouse_position}[x]</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:24.532" level="INFO">${x_range} = 0.0</msg>
+<status status="PASS" starttime="20240607 21:53:24.532" endtime="20240607 21:53:24.532"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${y_range}</var>
+<arg>${y} - ${mouse_position}[y]</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:24.532" level="INFO">${y_range} = 0.0</msg>
+<status status="PASS" starttime="20240607 21:53:24.532" endtime="20240607 21:53:24.532"/>
+</kw>
+<if>
+<branch type="IF" condition="${x_range} &gt; 4 or ${x_range} &lt; -4 or ${y_range} &gt; 4 or ${y_range} &lt; -4">
+<kw name="Fail" library="BuiltIn">
+<arg>Mouse did not move to the correct location</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:53:24.533" endtime="20240607 21:53:24.533"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:53:24.532" endtime="20240607 21:53:24.533"/>
+</branch>
+<status status="PASS" starttime="20240607 21:53:24.532" endtime="20240607 21:53:24.533"/>
+</if>
+<kw name="Move Window" library="Remote">
+<arg>Test Form</arg>
+<arg>x=0</arg>
+<arg>y=0</arg>
+<arg>display=SECONDARY</arg>
+<doc>Move Window
+Moves the window to the back</doc>
+<status status="PASS" starttime="20240607 21:53:24.533" endtime="20240607 21:53:24.554"/>
+</kw>
+<kw name="Get Image Bounds" library="Remote">
+<var>&amp;{bounds}</var>
+<arg>testClick.png</arg>
+<arg>display=SECONDARY</arg>
+<doc>Get Image Bounds</doc>
+<msg timestamp="20240607 21:53:25.020" level="INFO" html="true">Best match score: 0.93452
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763004557_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763004557_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763004557_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<msg timestamp="20240607 21:53:25.020" level="INFO">&amp;{bounds} = { width=62 | height=14 | x=84 | y=42 }</msg>
+<status status="PASS" starttime="20240607 21:53:24.554" endtime="20240607 21:53:25.020"/>
+</kw>
+<kw name="Get Display Dimensions" library="Remote">
+<var>&amp;{display_bounds}</var>
+<arg>SECONDARY</arg>
+<doc>Get Display Dimensions</doc>
+<msg timestamp="20240607 21:53:25.022" level="INFO">&amp;{display_bounds} = { width=2560 | height=1440 | x=611 | y=-2160 }</msg>
+<status status="PASS" starttime="20240607 21:53:25.020" endtime="20240607 21:53:25.022"/>
+</kw>
+<kw name="Move Mouse To" library="Remote">
+<arg>image=testClick.png</arg>
+<arg>display=SECONDARY</arg>
+<doc>Move Mouse To</doc>
+<msg timestamp="20240607 21:53:26.605" level="INFO" html="true">Best match score: 0.93452
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763005025_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763005025_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763005025_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:25.022" endtime="20240607 21:53:26.606"/>
+</kw>
+<kw name="Get Mouse Position" library="Remote">
+<var>&amp;{mouse_position}</var>
+<doc>Get Mouse Position</doc>
+<msg timestamp="20240607 21:53:26.608" level="INFO">&amp;{mouse_position} = { x=726 | y=-2111 }</msg>
+<status status="PASS" starttime="20240607 21:53:26.606" endtime="20240607 21:53:26.608"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${x}</var>
+<arg>${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:26.608" level="INFO">${x} = 726.0</msg>
+<status status="PASS" starttime="20240607 21:53:26.608" endtime="20240607 21:53:26.608"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${y}</var>
+<arg>${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:26.609" level="INFO">${y} = -2111.0</msg>
+<status status="PASS" starttime="20240607 21:53:26.608" endtime="20240607 21:53:26.609"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${x_range}</var>
+<arg>${x} - ${mouse_position}[x]</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:26.609" level="INFO">${x_range} = 0.0</msg>
+<status status="PASS" starttime="20240607 21:53:26.609" endtime="20240607 21:53:26.609"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${y_range}</var>
+<arg>${y} - ${mouse_position}[y]</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:26.609" level="INFO">${y_range} = 0.0</msg>
+<status status="PASS" starttime="20240607 21:53:26.609" endtime="20240607 21:53:26.609"/>
+</kw>
+<if>
+<branch type="IF" condition="${x_range} &gt; 4 or ${x_range} &lt; -4 or ${y_range} &gt; 4 or ${y_range} &lt; -4">
+<kw name="Fail" library="BuiltIn">
+<arg>Mouse did not move to the correct location</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:53:26.610" endtime="20240607 21:53:26.610"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:53:26.610" endtime="20240607 21:53:26.610"/>
+</branch>
+<status status="PASS" starttime="20240607 21:53:26.610" endtime="20240607 21:53:26.610"/>
+</if>
+<kw name="Move Window" library="Remote" type="TEARDOWN">
+<arg>Test Form</arg>
+<arg>x=0</arg>
+<arg>y=0</arg>
+<arg>display=PRIMARY</arg>
+<doc>Move Window
+Moves the window to the back</doc>
+<status status="PASS" starttime="20240607 21:53:26.610" endtime="20240607 21:53:26.624"/>
+</kw>
+<status status="PASS" starttime="20240607 21:53:15.620" endtime="20240607 21:53:26.624"/>
+</test>
+<test id="s1-s4-t3" name="Test Move Mouse To Image On Window" line="43">
+<kw name="Get Image Bounds" library="Remote">
+<var>&amp;{bounds}</var>
+<arg>testClick.png</arg>
+<arg>window=Test Form</arg>
+<doc>Get Image Bounds</doc>
+<msg timestamp="20240607 21:53:27.034" level="INFO" html="true">Best match score: 0.98874
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763006838_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763006838_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763006838_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<msg timestamp="20240607 21:53:27.034" level="INFO">&amp;{bounds} = { width=62 | height=14 | x=84 | y=42 }</msg>
+<status status="PASS" starttime="20240607 21:53:26.625" endtime="20240607 21:53:27.034"/>
+</kw>
+<kw name="Get Display Dimensions" library="Remote">
+<var>&amp;{display_bounds}</var>
+<arg>PRIMARY</arg>
+<doc>Get Display Dimensions</doc>
+<msg timestamp="20240607 21:53:27.036" level="INFO">&amp;{display_bounds} = { width=5120 | height=1440 | x=0 | y=0 }</msg>
+<status status="PASS" starttime="20240607 21:53:27.035" endtime="20240607 21:53:27.036"/>
+</kw>
+<kw name="Move Mouse To" library="Remote">
+<arg>image=testClick.png</arg>
+<arg>window=Test Form</arg>
+<doc>Move Mouse To</doc>
+<msg timestamp="20240607 21:53:28.358" level="INFO" html="true">Best match score: 0.98874
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763007039_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763007039_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763007039_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:27.036" endtime="20240607 21:53:28.358"/>
+</kw>
+<kw name="Get Mouse Position" library="Remote">
+<var>&amp;{mouse_position}</var>
+<doc>Get Mouse Position</doc>
+<msg timestamp="20240607 21:53:28.360" level="INFO">&amp;{mouse_position} = { x=115 | y=49 }</msg>
+<status status="PASS" starttime="20240607 21:53:28.358" endtime="20240607 21:53:28.360"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${x}</var>
+<arg>${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:28.360" level="INFO">${x} = 115.0</msg>
+<status status="PASS" starttime="20240607 21:53:28.360" endtime="20240607 21:53:28.360"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${y}</var>
+<arg>${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:28.361" level="INFO">${y} = 49.0</msg>
+<status status="PASS" starttime="20240607 21:53:28.361" endtime="20240607 21:53:28.361"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${x_range}</var>
+<arg>${x} - ${mouse_position}[x]</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:28.361" level="INFO">${x_range} = 0.0</msg>
+<status status="PASS" starttime="20240607 21:53:28.361" endtime="20240607 21:53:28.361"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${y_range}</var>
+<arg>${y} - ${mouse_position}[y]</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:28.362" level="INFO">${y_range} = 0.0</msg>
+<status status="PASS" starttime="20240607 21:53:28.361" endtime="20240607 21:53:28.362"/>
+</kw>
+<if>
+<branch type="IF" condition="${x_range} &gt; 4 or ${x_range} &lt; -4 or ${y_range} &gt; 4 or ${y_range} &lt; -4">
+<kw name="Fail" library="BuiltIn">
+<arg>Mouse did not move to the correct location</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:53:28.362" endtime="20240607 21:53:28.362"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:53:28.362" endtime="20240607 21:53:28.362"/>
+</branch>
+<status status="PASS" starttime="20240607 21:53:28.362" endtime="20240607 21:53:28.362"/>
+</if>
+<kw name="Move Window" library="Remote">
+<arg>Test Form</arg>
+<arg>x=0</arg>
+<arg>y=0</arg>
+<arg>display=SECONDARY</arg>
+<doc>Move Window
+Moves the window to the back</doc>
+<status status="PASS" starttime="20240607 21:53:28.362" endtime="20240607 21:53:28.377"/>
+</kw>
+<kw name="Get Image Bounds" library="Remote">
+<var>&amp;{bounds}</var>
+<arg>testClick.png</arg>
+<arg>waitTime=1000</arg>
+<arg>window=Test Form</arg>
+<doc>Get Image Bounds</doc>
+<msg timestamp="20240607 21:53:28.825" level="INFO" html="true">Best match score: 0.93452
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763008382_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763008382_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763008382_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<msg timestamp="20240607 21:53:28.825" level="INFO">&amp;{bounds} = { width=62 | height=14 | x=84 | y=42 }</msg>
+<status status="PASS" starttime="20240607 21:53:28.378" endtime="20240607 21:53:28.826"/>
+</kw>
+<kw name="Get Display Dimensions" library="Remote">
+<var>&amp;{display_bounds}</var>
+<arg>SECONDARY</arg>
+<doc>Get Display Dimensions</doc>
+<msg timestamp="20240607 21:53:28.827" level="INFO">&amp;{display_bounds} = { width=2560 | height=1440 | x=611 | y=-2160 }</msg>
+<status status="PASS" starttime="20240607 21:53:28.826" endtime="20240607 21:53:28.827"/>
+</kw>
+<kw name="Move Mouse To" library="Remote">
+<arg>image=testClick.png</arg>
+<arg>window=Test Form</arg>
+<doc>Move Mouse To</doc>
+<msg timestamp="20240607 21:53:30.393" level="INFO" html="true">Best match score: 0.93452
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763008831_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763008831_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763008831_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:28.827" endtime="20240607 21:53:30.393"/>
+</kw>
+<kw name="Get Mouse Position" library="Remote">
+<var>&amp;{mouse_position}</var>
+<doc>Get Mouse Position</doc>
+<msg timestamp="20240607 21:53:30.395" level="INFO">&amp;{mouse_position} = { x=726 | y=-2111 }</msg>
+<status status="PASS" starttime="20240607 21:53:30.393" endtime="20240607 21:53:30.395"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${x}</var>
+<arg>${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:30.395" level="INFO">${x} = 726.0</msg>
+<status status="PASS" starttime="20240607 21:53:30.395" endtime="20240607 21:53:30.395"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${y}</var>
+<arg>${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:30.396" level="INFO">${y} = -2111.0</msg>
+<status status="PASS" starttime="20240607 21:53:30.395" endtime="20240607 21:53:30.396"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${x_range}</var>
+<arg>${x} - ${mouse_position}[x]</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:30.396" level="INFO">${x_range} = 0.0</msg>
+<status status="PASS" starttime="20240607 21:53:30.396" endtime="20240607 21:53:30.396"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${y_range}</var>
+<arg>${y} - ${mouse_position}[y]</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240607 21:53:30.397" level="INFO">${y_range} = 0.0</msg>
+<status status="PASS" starttime="20240607 21:53:30.397" endtime="20240607 21:53:30.397"/>
+</kw>
+<if>
+<branch type="IF" condition="${x} != ${mouse_position}[x] or ${y} != ${mouse_position}[y]">
+<kw name="Fail" library="BuiltIn">
+<arg>Mouse did not move to the correct location</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:53:30.397" endtime="20240607 21:53:30.397"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:53:30.397" endtime="20240607 21:53:30.397"/>
+</branch>
+<status status="PASS" starttime="20240607 21:53:30.397" endtime="20240607 21:53:30.397"/>
+</if>
+<kw name="Move Window" library="Remote" type="TEARDOWN">
+<arg>Test Form</arg>
+<arg>x=0</arg>
+<arg>y=0</arg>
+<arg>display=PRIMARY</arg>
+<doc>Move Window
+Moves the window to the back</doc>
+<status status="PASS" starttime="20240607 21:53:30.397" endtime="20240607 21:53:30.424"/>
+</kw>
+<status status="PASS" starttime="20240607 21:53:26.625" endtime="20240607 21:53:30.424"/>
+</test>
+<test id="s1-s4-t4" name="Test Move Mouse Between Displays" line="71">
+<kw name="Move Mouse" library="Remote">
+<arg>100</arg>
+<arg>0</arg>
+<doc>Move Mouse</doc>
+<status status="PASS" starttime="20240607 21:53:30.425" endtime="20240607 21:53:30.478"/>
+</kw>
+<kw name="Move Mouse To" library="Remote">
+<arg>display=SECONDARY</arg>
+<arg>x=100</arg>
+<arg>y=100</arg>
+<doc>Move Mouse To</doc>
+<status status="PASS" starttime="20240607 21:53:30.478" endtime="20240607 21:53:30.544"/>
+</kw>
+<kw name="Move Mouse To" library="Remote">
+<arg>x=400</arg>
+<arg>y=400</arg>
+<doc>Move Mouse To</doc>
+<status status="PASS" starttime="20240607 21:53:30.544" endtime="20240607 21:53:31.787"/>
+</kw>
+<kw name="Move Mouse To" library="Remote">
+<arg>display=PRIMARY</arg>
+<arg>x=100</arg>
+<arg>y=100</arg>
+<doc>Move Mouse To</doc>
+<status status="PASS" starttime="20240607 21:53:31.787" endtime="20240607 21:53:32.003"/>
+</kw>
+<status status="PASS" starttime="20240607 21:53:30.425" endtime="20240607 21:53:32.003"/>
+</test>
+<test id="s1-s4-t5" name="Test Click Image" line="77">
+<kw name="Click" library="Remote">
+<arg>image=testClick.png</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<msg timestamp="20240607 21:53:36.587" level="INFO" html="true">Best match score: 0.98874
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763012007_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763012007_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763012007_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:32.004" endtime="20240607 21:53:36.587"/>
+</kw>
+<kw name="Verify Image Exists On Window" library="Remote">
+<arg>labelconfirmation.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:53:36.777" level="INFO" html="true">Best match score: 0.99068
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763016591_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763016591_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763016591_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:36.588" endtime="20240607 21:53:36.777"/>
+</kw>
+<kw name="Click" library="Remote" type="TEARDOWN">
+<arg>image=testClick.png</arg>
+<arg>window=Test Form</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<msg timestamp="20240607 21:53:37.225" level="INFO" html="true">Best match score: 0.98636
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763016781_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763016781_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763016781_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:36.778" endtime="20240607 21:53:37.225"/>
+</kw>
+<status status="PASS" starttime="20240607 21:53:32.003" endtime="20240607 21:53:37.226"/>
+</test>
+<test id="s1-s4-t6" name="Test Click Image On Window" line="82">
+<kw name="Click" library="Remote">
+<arg>image=testClick.png</arg>
+<arg>window=Test Form</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<msg timestamp="20240607 21:53:37.675" level="INFO" html="true">Best match score: 0.98636
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763017230_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763017230_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763017230_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:37.227" endtime="20240607 21:53:37.675"/>
+</kw>
+<kw name="Verify Image Exists On Window" library="Remote">
+<arg>labelconfirmation.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:53:37.859" level="INFO" html="true">Best match score: 0.99068
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763017680_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763017680_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763017680_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:37.675" endtime="20240607 21:53:37.859"/>
+</kw>
+<kw name="Click" library="Remote" type="TEARDOWN">
+<arg>image=testClick.png</arg>
+<arg>window=Test Form</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<msg timestamp="20240607 21:53:38.298" level="INFO" html="true">Best match score: 0.98636
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763017864_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763017864_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763017864_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:37.860" endtime="20240607 21:53:38.298"/>
+</kw>
+<status status="PASS" starttime="20240607 21:53:37.226" endtime="20240607 21:53:38.299"/>
+</test>
+<test id="s1-s4-t7" name="Test Click X Times" line="87">
+<kw name="Move Mouse To" library="Remote">
+<arg>image=clickCounter.png</arg>
+<doc>Move Mouse To</doc>
+<msg timestamp="20240607 21:53:42.955" level="INFO" html="true">Best match score: 0.99135
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763018303_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763018303_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763018303_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:38.299" endtime="20240607 21:53:42.955"/>
+</kw>
+<kw name="Click" library="Remote">
+<arg>times=2</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<status status="PASS" starttime="20240607 21:53:42.956" endtime="20240607 21:53:43.207"/>
+</kw>
+<kw name="Verify Image Exists On Window" library="Remote">
+<arg>two.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:53:43.419" level="INFO" html="true">Best match score: 0.99263
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763023212_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763023212_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763023212_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:43.208" endtime="20240607 21:53:43.419"/>
+</kw>
+<kw name="Click" library="Remote" type="TEARDOWN">
+<arg>image=testClick.png</arg>
+<arg>window=Test Form</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<msg timestamp="20240607 21:53:44.094" level="INFO" html="true">Best match score: 0.98874
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763023423_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763023423_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763023423_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:43.420" endtime="20240607 21:53:44.094"/>
+</kw>
+<status status="PASS" starttime="20240607 21:53:38.299" endtime="20240607 21:53:44.095"/>
+</test>
+<test id="s1-s4-t8" name="Test Click Location" line="93">
+<kw name="Get Window Dimensions" library="Remote">
+<var>&amp;{dimensions}</var>
+<arg>Test Form</arg>
+<doc>Gets the dimensions for the window requested.</doc>
+<msg timestamp="20240607 21:53:44.098" level="INFO">&amp;{dimensions} = { width=585 | height=510 | x=0 | y=0 }</msg>
+<status status="PASS" starttime="20240607 21:53:44.095" endtime="20240607 21:53:44.098"/>
+</kw>
+<kw name="Click" library="Remote">
+<arg>x=${${dimensions}[x]+50}</arg>
+<arg>y=${${dimensions}[y]+50}</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<status status="PASS" starttime="20240607 21:53:44.098" endtime="20240607 21:53:44.250"/>
+</kw>
+<kw name="Verify Image Exists On Window" library="Remote">
+<arg>labelconfirmation.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:53:44.436" level="INFO" html="true">Best match score: 0.99068
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763024255_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763024255_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763024255_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:44.250" endtime="20240607 21:53:44.436"/>
+</kw>
+<kw name="Click" library="Remote" type="TEARDOWN">
+<arg>x=${${dimensions}[x]+50}</arg>
+<arg>y=${${dimensions}[y]+50}</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<status status="PASS" starttime="20240607 21:53:44.437" endtime="20240607 21:53:44.559"/>
+</kw>
+<status status="PASS" starttime="20240607 21:53:44.095" endtime="20240607 21:53:44.560"/>
+</test>
+<test id="s1-s4-t9" name="Test Press And Release" line="99">
+<kw name="Move Mouse To" library="Remote">
+<arg>image=PAndRTest.png</arg>
+<doc>Move Mouse To</doc>
+<msg timestamp="20240607 21:53:49.211" level="INFO" html="true">Best match score: 0.98980
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763024563_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763024563_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763024563_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:44.560" endtime="20240607 21:53:49.211"/>
+</kw>
+<kw name="Press Mouse Button" library="Remote">
+<arg>Left</arg>
+<doc>Press Mouse Button</doc>
+<status status="PASS" starttime="20240607 21:53:49.211" endtime="20240607 21:53:49.213"/>
+</kw>
+<kw name="Verify Image Exists On Window" library="Remote">
+<arg>pressed.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:53:49.424" level="INFO" html="true">Best match score: 0.99170
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763029218_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763029218_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763029218_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:49.214" endtime="20240607 21:53:49.424"/>
+</kw>
+<kw name="Release Mouse Button" library="Remote">
+<arg>Left</arg>
+<doc>Release Mouse Button</doc>
+<status status="PASS" starttime="20240607 21:53:49.424" endtime="20240607 21:53:49.425"/>
+</kw>
+<kw name="Verify Image Exists On Window" library="Remote">
+<arg>released.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:53:49.625" level="INFO" html="true">Best match score: 0.99230
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763029431_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763029431_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763029431_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:49.427" endtime="20240607 21:53:49.625"/>
+</kw>
+<kw name="Click" library="Remote" type="TEARDOWN">
+<arg>image=testClick.png</arg>
+<arg>window=Test Form</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<msg timestamp="20240607 21:53:50.304" level="INFO" html="true">Best match score: 0.98874
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763029630_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763029630_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763029630_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:49.627" endtime="20240607 21:53:50.304"/>
+</kw>
+<status status="PASS" starttime="20240607 21:53:44.560" endtime="20240607 21:53:50.304"/>
+</test>
+<test id="s1-s4-t10" name="Test Wheel Up And Down" line="107">
+<kw name="Move Mouse To" library="Remote">
+<arg>image=PAndRTest.png</arg>
+<doc>Move Mouse To</doc>
+<msg timestamp="20240607 21:53:54.949" level="INFO" html="true">Best match score: 0.98980
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763030308_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763030308_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763030308_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:50.305" endtime="20240607 21:53:54.949"/>
+</kw>
+<kw name="Mouse Scroll" library="Remote">
+<arg>1</arg>
+<doc>Mouse Scroll</doc>
+<status status="PASS" starttime="20240607 21:53:54.950" endtime="20240607 21:53:54.952"/>
+</kw>
+<kw name="Verify Image Exists On Window" library="Remote">
+<arg>mousedown.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:53:55.137" level="INFO" html="true">Best match score: 0.98532
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763034956_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763034956_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763034956_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:54.952" endtime="20240607 21:53:55.137"/>
+</kw>
+<kw name="Mouse Scroll" library="Remote">
+<arg>-1</arg>
+<doc>Mouse Scroll</doc>
+<status status="PASS" starttime="20240607 21:53:55.138" endtime="20240607 21:53:55.140"/>
+</kw>
+<kw name="Verify Image Exists On Window" library="Remote">
+<arg>mouseup.png</arg>
+<arg>Test Form</arg>
+<doc>Verify Image Does Not Exist On Window</doc>
+<msg timestamp="20240607 21:53:55.376" level="INFO" html="true">Best match score: 0.98976
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763035143_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763035143_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763035143_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:55.140" endtime="20240607 21:53:55.376"/>
+</kw>
+<kw name="Click" library="Remote" type="TEARDOWN">
+<arg>image=testClick.png</arg>
+<arg>window=Test Form</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<msg timestamp="20240607 21:53:56.059" level="INFO" html="true">Best match score: 0.98631
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763035380_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763035380_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763035380_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:55.376" endtime="20240607 21:53:56.059"/>
+</kw>
+<status status="PASS" starttime="20240607 21:53:50.305" endtime="20240607 21:53:56.059"/>
+</test>
+<test id="s1-s4-t11" name="Click Image On Window" line="115">
+<kw name="Click" library="Remote">
+<arg>x=100</arg>
+<arg>y=100</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<status status="PASS" starttime="20240607 21:53:56.060" endtime="20240607 21:53:56.214"/>
+</kw>
+<kw name="Click" library="Remote">
+<arg>display=SECONDARY</arg>
+<arg>x=100</arg>
+<arg>y=100</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<status status="PASS" starttime="20240607 21:53:56.214" endtime="20240607 21:53:57.454"/>
+</kw>
+<kw name="Click" library="Remote">
+<arg>display=PRIMARY</arg>
+<arg>x=400</arg>
+<arg>y=400</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<status status="PASS" starttime="20240607 21:53:57.455" endtime="20240607 21:53:58.821"/>
+</kw>
+<kw name="Click" library="Remote">
+<arg>window=Test Form</arg>
+<arg>x=100</arg>
+<arg>y=150</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<status status="PASS" starttime="20240607 21:53:58.821" endtime="20240607 21:53:59.147"/>
+</kw>
+<kw name="Click" library="Remote">
+<arg>image=testClick.png</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<msg timestamp="20240607 21:54:03.719" level="INFO" html="true">Best match score: 0.98874
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763039151_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763039151_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763039151_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:53:59.148" endtime="20240607 21:54:03.719"/>
+</kw>
+<kw name="Click" library="Remote">
+<arg>image=testClick.png</arg>
+<arg>window=Test Form</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<msg timestamp="20240607 21:54:04.170" level="INFO" html="true">Best match score: 0.98636
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763043725_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763043725_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763043725_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:54:03.720" endtime="20240607 21:54:04.170"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Click" library="Remote">
+<arg>image=testClick.png</arg>
+<arg>display=SECONDARY</arg>
+<doc>Simulates a Mouse click
+Available options are:
+ - LEFT
+ - MIDDLE
+ - RIGHT</doc>
+<msg timestamp="20240607 21:54:05.439" level="FAIL">com.kalynx.uitestframework.exceptions.MouseException: *HTML* Best match score: 0.66462
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763044173_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763044173_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763044173_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;
+</msg>
+<status status="FAIL" starttime="20240607 21:54:04.170" endtime="20240607 21:54:05.439"/>
+</kw>
+<kw name="Fail" library="BuiltIn">
+<arg>This image should not have been visible</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:54:05.440" endtime="20240607 21:54:05.440"/>
+</kw>
+<status status="FAIL" starttime="20240607 21:54:04.170" endtime="20240607 21:54:05.440"/>
+</branch>
+<branch type="EXCEPT">
+<kw name="Log" library="BuiltIn">
+<arg>Test Passed</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240607 21:54:05.440" level="INFO">Test Passed</msg>
+<status status="PASS" starttime="20240607 21:54:05.440" endtime="20240607 21:54:05.440"/>
+</kw>
+<status status="PASS" starttime="20240607 21:54:05.440" endtime="20240607 21:54:05.440"/>
+</branch>
+<status status="PASS" starttime="20240607 21:54:04.170" endtime="20240607 21:54:05.440"/>
+</try>
+<status status="PASS" starttime="20240607 21:53:56.060" endtime="20240607 21:54:05.440"/>
+</test>
+<status status="PASS" starttime="20240607 21:53:11.044" endtime="20240607 21:54:05.441"/>
+</suite>
+<suite id="s1-s5" name="OcrKeywordsTest" source="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\OcrKeywordsTest.robot">
+<kw name="Add Image Location" library="Remote" type="SETUP">
+<arg>G:\\Projects\\Fuckaround\\robotuitestframework\\src\\test\\robot/</arg>
+<doc>Add Image Location
+Adds a location to search for images.</doc>
+<status status="PASS" starttime="20240607 21:54:05.445" endtime="20240607 21:54:05.446"/>
+</kw>
+<test id="s1-s5-t1" name="Test Read Text From Form" line="9">
+<kw name="Get Text From Form" library="Remote">
+<var>${text}</var>
+<arg>Test Form</arg>
+<doc>Get Text From Form</doc>
+<msg timestamp="20240607 21:54:05.590" level="INFO">${text} = ) Test Form
+
+Test Click
+
+Text Area
+
+Test2
+
+Click Counter.
+
+PANdRTest
+
+</msg>
+<status status="PASS" starttime="20240607 21:54:05.447" endtime="20240607 21:54:05.590"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${text}</arg>
+<arg>Test Click</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240607 21:54:05.591" endtime="20240607 21:54:05.591"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${text}</arg>
+<arg>Text Area</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240607 21:54:05.591" endtime="20240607 21:54:05.591"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${text}</arg>
+<arg>Test2</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240607 21:54:05.591" endtime="20240607 21:54:05.591"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${text}</arg>
+<arg>Click Counter.</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240607 21:54:05.592" endtime="20240607 21:54:05.592"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${text}</arg>
+<arg>PANdRTest</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240607 21:54:05.592" endtime="20240607 21:54:05.592"/>
+</kw>
+<status status="PASS" starttime="20240607 21:54:05.446" endtime="20240607 21:54:05.592"/>
+</test>
+<test id="s1-s5-t2" name="Test Get Words From Form" line="17">
+<kw name="Get Words From Form" library="Remote">
+<var>${words}</var>
+<arg>Test Form</arg>
+<doc>Get Words From Form</doc>
+<msg timestamp="20240607 21:54:05.731" level="INFO">${words} = [{'text': ') Test Form', 'width': 68.0, 'height': 12.0, 'x': 20.0, 'y': 8.0, 'confidence': 44.51448}, {'text': 'Test Click', 'width': 56.0, 'height': 9.0, 'x': 87.0, 'y': 45.0, 'confidence': 58.25859}...</msg>
+<status status="PASS" starttime="20240607 21:54:05.593" endtime="20240607 21:54:05.732"/>
+</kw>
+<status status="PASS" starttime="20240607 21:54:05.593" endtime="20240607 21:54:05.732"/>
+</test>
+<status status="PASS" starttime="20240607 21:54:05.442" endtime="20240607 21:54:05.732"/>
+</suite>
+<suite id="s1-s6" name="WindowKeywordTests" source="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\WindowKeywordTests.robot">
+<kw name="Run Keywords" library="BuiltIn" type="SETUP">
+<arg>Add Image Location</arg>
+<arg>G:\\Projects\\Fuckaround\\robotuitestframework\\src\\test\\robot/</arg>
+<arg>AND</arg>
+<arg>Set Primary Display Reference</arg>
+<arg>PRIMARY</arg>
+<arg>AND</arg>
+<arg>Set Display Reference</arg>
+<arg>PRIMARY</arg>
+<arg>SMALLER_THAN</arg>
+<arg>SECONDARY</arg>
+<arg>AND</arg>
+<arg>Set Monitored Display</arg>
+<arg>PRIMARY</arg>
+<arg>AND</arg>
+<arg>Set Result Path</arg>
+<arg>${OUTPUT_DIR}</arg>
+<doc>Executes all the given keywords in a sequence.</doc>
+<kw name="Add Image Location" library="Remote">
+<arg>G:\\Projects\\Fuckaround\\robotuitestframework\\src\\test\\robot/</arg>
+<doc>Add Image Location
+Adds a location to search for images.</doc>
+<status status="PASS" starttime="20240607 21:54:05.736" endtime="20240607 21:54:05.738"/>
+</kw>
+<kw name="Set Primary Display Reference" library="Remote">
+<arg>PRIMARY</arg>
+<doc>Sets the primary display to the given reference name</doc>
+<status status="PASS" starttime="20240607 21:54:05.738" endtime="20240607 21:54:05.739"/>
+</kw>
+<kw name="Set Display Reference" library="Remote">
+<arg>PRIMARY</arg>
+<arg>SMALLER_THAN</arg>
+<arg>SECONDARY</arg>
+<doc>    Sets the reference display to the given reference name
+    Options:
+     LEFT
+     RIGHT
+     ABOVE
+     BELOW
+     SMALLER_THAN
+     LARGER_THAN</doc>
+<status status="PASS" starttime="20240607 21:54:05.739" endtime="20240607 21:54:05.740"/>
+</kw>
+<kw name="Set Monitored Display" library="Remote">
+<arg>PRIMARY</arg>
+<doc>Set Display Reference</doc>
+<status status="PASS" starttime="20240607 21:54:05.741" endtime="20240607 21:54:05.741"/>
+</kw>
+<kw name="Set Result Path" library="Remote">
+<arg>${OUTPUT_DIR}</arg>
+<doc>Set Result Path
+Sets the path for where images will be saved.</doc>
+<status status="PASS" starttime="20240607 21:54:05.742" endtime="20240607 21:54:05.743"/>
+</kw>
+<status status="PASS" starttime="20240607 21:54:05.736" endtime="20240607 21:54:05.743"/>
+</kw>
+<test id="s1-s6-t1" name="Test Window Move" line="13">
+<kw name="Get Window Dimensions" library="Remote">
+<var>&amp;{dimensions}</var>
+<arg>Test Form</arg>
+<doc>Gets the dimensions for the window requested.</doc>
+<msg timestamp="20240607 21:54:05.745" level="INFO">&amp;{dimensions} = { width=585 | height=510 | x=0 | y=0 }</msg>
+<status status="PASS" starttime="20240607 21:54:05.743" endtime="20240607 21:54:05.745"/>
+</kw>
+<kw name="Move Window" library="Remote">
+<arg>Test Form</arg>
+<arg>100</arg>
+<arg>200</arg>
+<doc>Move Window
+Moves the window to the back</doc>
+<status status="PASS" starttime="20240607 21:54:05.745" endtime="20240607 21:54:05.750"/>
+</kw>
+<kw name="Get Window Dimensions" library="Remote">
+<var>&amp;{new_dimensions}</var>
+<arg>Test Form</arg>
+<doc>Gets the dimensions for the window requested.</doc>
+<msg timestamp="20240607 21:54:05.752" level="INFO">&amp;{new_dimensions} = { width=585 | height=510 | x=100 | y=200 }</msg>
+<status status="PASS" starttime="20240607 21:54:05.750" endtime="20240607 21:54:05.752"/>
+</kw>
+<if>
+<branch type="IF" condition="${${dimensions}[x] + 100} != ${new_dimensions}[x] and ${${dimensions}[y] + 200} != ${new_dimensions}[y]">
+<kw name="Fail" library="BuiltIn">
+<arg>Window did not move correctly.</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:54:05.753" endtime="20240607 21:54:05.753"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:54:05.753" endtime="20240607 21:54:05.753"/>
+</branch>
+<status status="PASS" starttime="20240607 21:54:05.752" endtime="20240607 21:54:05.753"/>
+</if>
+<if>
+<branch type="IF" condition="${dimensions}[width] != ${new_dimensions}[width] and ${dimensions}[height] != ${new_dimensions}[height]">
+<kw name="Fail" library="BuiltIn">
+<arg>Window width and height should not have moved.</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:54:05.753" endtime="20240607 21:54:05.753"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:54:05.753" endtime="20240607 21:54:05.753"/>
+</branch>
+<status status="PASS" starttime="20240607 21:54:05.753" endtime="20240607 21:54:05.753"/>
+</if>
+<kw name="Move Window" library="Remote" type="TEARDOWN">
+<arg>Test Form</arg>
+<arg>-100</arg>
+<arg>-200</arg>
+<doc>Move Window
+Moves the window to the back</doc>
+<status status="PASS" starttime="20240607 21:54:05.754" endtime="20240607 21:54:05.759"/>
+</kw>
+<doc>Verify that the window can be moved</doc>
+<status status="PASS" starttime="20240607 21:54:05.743" endtime="20240607 21:54:05.759"/>
+</test>
+<test id="s1-s6-t2" name="Test Move Window To Another Screen" line="27">
+<kw name="Move Window" library="Remote">
+<arg>Test Form</arg>
+<arg>0</arg>
+<arg>0</arg>
+<arg>SECONDARY</arg>
+<doc>Move Window
+Moves the window to the back</doc>
+<status status="PASS" starttime="20240607 21:54:05.760" endtime="20240607 21:54:05.772"/>
+</kw>
+<kw name="Get Display Dimensions" library="Remote">
+<var>&amp;{display}</var>
+<arg>SECONDARY</arg>
+<doc>Get Display Dimensions</doc>
+<msg timestamp="20240607 21:54:05.774" level="INFO">&amp;{display} = { width=2560 | height=1440 | x=611 | y=-2160 }</msg>
+<status status="PASS" starttime="20240607 21:54:05.772" endtime="20240607 21:54:05.774"/>
+</kw>
+<kw name="Get Window Dimensions" library="Remote">
+<var>&amp;{dimensions}</var>
+<arg>Test Form</arg>
+<doc>Gets the dimensions for the window requested.</doc>
+<msg timestamp="20240607 21:54:05.776" level="INFO">&amp;{dimensions} = { width=878 | height=765 | x=611 | y=-2160 }</msg>
+<status status="PASS" starttime="20240607 21:54:05.774" endtime="20240607 21:54:05.776"/>
+</kw>
+<if>
+<branch type="IF" condition="${dimensions}[x] != ${display}[x] and ${dimensions}[y] != ${display}[y]">
+<kw name="Fail" library="BuiltIn">
+<arg>Window did not move to the secondary display.</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:54:05.777" endtime="20240607 21:54:05.777"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:54:05.776" endtime="20240607 21:54:05.777"/>
+</branch>
+<status status="PASS" starttime="20240607 21:54:05.776" endtime="20240607 21:54:05.777"/>
+</if>
+<kw name="Move Window" library="Remote">
+<arg>Test Form</arg>
+<arg>0</arg>
+<arg>0</arg>
+<arg>PRIMARY</arg>
+<doc>Move Window
+Moves the window to the back</doc>
+<status status="PASS" starttime="20240607 21:54:05.777" endtime="20240607 21:54:05.794"/>
+</kw>
+<kw name="Get Display Dimensions" library="Remote">
+<var>${display}</var>
+<arg>PRIMARY</arg>
+<doc>Get Display Dimensions</doc>
+<msg timestamp="20240607 21:54:05.796" level="INFO">${display} = {'width': 5120, 'height': 1440, 'x': 0, 'y': 0}</msg>
+<status status="PASS" starttime="20240607 21:54:05.794" endtime="20240607 21:54:05.796"/>
+</kw>
+<kw name="Get Window Dimensions" library="Remote">
+<var>&amp;{dimensions}</var>
+<arg>Test Form</arg>
+<doc>Gets the dimensions for the window requested.</doc>
+<msg timestamp="20240607 21:54:05.799" level="INFO">&amp;{dimensions} = { width=585 | height=510 | x=0 | y=0 }</msg>
+<status status="PASS" starttime="20240607 21:54:05.796" endtime="20240607 21:54:05.799"/>
+</kw>
+<if>
+<branch type="IF" condition="${dimensions}[x] != ${display}[x] and ${dimensions}[y] != ${display}[y]">
+<kw name="Fail" library="BuiltIn">
+<arg>Window did not move to the primary display.</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:54:05.800" endtime="20240607 21:54:05.800"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:54:05.800" endtime="20240607 21:54:05.800"/>
+</branch>
+<status status="PASS" starttime="20240607 21:54:05.800" endtime="20240607 21:54:05.800"/>
+</if>
+<status status="PASS" starttime="20240607 21:54:05.759" endtime="20240607 21:54:05.800"/>
+</test>
+<test id="s1-s6-t3" name="Test Resize Window" line="41">
+<kw name="Get Window Dimensions" library="Remote">
+<var>&amp;{dimensions}</var>
+<arg>Test Form</arg>
+<doc>Gets the dimensions for the window requested.</doc>
+<msg timestamp="20240607 21:54:05.803" level="INFO">&amp;{dimensions} = { width=585 | height=510 | x=0 | y=0 }</msg>
+<status status="PASS" starttime="20240607 21:54:05.801" endtime="20240607 21:54:05.803"/>
+</kw>
+<kw name="Resize Window" library="Remote">
+<arg>Test Form</arg>
+<arg>500</arg>
+<arg>500</arg>
+<doc>Resize Window
+Resizes the specified window</doc>
+<status status="PASS" starttime="20240607 21:54:05.804" endtime="20240607 21:54:05.815"/>
+</kw>
+<kw name="Get Window Dimensions" library="Remote">
+<var>&amp;{new_dimensions}</var>
+<arg>Test Form</arg>
+<doc>Gets the dimensions for the window requested.</doc>
+<msg timestamp="20240607 21:54:05.818" level="INFO">&amp;{new_dimensions} = { width=500 | height=500 | x=0 | y=0 }</msg>
+<status status="PASS" starttime="20240607 21:54:05.815" endtime="20240607 21:54:05.818"/>
+</kw>
+<if>
+<branch type="IF" condition="${dimensions}[x] != ${new_dimensions}[x] and ${dimensions}[y] != ${new_dimensions}[y]">
+<kw name="Fail" library="BuiltIn">
+<arg>Window should not have moved.</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:54:05.819" endtime="20240607 21:54:05.819"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:54:05.819" endtime="20240607 21:54:05.819"/>
+</branch>
+<status status="PASS" starttime="20240607 21:54:05.819" endtime="20240607 21:54:05.819"/>
+</if>
+<if>
+<branch type="IF" condition="${new_dimensions}[width] != 500 and ${new_dimensions}[height] != 500">
+<kw name="Fail" library="BuiltIn">
+<arg>Window did not resize correctly.</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20240607 21:54:05.819" endtime="20240607 21:54:05.819"/>
+</kw>
+<status status="NOT RUN" starttime="20240607 21:54:05.819" endtime="20240607 21:54:05.819"/>
+</branch>
+<status status="PASS" starttime="20240607 21:54:05.819" endtime="20240607 21:54:05.819"/>
+</if>
+<kw name="Run Keywords" library="BuiltIn" type="TEARDOWN">
+<arg>Sleep</arg>
+<arg>1s</arg>
+<arg>AND</arg>
+<arg>Resize Window</arg>
+<arg>Test Form</arg>
+<arg>${dimensions}[width]</arg>
+<arg>${dimensions}[height]</arg>
+<doc>Executes all the given keywords in a sequence.</doc>
+<kw name="Sleep" library="BuiltIn">
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20240607 21:54:06.820" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20240607 21:54:05.820" endtime="20240607 21:54:06.820"/>
+</kw>
+<kw name="Resize Window" library="Remote">
+<arg>Test Form</arg>
+<arg>${dimensions}[width]</arg>
+<arg>${dimensions}[height]</arg>
+<doc>Resize Window
+Resizes the specified window</doc>
+<status status="PASS" starttime="20240607 21:54:06.820" endtime="20240607 21:54:06.829"/>
+</kw>
+<status status="PASS" starttime="20240607 21:54:05.820" endtime="20240607 21:54:06.829"/>
+</kw>
+<doc>Verify that a window can be resized.</doc>
+<status status="PASS" starttime="20240607 21:54:05.801" endtime="20240607 21:54:06.829"/>
+</test>
+<test id="s1-s6-t4" name="Test Get All Windows" line="56">
+<kw name="Get All Available Windows" library="Remote">
+<var>@{windows}</var>
+<doc>Gets all available windows, minimized or maximized.</doc>
+<msg timestamp="20240607 21:54:06.837" level="INFO">@{windows} = [ Battery Meter | Network Flyout | Menu | CiceroUIWndFrame | Test Form | Blocking Form | robotuitestframework – WindowKeywordTests.robot | Robot Log - Google Chrome | Netflix - Google Chrome | Desktop...</msg>
+<status status="PASS" starttime="20240607 21:54:06.830" endtime="20240607 21:54:06.837"/>
+</kw>
+<kw name="List Should Contain Value" library="Collections">
+<arg>${windows}</arg>
+<arg>Test Form</arg>
+<doc>Fails if the ``value`` is not found from ``list``.</doc>
+<status status="PASS" starttime="20240607 21:54:06.837" endtime="20240607 21:54:06.837"/>
+</kw>
+<doc>Tests that windows are returned</doc>
+<status status="PASS" starttime="20240607 21:54:06.830" endtime="20240607 21:54:06.837"/>
+</test>
+<test id="s1-s6-t5" name="Test Bring Window To Front" line="61">
+<kw name="Bring Window To Front" library="Remote">
+<arg>Blocking Form</arg>
+<doc>Brings the window to the front.</doc>
+<status status="PASS" starttime="20240607 21:54:06.838" endtime="20240607 21:54:06.839"/>
+</kw>
+<kw name="Verify Image Does Not Exist" library="Remote">
+<arg>testClick.png</arg>
+<doc>Verify Image Does Not Exist</doc>
+<msg timestamp="20240607 21:54:11.278" level="INFO" html="true">Best match score: 0.89842
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763046842_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763046842_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763046842_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:54:06.840" endtime="20240607 21:54:11.278"/>
+</kw>
+<kw name="Bring Window To Front" library="Remote">
+<arg>Test Form</arg>
+<doc>Brings the window to the front.</doc>
+<status status="PASS" starttime="20240607 21:54:11.278" endtime="20240607 21:54:11.280"/>
+</kw>
+<kw name="Verify Image Exists" library="Remote">
+<arg>testClick.png</arg>
+<doc>Verify Image Exists</doc>
+<msg timestamp="20240607 21:54:15.721" level="INFO" html="true">Best match score: 0.98636
+ Needed: 0.9
+ &lt;table&gt;
+     &lt;tr&gt;
+         &lt;td&gt;Best Match&lt;/td&gt;
+         &lt;td&gt;Wanted&lt;/td&gt;
+     &lt;/tr&gt;
+     &lt;tr&gt;
+         &lt;td&gt;&lt;a href="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763051282_screenshot.jpg"&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763051282_screenshot.jpg" height="100" width="100"&gt;&lt;/img&gt;&lt;/a&gt;&lt;/td&gt;
+         &lt;td&gt;&lt;img src="G:\Projects\Fuckaround\robotuitestframework\src\test\robot\image_results\1717763051282_expected.jpg"&gt;&lt;/img&gt;&lt;/td&gt;
+     &lt;/tr&gt;
+ &lt;/table&gt;</msg>
+<status status="PASS" starttime="20240607 21:54:11.280" endtime="20240607 21:54:15.721"/>
+</kw>
+<kw name="Bring Window To Front" library="Remote" type="TEARDOWN">
+<arg>Test Form</arg>
+<doc>Brings the window to the front.</doc>
+<status status="PASS" starttime="20240607 21:54:15.722" endtime="20240607 21:54:15.725"/>
+</kw>
+<doc>Tests that a window can be brought to the front</doc>
+<status status="PASS" starttime="20240607 21:54:06.838" endtime="20240607 21:54:15.725"/>
+</test>
+<status status="PASS" starttime="20240607 21:54:05.733" endtime="20240607 21:54:15.725"/>
+</suite>
+<status status="PASS" starttime="20240607 21:52:15.464" endtime="20240607 21:54:15.726"/>
+</suite>
+<statistics>
+<total>
+<stat pass="31" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="31" fail="0" skip="0" id="s1" name="Robot">Robot</stat>
+<stat pass="3" fail="0" skip="0" id="s1-s1" name="DisplayKeywordTests">Robot.DisplayKeywordTests</stat>
+<stat pass="8" fail="0" skip="0" id="s1-s2" name="ImageMatchTests">Robot.ImageMatchTests</stat>
+<stat pass="2" fail="0" skip="0" id="s1-s3" name="KeyboardTests">Robot.KeyboardTests</stat>
+<stat pass="11" fail="0" skip="0" id="s1-s4" name="MouseTests">Robot.MouseTests</stat>
+<stat pass="2" fail="0" skip="0" id="s1-s5" name="OcrKeywordsTest">Robot.OcrKeywordsTest</stat>
+<stat pass="5" fail="0" skip="0" id="s1-s6" name="WindowKeywordTests">Robot.WindowKeywordTests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
