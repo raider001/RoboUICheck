@@ -13,7 +13,20 @@ This framework is setup as a Remote Library and be ran as a java application. It
 |--image-loc|-i|The location where images for the results are stored|no|
 
 ## Binaries
-Download release/UITestFramework-1.0.0.jar
+Download the latest release from the following location
+
+## Prerequestites
+Java run time must be installed
+
+## Run installation
+1. Download the latest binary file located at: https://github.com/raider001/RoboUICheck/tree/master/release
+2. Run java -jar UITestFramework-1.0.0.jar -p 7442
+
+## Usage
+In your robot file, add the library 
+Library  Remote         http://127.0.0.1:7442/  WITH NAME    UI
+
+Use as you would any Robot Remote Library
 
 ## Keywords
 https://raider001.github.io/robouicheck/keyword_doc/doc.html
