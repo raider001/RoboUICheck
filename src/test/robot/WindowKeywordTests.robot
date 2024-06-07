@@ -5,7 +5,8 @@ Library  Collections
 Suite Setup   Run Keywords   Add Image Location  ${CURDIR}/  AND
 ...    Set Primary Display Reference    PRIMARY    AND
 ...    Set Display Reference    PRIMARY    SMALLER_THAN    SECONDARY  AND
-...    Set Monitored Display    PRIMARY
+...    Set Monitored Display    PRIMARY  AND
+...    Set Result Path  ${OUTPUT_DIR}
 
 
 *** Test Cases ***

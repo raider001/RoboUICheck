@@ -47,8 +47,8 @@ public class SettingsKeywords {
             Set Result Path
             Sets the path for where images will be saved.
             """)
-    public void setResultPath(String path) throws Exception {
-        CV_MONITOR.setResultsLocation(Path.of(path));
+    public void setResultPath(String path) {
+        CV_MONITOR.setResultsLocation(Path.of(path, "image_results"));
     }
 
     @RobotKeyword("""

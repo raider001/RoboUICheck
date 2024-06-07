@@ -6,7 +6,8 @@ Suite Setup   Run Keywords  Add Image Location  ${CURDIR}/  AND
 ...    Bring Window To Front  Test Form    AND
 ...    Set Primary Display Reference    PRIMARY    AND
 ...    Set Display Reference    PRIMARY    SMALLER_THAN    SECONDARY  AND
-...    Set Match Percentage    .95
+...    Set Match Percentage    .95  AND
+...    Set Result Path  ${OUTPUT_DIR}
 
 
 *** Test Cases ***

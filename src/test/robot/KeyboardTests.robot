@@ -4,7 +4,8 @@ Library  BuiltIn
 Suite Setup   Run Keywords  Add Image Location  ${CURDIR}/  AND
 ...    Bring Window To Front  Test Form    AND
 ...    Set Primary Display Reference    PRIMARY    AND
-...    Set Display Reference    PRIMARY    SMALLER_THAN    SECONDARY
+...    Set Display Reference    PRIMARY    SMALLER_THAN    SECONDARY  AND
+...    Set Result Path  ${OUTPUT_DIR}
 
 
 *** Test Cases ***

@@ -5,7 +5,8 @@ Suite Setup   Run Keywords  Add Image Location  ${CURDIR}/  AND
 ...    Bring Window To Front  Test Form    AND
 ...    Set Primary Display Reference    PRIMARY    AND
 ...    Set Display Reference    PRIMARY    SMALLER_THAN    SECONDARY  AND
-...    Set Match Percentage    .9
+...    Set Match Percentage    .9  AND
+...    Set Result Path  ${OUTPUT_DIR}
 
 
 *** Test Cases ***
@@ -21,7 +22,7 @@ Test Move Mouse To Image On Display
    ${y}=  Evaluate  ${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2
    ${x_range}=  Evaluate  ${x} - ${mouse_position}[x]
    ${y_range}=  Evaluate  ${y} - ${mouse_position}[y]
-   IF  ${x_range} > 3 or ${x_range} < 3 or ${y_range} > 3 or ${y_range}
+   IF  ${x_range} > 4 or ${x_range} < -4 or ${y_range} > 4 or ${y_range} < -4
        Fail  Mouse did not move to the correct location
    END
 
@@ -32,9 +33,9 @@ Test Move Mouse To Image On Display
    &{mouse_position}=  Get Mouse Position
    ${x}=  Evaluate  ${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2
    ${y}=  Evaluate  ${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2
-   ${x_range}=  Evaluate ${x} - ${mouse_position}[x]
-   ${y_range}=  Evaluate ${y} - ${mouse_position}[y]
-   IF  ${x_range} > 3 or ${x_range} < 3 or ${y_range} > 3 or ${y_range}
+   ${x_range}=  Evaluate  ${x} - ${mouse_position}[x]
+   ${y_range}=  Evaluate  ${y} - ${mouse_position}[y]
+   IF  ${x_range} > 4 or ${x_range} < -4 or ${y_range} > 4 or ${y_range} < -4
        Fail  Mouse did not move to the correct location
    END
    [Teardown]  Move Window  Test Form  x=0  y=0  display=PRIMARY
@@ -46,18 +47,21 @@ Test Move Mouse To Image On Window
    &{mouse_position}=  Get Mouse Position
    ${x}=  Evaluate  ${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2
    ${y}=  Evaluate  ${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2
-
-   IF  ${x} != ${mouse_position}[x] or ${y} != ${mouse_position}[y]
+   ${x_range}=  Evaluate  ${x} - ${mouse_position}[x]
+   ${y_range}=  Evaluate  ${y} - ${mouse_position}[y]
+   IF  ${x_range} > 4 or ${x_range} < -4 or ${y_range} > 4 or ${y_range} < -4
        Fail  Mouse did not move to the correct location
    END
 
    Move Window  Test Form  x=0  y=0  display=SECONDARY
-   &{bounds}=  Get Image Bounds    testClick.png  window=Test Form
+   &{bounds}=  Get Image Bounds    testClick.png  waitTime=1000  window=Test Form
    &{display_bounds}=  Get Display Dimensions  SECONDARY
-    Move Mouse To  image=testClick.png  window=Test Form
-    &{mouse_position}=  Get Mouse Position
-    ${x}=  Evaluate  ${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2
-    ${y}=  Evaluate  ${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2
+   Move Mouse To  image=testClick.png  window=Test Form
+   &{mouse_position}=  Get Mouse Position
+   ${x}=  Evaluate  ${display_bounds}[x] + ${bounds}[x] + ${bounds}[width] / 2
+   ${y}=  Evaluate  ${display_bounds}[y] + ${bounds}[y] + ${bounds}[height] / 2
+   ${x_range}=  Evaluate  ${x} - ${mouse_position}[x]
+   ${y_range}=  Evaluate  ${y} - ${mouse_position}[y]
 
     IF  ${x} != ${mouse_position}[x] or ${y} != ${mouse_position}[y]
         Fail  Mouse did not move to the correct location

@@ -74,7 +74,6 @@ public class WindowsWindowApi implements Window {
         return !WINDOW_API.EnumWindows(enumCallback, null);
     }
 
-
     @Override
     public boolean setWindowPosition(String windowName, String displayReference, int x, int y) {
         User32.WNDENUMPROC enumCallback = (hWnd, arg) -> {

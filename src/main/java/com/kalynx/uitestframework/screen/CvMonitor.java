@@ -28,7 +28,6 @@ public class CvMonitor {
     private final ImageLibrary imageLibrary = new ImageLibrary();
     private  final DisplayManager displayManager;
     private final Settings settings;
-    private Path logLocation = Path.of(".", "log");
     private Path imageLocation = Path.of(".", "images");
     private Path resultLocation = Path.of(".","log", "image_results");
 
@@ -64,6 +63,7 @@ public class CvMonitor {
                 new Scalar(0, 0, 255), 2, 8, 0);
 
         BufferedImage buffImage = (BufferedImage) HighGui.toBufferedImage(successfulResult.getData().screenshot());
+        if(Files.notExists(resultLocation)) Files.createDirectories(resultLocation);
         Path resultLoc = Path.of(resultLocation.toString(), successfulResult.getData().takenTime() + ".jpg");
         ImageIO.write(buffImage, "jpg", resultLoc.toFile());
         String htmlResult = generateHTMLResult(data.score, expectedSimilarity,
@@ -100,7 +100,7 @@ public class CvMonitor {
 
     public void setResultsLocation(Path imageLocation) {
         this.imageLocation = imageLocation;
-        resultLocation = Path.of(logLocation.toString(), imageLocation.toString());
+        resultLocation = imageLocation;
     }
 
     public void addImagePath(String imagePath) {
