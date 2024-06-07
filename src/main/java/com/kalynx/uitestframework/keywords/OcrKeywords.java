@@ -11,6 +11,7 @@ import com.kalynx.uitestframework.exceptions.DisplayNotFoundException;
 import com.kalynx.uitestframework.exceptions.WindowException;
 import net.sourceforge.tess4j.TesseractException;
 import net.sourceforge.tess4j.Word;
+import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 
@@ -26,7 +27,7 @@ public class OcrKeywords {
     private static final WindowController WINDOW_CONTROLLER = DI.getInstance().getDependency(WindowController.class);
     private static final OcrController OCR_CONTROLLER = DI.getInstance().getDependency(OcrController.class);
 
-    @RobotKeyword("Get Words")
+    @RobotKeyword("Gets all the words found on the display in a format containing the name of the word and its location.")
     public List<Map<String,Object>> getWords() throws DisplayNotFoundException, TesseractException {
         DisplayAttributes attr = DISPLAY_MANAGER.getSelectedDisplay();
         DisplayManager.DisplayData dd = DISPLAY_MANAGER.getDisplayDisplayRegion(attr);
@@ -34,7 +35,7 @@ public class OcrKeywords {
         return getWords(img);
     }
 
-    @RobotKeyword("Get Text")
+    @RobotKeyword("Returns all the text read from on the screen")
     public String getText() throws DisplayNotFoundException, TesseractException {
         DisplayAttributes attr = DISPLAY_MANAGER.getSelectedDisplay();
         DisplayManager.DisplayData data = DISPLAY_MANAGER.getDisplayDisplayRegion(attr);
@@ -43,6 +44,7 @@ public class OcrKeywords {
     }
 
     @RobotKeyword("Get Text From Display")
+    @ArgumentNames({"display"})
     public String getTextFromDisplay(String display) throws DisplayNotFoundException, TesseractException {
         DisplayAttributes attr = DISPLAY_MANAGER.getDisplay(display);
         DisplayManager.DisplayData data = DISPLAY_MANAGER.getDisplayDisplayRegion(attr);
@@ -51,6 +53,7 @@ public class OcrKeywords {
     }
 
     @RobotKeyword("Get Words From Display")
+    @ArgumentNames({"display"})
     public List<Map<String,Object>> getWordsFromDisplay(String display) throws DisplayNotFoundException, TesseractException {
         DisplayAttributes attr = DISPLAY_MANAGER.getDisplay(display);
         DisplayManager.DisplayData dd = DISPLAY_MANAGER.getDisplayDisplayRegion(attr);
@@ -59,6 +62,7 @@ public class OcrKeywords {
     }
 
     @RobotKeyword("Get Text From Form")
+    @ArgumentNames({"form"})
     public String getTextFromForm(String form) throws WindowException, DisplayNotFoundException, TesseractException {
         Rectangle r = WINDOW_CONTROLLER.getWindowDimensions(form);
         BufferedImage img = DISPLAY_MANAGER.capture(r);
@@ -66,6 +70,7 @@ public class OcrKeywords {
     }
 
     @RobotKeyword("Get Words From Form")
+    @ArgumentNames({"form"})
     public List<Map<String, Object>> getWordsFromForm(String form) throws WindowException, DisplayNotFoundException, TesseractException {
         Rectangle r = WINDOW_CONTROLLER.getWindowDimensions(form);
         BufferedImage img = DISPLAY_MANAGER.capture(r);
@@ -80,6 +85,7 @@ public class OcrKeywords {
     - OEM_TESSERACT_LSTM_COMBINED
     - OEM_DEFAULT
     """)
+    @ArgumentNames({"ocrMode"})
     public void setOcrMode(String val) {
         OcrMode mode = null;
         try {
@@ -109,6 +115,7 @@ public class OcrKeywords {
     - RAW_LINE
     - COUNT
     """)
+    @ArgumentNames({"pageSegMode"})
     public void setPageSegMode(String val) {
         SegmentationMode mode = null;
         try {
@@ -120,8 +127,9 @@ public class OcrKeywords {
     }
 
     @RobotKeyword("""
-    Set Data Path
+    Sets the OCR Trained Data Path
     """)
+    @ArgumentNames({"path"})
     public void setDataPath(String path) {
         OCR_CONTROLLER.setDataPath(path);
     }

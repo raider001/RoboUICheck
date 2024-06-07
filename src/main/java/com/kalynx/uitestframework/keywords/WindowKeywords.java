@@ -38,14 +38,15 @@ public class WindowKeywords {
     @RobotKeyword("""
             Brings the window to the front.
             """)
+    @ArgumentNames({"windowName"})
     public void bringWindowToFront(String windowName) throws WindowException {
         boolean success = WINDOW_CONTROLLER.bringToFront(windowName);
         if(!success) throw new WindowException(WINDOW + windowName + NOT_FOUND_AVAILABLE_WINDOWS + getAllAvailableWindows().toString());
     }
 
     @RobotKeyword("""
-            Move Window
-            Moves the window to the back
+            Moves the window to the specified location.
+            When not defined, the display will be the currently selected display.
             """)
     @ArgumentNames({"windowName", "x", "y", "display="})
     public void moveWindow(String windowName, int x, int y, String display) throws IllegalArgumentException, WindowException {
@@ -58,6 +59,7 @@ public class WindowKeywords {
             Resize Window
             Resizes the specified window
             """)
+    @ArgumentNames({"windowName", "width", "height"})
     public void resizeWindow(String windowName, int width, int height) {
         if(width < 0 || height < 0) throw new IllegalArgumentException("Width and height must be greater than 0");
         if(!WINDOW_CONTROLLER.getAllWindows().contains(windowName)) throw new IllegalArgumentException(WINDOW + windowName + NOT_FOUND_AVAILABLE_WINDOWS + getAllAvailableWindows().toString());

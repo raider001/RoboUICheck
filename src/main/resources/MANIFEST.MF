@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: furne
+Build-Jdk: 21
+Main-Class: com.kalynx.uitestframework.Main
+

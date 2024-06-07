@@ -182,6 +182,7 @@ public class MouseKeywords {
     @RobotKeyword("""
             Press Mouse Button
             """)
+    @ArgumentNames({"button"})
     public void pressMouseButton(String button) throws MouseException {
         try {
             MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
@@ -192,7 +193,7 @@ public class MouseKeywords {
     }
 
     @RobotKeyword("""
-            Get Mouse Position
+            Returns the Mouse Position in the dictionary format {x,y}
             """)
     public Map<String, Integer> getMousePosition() {
         Point p = MOUSE_CONTROLLER.getMousePosition();
@@ -202,6 +203,7 @@ public class MouseKeywords {
     @RobotKeyword("""
             Release Mouse Button
             """)
+    @ArgumentNames({"button"})
     public void releaseMouseButton(String button) throws MouseException {
         try {
             MouseButtonDown mask = MouseButtonDown.valueOf(button.toUpperCase());
@@ -214,6 +216,7 @@ public class MouseKeywords {
     @RobotKeyword("""
             Mouse Scroll
             """)
+    @ArgumentNames({"scrollAmount"})
     public void mouseScroll(int scrollAmount) {
         MOUSE_CONTROLLER.mouseScroll(scrollAmount);
     }

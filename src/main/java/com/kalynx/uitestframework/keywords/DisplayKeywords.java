@@ -27,8 +27,6 @@ public class DisplayKeywords {
     }
 
     @RobotKeyword("""
-            Set Display
-                        
             | variable       | default  | unit                  |
             | displayId      |   0      | integer|String        |
                         
@@ -49,6 +47,7 @@ public class DisplayKeywords {
                  SMALLER_THAN
                  LARGER_THAN
             """)
+    @ArgumentNames({"originReference", "relativeState", "newReferenceName"})
     public void setDisplayReference(String originReference, String relativeState, String newReferenceName) {
 
         RelativeEnum e = RelativeEnum.valueOf(relativeState.toUpperCase());
@@ -78,6 +77,7 @@ public class DisplayKeywords {
             Sets the capture region for the currently selected display.
 
             """)
+    @ArgumentNames({"displayId", "x", "y", WIDTH, HEIGHT})
     public void setMonitoredAreaForDisplayId(int displayId, int x, int y, int width, int height) {
         DISPLAY_MANAGER.setDisplayRegion(displayId,x,y,width,height);
     }
@@ -87,6 +87,7 @@ public class DisplayKeywords {
                         
             Resets the monitored area for the selected display to the full display.
             """)
+    @ArgumentNames({"displayId"})
     public void resetMonitoredAreaForId(int displayId) {
         DisplayAttributes attr = DISPLAY_MANAGER.getDisplay(displayId);
         Rectangle displayRegion = new Rectangle(0, 0, attr.width(), attr.height());
@@ -96,6 +97,7 @@ public class DisplayKeywords {
     @RobotKeyword("""
             Set Monitored Area For Display
             """)
+    @ArgumentNames({"displayReference", "x", "y", WIDTH, HEIGHT})
     public void setMonitoredAreaForDisplay(String displayReference, int x, int y, int width, int height) throws DisplayNotFoundException {
         DisplayAttributes attr = DISPLAY_MANAGER.getDisplay(displayReference);
         DISPLAY_MANAGER.setDisplayRegion(attr.displayId(),x,y,width,height);
@@ -104,6 +106,7 @@ public class DisplayKeywords {
     @RobotKeyword("""
             ResetMonitoredAreaForDisplay
             """)
+    @ArgumentNames({"displayReference"})
     public void resetMonitoredAreaForDisplay(String displayReference) throws DisplayNotFoundException {
         DisplayAttributes attr = DISPLAY_MANAGER.getDisplay(displayReference);
         Rectangle displayRegion = new Rectangle(0, 0, attr.width(), attr.height());
