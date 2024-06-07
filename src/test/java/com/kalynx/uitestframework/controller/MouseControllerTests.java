@@ -25,6 +25,7 @@ class MouseControllerTests {
         mic = Mockito.mock(MouseInfoControl.class);
         RobotControl control = new RobotWrapper(r);
         cons = Mockito.mock(Consumer.class);
+        dm.setDisplay(1);
         sut = new MouseController(control, mic,dm,cons);
     }
 

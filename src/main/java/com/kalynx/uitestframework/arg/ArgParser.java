@@ -89,7 +89,7 @@ public class ArgParser {
     private <T> void handle(Arg<T> arg, String... vals) {
         if(arg.argType.equals(Integer[].class)) {
             List<Integer> res = Arrays.stream(vals).map(Integer::valueOf).toList();
-            arg.cmd.accept((T) res);
+            arg.cmd.accept((T) res.toArray(Integer[]::new));
         } else if(arg.argType.equals(String[].class)) {
             if(arg.argType.componentType().equals(String.class)) {
                 arg.cmd.accept((T) vals);
