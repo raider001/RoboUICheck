@@ -24,7 +24,7 @@ Java run time must be installed
 
 ## Usage
 In your robot file, add the library 
-Library  Remote         http://127.0.0.1:7442/  WITH NAME    UI
+Library  Remote         http://127.0.0.1:7442/  AS  UI
 
 Use as you would any Robot Remote Library
 
