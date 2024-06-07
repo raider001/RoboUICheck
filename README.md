@@ -12,6 +12,9 @@ This framework is setup as a Remote Library and be ran as a java application. It
 |--log-location|-l|The location for where the sikuli logs are stored|no|
 |--image-loc|-i|The location where images for the results are stored|no|
 
+## Binaries
+Download release/UITestFramework-1.0.0.jar
+
 ## Keywords
 https://raider001.github.io/robouicheck/keyword_doc/doc.html
 
