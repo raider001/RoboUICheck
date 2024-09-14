@@ -19,7 +19,7 @@ public class WindowController implements Window {
         if (os.contains("win")) {
             window = new WindowsWindowApi(displayManager);
         } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
-            window = new LinuxWindowApi();
+            window = new LinuxWindowApi(displayManager);
         } else {
             throw new UnsupportedOS();
         }

@@ -1,5 +1,7 @@
 package com.kalynx.uitestframework.os.linux;
 
+import com.kalynx.uitestframework.controller.DisplayManager;
+import com.kalynx.uitestframework.exceptions.DisplayNotFoundException;
 import com.kalynx.uitestframework.os.Window;
 import com.sun.jna.Native;
 import com.sun.jna.platform.unix.X11;
@@ -12,6 +14,12 @@ import java.util.*;
 public class LinuxWindowApi implements Window {
     private static final X11 x11 = X11.INSTANCE;
     private static final XLib X_LIB = XLib.INSTANCE;
+    private final DisplayManager displayManager;
+
+    public LinuxWindowApi(DisplayManager displayManager) {
+        this.displayManager = displayManager
+    }
+
     @Override
     public List<String> getAllWindows() {
         Map<String, Long> windows = new HashMap<>();
@@ -55,7 +63,13 @@ public class LinuxWindowApi implements Window {
 
     @Override
     public boolean setWindowPosition(String windowName, String displayReference, int x, int y) {
-        return false;
+        try {
+            int dispX = displayManager.getDisplay(displayReference).x();
+            int dispY = displayManager.getDisplay(displayReference).y();
+            return setWindowPosition(windowName, x + dispX, y + dispY);
+        } catch (DisplayNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
