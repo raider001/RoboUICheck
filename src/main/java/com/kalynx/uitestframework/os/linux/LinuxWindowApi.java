@@ -17,7 +17,7 @@ public class LinuxWindowApi implements Window {
     private final DisplayManager displayManager;
 
     public LinuxWindowApi(DisplayManager displayManager) {
-        this.displayManager = displayManager
+        this.displayManager = displayManager;
     }
 
     @Override
