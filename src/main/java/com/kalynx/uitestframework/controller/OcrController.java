@@ -22,7 +22,7 @@ public class OcrController {
         if (os.contains("win")) {
             tmpFolder = LoadLibs.extractTessResources("win32-x86-64");
         } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
-            throw new UnsupportedOS();
+            tmpFolder = LoadLibs.extractTessResources("linux-x86-64/libtesseract.so");
         } else {
             throw new UnsupportedOS();
         }

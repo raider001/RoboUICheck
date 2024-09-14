@@ -24,6 +24,15 @@ public class LinuxWindowApi implements Window {
 
     @Override
     public Rectangle getWindowDimensions(String windowName) {
+        X11.Display display = x11.XOpenDisplay(null);
+        int selectedWindow = getWindowId(display, windowName);
+        X11.Window window = new X11.Window(selectedWindow);
+
+        if(selectedWindow != -1) {
+            X11.XWindowAttributes attributes = new X11.XWindowAttributes();
+            x11.XGetWindowAttributes(display, window,attributes);
+            return new Rectangle(attributes.x, attributes.y, attributes.width, attributes.height);
+        }
         return null;
     }
 
