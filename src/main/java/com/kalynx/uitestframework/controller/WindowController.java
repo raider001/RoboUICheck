@@ -28,7 +28,7 @@ public class WindowController implements Window {
     /**
      * Returns all window names.
      *
-     * @return
+     * @return All window names available in the system
      */
     @Override
     public List<String> getAllWindows() {
@@ -38,17 +38,18 @@ public class WindowController implements Window {
     @Override
     public Rectangle getWindowDimensions(String windowName) throws WindowException {
         Rectangle r = window.getWindowDimensions(windowName);
-        if(r == null) throw new WindowException(windowName + " does Not Exist");
-        return r;
+        if (r == null) throw new WindowException(windowName + " does Not Exist");
+
+        return new Rectangle(r);
     }
 
     /**
      * Sets the window position relative to its current position
      *
-     * @param windowName
-     * @param x
-     * @param y
-     * @return
+     * @param windowName the window name
+     * @param x          the x position
+     * @param y          the y position
+     * @return true if the window was moved
      */
     @Override
     public boolean setWindowPosition(String windowName, int x, int y) {
@@ -58,11 +59,11 @@ public class WindowController implements Window {
     /**
      * Sets the window position based on the display reference
      *
-     * @param windowName
-     * @param displayReference
-     * @param x
-     * @param y
-     * @return
+     * @param windowName       the window name
+     * @param displayReference the display reference
+     * @param x                the x position
+     * @param y                the y position
+     * @return true if the window was moved
      */
     @Override
     public boolean setWindowPosition(String windowName, String displayReference, int x, int y) {
@@ -72,10 +73,10 @@ public class WindowController implements Window {
     /**
      * Sets the window size
      *
-     * @param windowName
-     * @param width
-     * @param height
-     * @return
+     * @param windowName the window name
+     * @param width      the width
+     * @param height     the height
+     * @return true if the window was resized
      */
     @Override
     public boolean setWindowSize(String windowName, int width, int height) {
@@ -85,8 +86,8 @@ public class WindowController implements Window {
     /**
      * Bring the window to the front.
      *
-     * @param windowName
-     * @return
+     * @param windowName the window name
+     * @return true if the window was brought to the front
      */
     @Override
     public boolean bringToFront(String windowName) {

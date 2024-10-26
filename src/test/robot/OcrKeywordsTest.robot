@@ -7,7 +7,7 @@ Suite Setup    Add Image Location  ${CURDIR}/
 
 *** Test Cases ***
 Test Read Text From Form
-    ${text}=    Get Text From Form    Test Form
+    ${text}=     Get Text  window=Test Form
     Should Contain   ${text}    Test Click
     Should Contain   ${text}    Text Area
     Should Contain   ${text}    Test2
@@ -15,4 +15,4 @@ Test Read Text From Form
     Should Contain   ${text}    PANdRTest
 
 Test Get Words From Form
-    ${words}=    Get Words From Form    Test Form
+    ${words}=    Get Words    window=Test Form

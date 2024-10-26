@@ -8,6 +8,7 @@ import com.kalynx.uitestframework.data.DisplayAttributes;
 import com.kalynx.uitestframework.data.OcrMode;
 import com.kalynx.uitestframework.data.SegmentationMode;
 import com.kalynx.uitestframework.exceptions.DisplayNotFoundException;
+import com.kalynx.uitestframework.exceptions.OcrException;
 import com.kalynx.uitestframework.exceptions.WindowException;
 import net.sourceforge.tess4j.TesseractException;
 import net.sourceforge.tess4j.Word;
@@ -27,67 +28,43 @@ public class OcrKeywords {
     private static final WindowController WINDOW_CONTROLLER = DI.getInstance().getDependency(WindowController.class);
     private static final OcrController OCR_CONTROLLER = DI.getInstance().getDependency(OcrController.class);
 
-    @RobotKeyword("Gets all the words found on the display in a format containing the name of the word and its location.")
-    public List<Map<String,Object>> getWords() throws DisplayNotFoundException, TesseractException {
-        DisplayAttributes attr = DISPLAY_MANAGER.getSelectedDisplay();
-        DisplayManager.DisplayData dd = DISPLAY_MANAGER.getDisplayDisplayRegion(attr);
-        BufferedImage img = DISPLAY_MANAGER.capture(dd.displayRegion());
-        return getWords(img);
-    }
-
-    @RobotKeyword("Returns all the text read from on the screen")
-    public String getText() throws DisplayNotFoundException, TesseractException {
-        DisplayAttributes attr = DISPLAY_MANAGER.getSelectedDisplay();
-        DisplayManager.DisplayData data = DISPLAY_MANAGER.getDisplayDisplayRegion(attr);
-        BufferedImage img = DISPLAY_MANAGER.capture(data.displayRegion());
-        return OCR_CONTROLLER.readText(img);
-    }
-
-    @RobotKeyword("Get Text From Display")
-    @ArgumentNames({"display"})
-    public String getTextFromDisplay(String display) throws DisplayNotFoundException, TesseractException {
-        DisplayAttributes attr = DISPLAY_MANAGER.getDisplay(display);
-        DisplayManager.DisplayData data = DISPLAY_MANAGER.getDisplayDisplayRegion(attr);
-        BufferedImage img = DISPLAY_MANAGER.capture(data.displayRegion());
-        return OCR_CONTROLLER.readText(img);
-    }
-
-    @RobotKeyword("Get Words From Display")
-    @ArgumentNames({"display"})
-    public List<Map<String,Object>> getWordsFromDisplay(String display) throws DisplayNotFoundException, TesseractException {
-        DisplayAttributes attr = DISPLAY_MANAGER.getDisplay(display);
-        DisplayManager.DisplayData dd = DISPLAY_MANAGER.getDisplayDisplayRegion(attr);
-        BufferedImage img = DISPLAY_MANAGER.capture(dd.displayRegion());
-        return getWords(img);
-    }
-
-    @RobotKeyword("Get Text From Form")
-    @ArgumentNames({"form"})
-    public String getTextFromForm(String form) throws WindowException, DisplayNotFoundException, TesseractException {
-        Rectangle r = WINDOW_CONTROLLER.getWindowDimensions(form);
-        BufferedImage img = DISPLAY_MANAGER.capture(r);
-        return OCR_CONTROLLER.readText(img);
-    }
-
-    @RobotKeyword("Get Words From Form")
-    @ArgumentNames({"form"})
-    public List<Map<String, Object>> getWordsFromForm(String form) throws WindowException, DisplayNotFoundException, TesseractException {
-        Rectangle r = WINDOW_CONTROLLER.getWindowDimensions(form);
-        BufferedImage img = DISPLAY_MANAGER.capture(r);
+    @RobotKeyword("""
+            Gets all the words found on the display in a format containing the name of the word and its location.
+            Based on the parameters provided, the words will be extracted from the display, window, or a specific region.
+            The dimensions of the region can be specified using the x, y, width, and height parameters and act as offsets from the top-left corner of the display or window.
+            All options are optional, but where a dimension is provided, all dimensions must also be provided.
+            Display and window cannot be defined at the same time.
+            """)
+    @ArgumentNames({"display=", "window=", "x=", "y=", "width=", "height="})
+    public List<Map<String, Object>> getWords(String display, String window, Integer x, Integer y, Integer width, Integer height) throws DisplayNotFoundException, OcrException, WindowException {
+        BufferedImage img = determineCaptureRegion(display, window, x, y, width, height);
         return getWords(img);
     }
 
     @RobotKeyword("""
-    Set OCR Mode
-    Available Options:
-    - OEM_TESSERACT_ONLY
-    - OEM_LSTM_ONLY
-    - OEM_TESSERACT_LSTM_COMBINED
-    - OEM_DEFAULT
-    """)
+            Returns all the text read from on the screen
+            Based on the parameters provided, the words will be extracted from the display, window, or a specific region.
+            The dimensions of the region can be specified using the x, y, width, and height parameters and act as offsets from the top-left corner of the display or window.
+            All options are optional, but where a dimension is provided, all dimensions must also be provided.
+            Display and window cannot be defined at the same time.
+            """)
+    @ArgumentNames({"display=", "window=", "x=", "y=", "width=", "height="})
+    public String getText(String display, String window, Integer x, Integer y, Integer width, Integer height) throws DisplayNotFoundException, TesseractException, OcrException, WindowException {
+        BufferedImage img = determineCaptureRegion(display, window, x, y, width, height);
+        return OCR_CONTROLLER.readText(img);
+    }
+
+    @RobotKeyword("""
+            Set OCR Mode
+            Available Options:
+            - OEM_TESSERACT_ONLY
+            - OEM_LSTM_ONLY
+            - OEM_TESSERACT_LSTM_COMBINED
+            - OEM_DEFAULT
+            """)
     @ArgumentNames({"ocrMode"})
     public void setOcrMode(String val) {
-        OcrMode mode = null;
+        OcrMode mode;
         try {
             mode = OcrMode.valueOf(val.toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -97,27 +74,27 @@ public class OcrKeywords {
     }
 
     @RobotKeyword("""
-    Set Page Segmentation Mode
-    Available Options:
-    - OSD_ONLY
-    - AUTO_OSD
-    - AUTO_ONLY
-    - AUTO
-    - SINGLE_COLUMN
-    - SINGLE_BLOCK_VERT_TEXT
-    - SINGLE_BLOCK
-    - SINGLE_LINE
-    - SINGLE_WORD
-    - CIRCLE_WORD
-    - SINGLE_CHAR
-    - SPARSE_TEXT
-    - SPARSE_TEXT_OSD
-    - RAW_LINE
-    - COUNT
-    """)
+            Set Page Segmentation Mode
+            Available Options:
+            - OSD_ONLY
+            - AUTO_OSD
+            - AUTO_ONLY
+            - AUTO
+            - SINGLE_COLUMN
+            - SINGLE_BLOCK_VERT_TEXT
+            - SINGLE_BLOCK
+            - SINGLE_LINE
+            - SINGLE_WORD
+            - CIRCLE_WORD
+            - SINGLE_CHAR
+            - SPARSE_TEXT
+            - SPARSE_TEXT_OSD
+            - RAW_LINE
+            - COUNT
+            """)
     @ArgumentNames({"pageSegMode"})
     public void setPageSegMode(String val) {
-        SegmentationMode mode = null;
+        SegmentationMode mode;
         try {
             mode = SegmentationMode.valueOf(val.toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -127,18 +104,18 @@ public class OcrKeywords {
     }
 
     @RobotKeyword("""
-    Sets the OCR Trained Data Path
-    """)
+            Sets the OCR Trained Data Path
+            """)
     @ArgumentNames({"path"})
     public void setDataPath(String path) {
         OCR_CONTROLLER.setDataPath(path);
     }
 
-    private List<Map<String,Object>> getWords(BufferedImage image) throws TesseractException {
+    private List<Map<String, Object>> getWords(BufferedImage image) {
         List<Word> words = OCR_CONTROLLER.getWords(image);
         List<Map<String, Object>> data = new ArrayList<>();
 
-        for(Word word : words) {
+        for (Word word : words) {
             Map<String, Object> wordData = Map.of(
                     "text", word.getText().replace("\n", "").trim(),
                     "x", word.getBoundingBox().getX(),
@@ -148,6 +125,53 @@ public class OcrKeywords {
                     "height", word.getBoundingBox().getHeight());
             data.add(wordData);
         }
-        return data.stream().filter(word -> !word.get("text").toString().equals("")).toList();
+        return data.stream().filter(word -> !word.get("text").toString().isEmpty()).toList();
     }
+
+    private void performBasicValidation(String display, String window, Integer x, Integer y, Integer width, Integer height) throws OcrException {
+        isDimensionsValid(x, y, width, height);
+        if (display != null && window != null) throw new OcrException("Cannot specify both display and window.");
+    }
+
+    private void isDimensionsValid(Integer x, Integer y, Integer width, Integer height) throws OcrException {
+        int nulls = 0;
+        if (x == null) nulls++;
+        if (y == null) nulls++;
+        if (width == null) nulls++;
+        if (height == null) nulls++;
+
+        if (nulls > 0 && nulls < 4) throw new OcrException("Either all dimensions must be applied, or none at all.");
+
+    }
+
+    private void translateRegionIfDimensionsDefined(Integer x, Integer y, Integer width, Integer height, Rectangle r) {
+        if (x != null) {
+            r.x += x;
+            r.y += y;
+            r.width = width;
+            r.height = height;
+        }
+    }
+
+    private BufferedImage determineCaptureRegion(String display, String window, Integer x, Integer y, Integer width, Integer height) throws OcrException, DisplayNotFoundException, WindowException {
+        performBasicValidation(display, window, x, y, width, height);
+        Rectangle r;
+        if (display != null) {
+            DisplayAttributes attr = DISPLAY_MANAGER.getDisplay(display);
+            r = new Rectangle(DISPLAY_MANAGER.getDisplayDisplayRegion(attr).displayRegion());
+            translateRegionIfDimensionsDefined(x, y, width, height, r);
+        } else if (window != null) {
+            r = WINDOW_CONTROLLER.getWindowDimensions(window);
+            translateRegionIfDimensionsDefined(x, y, width, height, r);
+        } else if (x != null) {
+            r = new Rectangle(x, y, width, height);
+        } else {
+            DisplayAttributes attr = DISPLAY_MANAGER.getSelectedDisplay();
+            DisplayManager.DisplayData dd = DISPLAY_MANAGER.getDisplayDisplayRegion(attr);
+            r = new Rectangle(dd.displayRegion());
+        }
+
+        return DISPLAY_MANAGER.capture(r);
+    }
+
 }
