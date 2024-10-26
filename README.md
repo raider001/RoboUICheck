@@ -16,7 +16,7 @@ This framework is setup as a Remote Library and be ran as a java application. It
 Java run time must be installed
 
 ## Run installation
-1. Download the latest binary file located at: https://github.com/raider001/RoboUICheck/tree/master/release
+1. Download the maven project and compile it.
 2. Run java -jar UITestFramework-1.0.0.jar -p 7442
 
 ## Usage
@@ -26,9 +26,5 @@ Library  Remote         http://127.0.0.1:7442/  AS  UI
 
 Use as you would any Robot Remote Library
 
-## Keywords
-https://raider001.github.io/robouicheck/keyword_doc/doc.html
-
-## Test Results
-https://raider001.github.io/robouicheck/test_results/report.html
-https://raider001.github.io/robouicheck/test_results/unittestresults.html
+## Keywords And Test Results for each Version
+https://raider001.github.io/robouicheck/index.html
