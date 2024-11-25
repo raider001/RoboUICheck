@@ -19,12 +19,11 @@ import java.util.Map;
 @RobotKeywords
 public class ScreenKeywords {
 
+    public static final String HTML = "*HTML*";
     private static final Logger LOGGER = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
     private static final CvMonitor CV_MONITOR = DI.getInstance().getDependency(CvMonitor.class);
     private static final DisplayManager DISPLAY_MANAGER = DI.getInstance().getDependency(DisplayManager.class);
     private static final DisplayRegionUtil DISPLAY_REGION_UTIL = DI.getInstance().getDependency(DisplayRegionUtil.class);
-    public static final String HTML = "*HTML*";
-
 
     @RobotKeyword("""
             Verify Image Exists
@@ -45,7 +44,7 @@ public class ScreenKeywords {
     @ArgumentNames({"image_name", "minMatchScore=-1", "waitTime=200"})
     public void verifyImageExists(String imageName, double minMatchScore, int waitTime) throws Exception {
         Result<?> r = CV_MONITOR.monitorForImage(Duration.ofMillis(waitTime), imageName, minMatchScore);
-        if(r.isFailure()) throw new Exception(HTML + r.getInfo());
+        if (r.isFailure()) throw new Exception(HTML + r.getInfo());
         LOGGER.info(r.getInfo());
     }
 
@@ -68,7 +67,7 @@ public class ScreenKeywords {
     @ArgumentNames({"image_name", "minMatchScore=-1", "waitTime=200"})
     public void verifyImageDoesNotExist(String imageName, double minMatchScore, int waitTime) throws Exception {
         Result<?> r = CV_MONITOR.monitorForLackOfImage(Duration.ofMillis(waitTime), imageName, minMatchScore);
-        if(r.isFailure()) throw new Exception(HTML + r.getInfo());
+        if (r.isFailure()) throw new Exception(HTML + r.getInfo());
         LOGGER.info(r.getInfo());
     }
 
@@ -169,7 +168,7 @@ public class ScreenKeywords {
             """)
     @ArgumentNames({"imagePath", "windowName", "minMatchScore=-1", "waitTime=200"})
     public void verifyImageExistsOnWindow(String imageName, String windowName, double minMatchScore, int waitTime) throws Exception {
-        Result<?> r =getResultFromWindow(imageName, minMatchScore, waitTime, windowName, ContainType.DOES_CONTAIN);
+        Result<?> r = getResultFromWindow(imageName, minMatchScore, waitTime, windowName, ContainType.DOES_CONTAIN);
         if (r.isFailure()) {
             throw new Exception(HTML + r.getInfo());
         }
@@ -178,24 +177,24 @@ public class ScreenKeywords {
 
     @RobotKeyword("""
             Get Image Bounds
-            
+                        
             Gets the Image bounds.
-            
+                        
             Note that only display or window can be defined, not both. Otherwise the keyword will fail.
-            
+                        
             """)
-    @ArgumentNames({"imagePath", "minMatchScore=-1", "waitTime=200", "display=", "window="})
+    @ArgumentNames({"image", "minMatchScore=-1", "waitTime=200", "display=", "window="})
     public Map<String, Integer> getImageBounds(String image, double minMatchScore, int waitTime, String display, String window) throws Exception {
-        if(display != null && window != null) throw new Exception("Cannot specify both display and window");
+        if (display != null && window != null) throw new Exception("Cannot specify both display and window");
         Result<ScreenshotData> r;
-        if(window != null) {
+        if (window != null) {
             r = getResultFromWindow(image, minMatchScore, waitTime, window, ContainType.DOES_CONTAIN);
-        } else if(display != null) {
+        } else if (display != null) {
             r = getResultFromDisplay(image, minMatchScore, waitTime, display, ContainType.DOES_CONTAIN);
         } else {
             r = CV_MONITOR.monitorForImage(Duration.ofMillis(waitTime), image, minMatchScore);
         }
-        if(r.isFailure()) throw new Exception(HTML + r.getInfo());
+        if (r.isFailure()) throw new Exception(HTML + r.getInfo());
         LOGGER.info(r.getInfo());
         return Map.of("x", r.getData().foundLocation().x, "y", r.getData().foundLocation().y, "width", r.getData().foundLocation().width, "height", r.getData().foundLocation().height);
     }
@@ -215,8 +214,6 @@ public class ScreenKeywords {
         DISPLAY_MANAGER.setDisplay(originalDisplay);
         return r;
     }
-
-
 
 
     private enum ContainType {

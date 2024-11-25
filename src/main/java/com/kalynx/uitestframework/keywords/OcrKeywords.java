@@ -1,6 +1,7 @@
 package com.kalynx.uitestframework.keywords;
 
 import com.kalynx.uitestframework.DI;
+import com.kalynx.uitestframework.ValidationUtils;
 import com.kalynx.uitestframework.controller.DisplayManager;
 import com.kalynx.uitestframework.controller.OcrController;
 import com.kalynx.uitestframework.controller.WindowController;
@@ -128,21 +129,6 @@ public class OcrKeywords {
         return data.stream().filter(word -> !word.get("text").toString().isEmpty()).toList();
     }
 
-    private void performBasicValidation(String display, String window, Integer x, Integer y, Integer width, Integer height) throws OcrException {
-        isDimensionsValid(x, y, width, height);
-        if (display != null && window != null) throw new OcrException("Cannot specify both display and window.");
-    }
-
-    private void isDimensionsValid(Integer x, Integer y, Integer width, Integer height) throws OcrException {
-        int nulls = 0;
-        if (x == null) nulls++;
-        if (y == null) nulls++;
-        if (width == null) nulls++;
-        if (height == null) nulls++;
-
-        if (nulls > 0 && nulls < 4) throw new OcrException("Either all dimensions must be applied, or none at all.");
-
-    }
 
     private void translateRegionIfDimensionsDefined(Integer x, Integer y, Integer width, Integer height, Rectangle r) {
         if (x != null) {
@@ -154,7 +140,7 @@ public class OcrKeywords {
     }
 
     private BufferedImage determineCaptureRegion(String display, String window, Integer x, Integer y, Integer width, Integer height) throws OcrException, DisplayNotFoundException, WindowException {
-        performBasicValidation(display, window, x, y, width, height);
+        ValidationUtils.performBasicValidation(display, window, x, y, width, height);
         Rectangle r;
         if (display != null) {
             DisplayAttributes attr = DISPLAY_MANAGER.getDisplay(display);

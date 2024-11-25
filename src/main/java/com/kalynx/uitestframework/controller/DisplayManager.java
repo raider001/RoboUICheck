@@ -7,8 +7,8 @@ import com.kalynx.uitestframework.exceptions.DisplayNotFoundException;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -64,6 +64,7 @@ public class DisplayManager {
     /**
      * Sets the capture region for the currently selected display.
      * The bounds provided are treated as relative to the selected display.
+     *
      * @param screenRegion The Region of the screen to capture.
      */
     public void setCaptureRegion(Rectangle screenRegion) {
@@ -77,28 +78,30 @@ public class DisplayManager {
 
     /**
      * Sets the display region for a region with the specific display ID.
+     *
      * @param reference Id of the display
-     * @param x horizontal position of the screen
-     * @param y vertical position of the screen
-     * @param width total width to monitor or capture
-     * @param height total height to monitor or capture
+     * @param x         horizontal position of the screen
+     * @param y         vertical position of the screen
+     * @param width     total width to monitor or capture
+     * @param height    total height to monitor or capture
      */
     public void setDisplayRegion(int reference, int x, int y, int width, int height) {
         DisplayAttributes attr = getDisplay(reference);
-        validateRegionData(new Rectangle(x,y,width,height), attr);
+        validateRegionData(new Rectangle(x, y, width, height), attr);
         displayData.get(attr).displayRegion().setBounds((x + attr.x()),
                 (attr.y() + y),
                 width,
                 height);
     }
 
-    private void validateRegionData(Rectangle screenRegion, DisplayAttributes selectedDisplay ) {if(screenRegion.x < 0) throw new AssertionError("screenRegion x must be greater than or equal to 0");
-        if(screenRegion.y < 0)  throw new AssertionError("screenRegion y must be greater than or equal to 0");
+    private void validateRegionData(Rectangle screenRegion, DisplayAttributes selectedDisplay) {
+        if (screenRegion.x < 0) throw new AssertionError("screenRegion x must be greater than or equal to 0");
+        if (screenRegion.y < 0) throw new AssertionError("screenRegion y must be greater than or equal to 0");
         if (screenRegion.width <= 0) throw new AssertionError("screenRegion width must be greater than 0");
         if (screenRegion.height <= 0) throw new AssertionError("screenRegion height must be greater than 0");
-        if(screenRegion.x + screenRegion.width > selectedDisplay.width())
+        if (screenRegion.x + screenRegion.width > selectedDisplay.width())
             throw new AssertionError("screenRegion x(" + screenRegion.x + ") + width(" + screenRegion.width + ") must be less than the selected screen width(" + selectedDisplay.width() + ")");
-        if(screenRegion.y + screenRegion.height > selectedDisplay.height())
+        if (screenRegion.y + screenRegion.height > selectedDisplay.height())
             throw new AssertionError("screenRegion y(" + screenRegion.y + ") + height(" + screenRegion.height + ") must be less than the selected screen height(" + selectedDisplay.height() + ")");
 
     }
@@ -115,9 +118,9 @@ public class DisplayManager {
 
     public BufferedImage capture(Rectangle rectangle) throws DisplayNotFoundException {
         DisplayAttributes attr = getDisplays().stream().filter(displayAttributes ->
-            displayAttributes.x() <=rectangle.x && displayAttributes.y() <= rectangle.y &&
-                    displayAttributes.x() + displayAttributes.width() >= rectangle.x + rectangle.width &&
-                    displayAttributes.y() + displayAttributes.height() >= rectangle.y + rectangle.height
+                displayAttributes.x() <= rectangle.x && displayAttributes.y() <= rectangle.y &&
+                        displayAttributes.x() + displayAttributes.width() >= rectangle.x + rectangle.width &&
+                        displayAttributes.y() + displayAttributes.height() >= rectangle.y + rectangle.height
         ).findFirst().orElseThrow(() -> new DisplayNotFoundException("Rectangle is not within any display"));
         Robot robot = getDisplayDisplayRegion(attr).robots().poll();
         assert robot != null;
@@ -128,14 +131,13 @@ public class DisplayManager {
 
     public DisplayAttributes getDisplay(String reference) throws DisplayNotFoundException {
         DisplayAttributes attr = displayNameToDimensionMap.get(reference);
-        if(attr == null) throw new DisplayNotFoundException(reference);
+        if (attr == null) throw new DisplayNotFoundException(reference);
         return attr;
     }
 
     public DisplayAttributes getDisplay(int reference) {
         return displayIdToDimensionMap.get(reference);
     }
-
 
 
     public List<DisplayAttributes> getDisplays() {
